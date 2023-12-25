@@ -28,6 +28,6 @@ namespace API.Controllers
             return user != null ? Ok(user) : NotFound();
         }
 
-        // need handlers for post, put and delete
+        // TODO create handlers for post, put and delete
     }
 }
