@@ -7,9 +7,11 @@
 
 [1]: https://clodsire.nl
 
-# Setting Up Test/Local MySQL Database
+<p/>
 
-## Installation Steps
+# Setting Up Test Database for MySQl
+
+## Installation Steps for XAMP (Can also be done with MySQL Workbench but too lazy to add the steps)
 
 1. **Clone the Repository:**
    Clone this repository to your local machine.
