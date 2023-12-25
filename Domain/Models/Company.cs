@@ -9,9 +9,9 @@ namespace Domain
         [Required]
         public string Name { get; set; } = null!;
         [Required]
-        public string Adres { get; set; } = null!; 
+        public string Adres { get; set; } = null!;
         [Required]
-        public string Location { get; set; } = null!; // NOTICE can have multiple locations so need to be checked
+        public string Location { get; set; } = null!; // NOTICE this property can have multiple locations so need to be checked
         [Required]
         public string Country { get; set; } = null!; // DITTO
         [Required]

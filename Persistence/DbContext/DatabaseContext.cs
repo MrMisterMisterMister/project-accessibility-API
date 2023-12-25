@@ -18,8 +18,8 @@ namespace Persistence
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<User>().ToTable("Users");
-            modelBuilder.Entity<Company>().ToTable("Company");
-            modelBuilder.Entity<PanelMember>().ToTable("PanelMember");
+            modelBuilder.Entity<Company>().ToTable("Company"); // Creates a separate table instead of combining the properties in user
+            modelBuilder.Entity<PanelMember>().ToTable("PanelMember"); // Same as the above
 
         }
     }

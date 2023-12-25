@@ -37,8 +37,8 @@ namespace Persistence
                 }
             };
 
-            await context.Users.AddRangeAsync(users); // Save data into memory
-            await context.SaveChangesAsync(); // Save changes into database
+            await context.Users.AddRangeAsync(users); // Saves the users in the list into memory
+            await context.SaveChangesAsync(); // Saves changes into database
         }
 
         public static async Task SeedCompanies(DatabaseContext context)
@@ -109,7 +109,7 @@ namespace Persistence
                 }
             };
 
-            await context.Companies.AddRangeAsync(companies); // Save data into memory
+            await context.Companies.AddRangeAsync(companies); // Saves the companies in the list into memory
             await context.SaveChangesAsync(); // Save changes into database
         }
 
@@ -171,7 +171,7 @@ namespace Persistence
                 }
             };
 
-            await context.PanelMembers.AddRangeAsync(panelMembers); // Save data into memory
+            await context.PanelMembers.AddRangeAsync(panelMembers); // // Saves the panelmembers in the list into memory
             await context.SaveChangesAsync(); // Save changes into database
         }
     }

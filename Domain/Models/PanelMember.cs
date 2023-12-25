@@ -4,7 +4,7 @@ namespace Domain
 {
     public class PanelMember : User
     {
-        public int Guardian { get; set; } // TODO need to check this
+        public int Guardian { get; set; } // TODO ...
         [Required]
         public string FirstName { get; set; } = null!;
         [Required]
