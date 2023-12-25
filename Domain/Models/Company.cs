@@ -9,14 +9,14 @@ namespace Domain
         [Required]
         public string Name { get; set; } = null!;
         [Required]
-        public string Adres { get; set; } = null!;
+        public string Adres { get; set; } = null!; 
         [Required]
-        public string Location { get; set; } = null!;
+        public string Location { get; set; } = null!; // NOTICE can have multiple locations so need to be checked
         [Required]
-        public string Country { get; set; } = null!;
+        public string Country { get; set; } = null!; // DITTO
         [Required]
-        public string Url { get; set; } = null!;
+        public string Url { get; set; } = null!; // DITTO
         [Required]
-        public string Contact { get; set; } = null!;
+        public string Contact { get; set; } = null!; // DITTO
     }
 }
