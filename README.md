@@ -32,7 +32,7 @@
 5. **Run the Program:**
 
 - Navigate to the project directory.
-- Run the application using either `dotnet run` or `dotnet watch`, make sure to cd in ./API.
+- Run the application using either `dotnet run` or `dotnet watch`, make sure to cd in `./API` before running.
 - Entity Framework Core will create the test database if it hasn't been created yet.
 
 ## Configuration (If Necessary)
