@@ -12,7 +12,7 @@ namespace API.Extensions
 
             services.AddDbContext<DatabaseContext>(opt =>
             {
-                opt.UseMySql(config.GetConnectionString("TestDatabase"), new MySqlServerVersion(new Version(8, 0, 35)));
+                opt.UseMySql(config.GetConnectionString("MyAccessibleDatabase"), new MySqlServerVersion(new Version(8, 0, 35)));
             });
             
             return services;
