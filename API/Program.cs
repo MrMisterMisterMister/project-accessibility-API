@@ -16,19 +16,19 @@ var app = builder.Build();
 app.UseForwardedHeaders();
 app.MapControllers();
 
-using var scope = app.Services.CreateScope(); // creates scope for services to setup local database and discards itself
-var services = scope.ServiceProvider;
+// using var scope = app.Services.CreateScope(); // creates scope for services to setup local database and discards itself
+// var services = scope.ServiceProvider;
 
-try
-{
-    var databaseContext = services.GetRequiredService<DatabaseContext>();
-    await databaseContext.Database.MigrateAsync(); // executes dotnet ef update on the latest migrations
-    await Seed.SeedAll(databaseContext); // inserts seed data into the database
-}
-catch (Exception e)
-{
-    var logger = services.GetRequiredService<ILogger<Program>>();
-    logger.LogError(e, "An error occured during migration");
-}
+// try
+// {
+//     var databaseContext = services.GetRequiredService<DatabaseContext>();
+//     await databaseContext.Database.MigrateAsync(); // executes dotnet ef update on the latest migrations
+//     await Seed.SeedAll(databaseContext); // inserts seed data into the database
+// }
+// catch (Exception e)
+// {
+//     var logger = services.GetRequiredService<ILogger<Program>>();
+//     logger.LogError(e, "An error occured during migration");
+// }
 
 app.Run();
