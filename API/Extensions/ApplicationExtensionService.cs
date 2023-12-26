@@ -1,3 +1,4 @@
+using Application.UserHandlers;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -10,11 +11,12 @@ namespace API.Extensions
         {
             // This is where all the services should be placed for cleaner clode
 
-            services.AddDbContext<DatabaseContext>(opt =>
-            {
-                opt.UseMySql(config.GetConnectionString("TestDatabase"), new MySqlServerVersion(new Version(8, 0, 35)));
-            });
-            
+            services.AddDbContext<DatabaseContext>(opt => 
+                opt.UseMySql(config.GetConnectionString("TestDatabase"), 
+                    new MySqlServerVersion(new Version(8, 0, 35))));
+
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Read.Handler).Assembly));
+
             return services;
         }
     }

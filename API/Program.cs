@@ -12,9 +12,8 @@ builder.Services.AddApplicationServices(builder.Configuration); // Services shou
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-app.UseHttpsRedirection(); // TODO configure https
-
+// Configure the HTTP request pipeline. HTTPS will be handled by NGINX
+app.UseForwardedHeaders();
 app.MapControllers();
 
 using var scope = app.Services.CreateScope(); // creates scope for services to setup local database and discards itself
