@@ -5,21 +5,21 @@ using Persistence;
 
 namespace Application.UserHandlers
 {
-    public class GetUser
+    public class GetUser // Handler to retrieve users
     {
-        public class Query : IRequest<List<User>> { }
+        public class Query : IRequest<List<User>> { } // Defins query to get a list of users
 
-        public class Handler : IRequestHandler<Query, List<User>>
+        public class Handler : IRequestHandler<Query, List<User>> // Handles user query retrieval
         {
             private readonly DatabaseContext _databaseContext;
-            public Handler(DatabaseContext databaseContext)
+            public Handler(DatabaseContext databaseContext) // Dbcontext injcetion
             {
                 _databaseContext = databaseContext;
             }
 
-            public async Task<List<User>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<User>> Handle(Query request, CancellationToken cancellationToken) // Logic
             {
-                return await _databaseContext.Users.ToListAsync();
+                return await _databaseContext.Users.ToListAsync(); // Fetches all users from the database asynchronously
             }
         }
     }
