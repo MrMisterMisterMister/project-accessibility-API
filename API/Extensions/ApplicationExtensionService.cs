@@ -16,8 +16,8 @@ namespace API.Extensions
                 opt.UseMySql(config.GetConnectionString("TestDatabase"),
                     new MySqlServerVersion(new Version(8, 0, 35))));
 
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetUser.Handler).Assembly));
-            services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetUser.Handler).Assembly)); // Adds mediatr service
+            services.AddAutoMapper(typeof(MappingProfiles).Assembly); // Adds automapper service
 
             return services;
         }
