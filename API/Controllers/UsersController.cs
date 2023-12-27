@@ -10,7 +10,7 @@ namespace API.Controllers
     {
         // Retrieves list of users
         [HttpGet]
-        public async Task<ActionResult<List<User>>> GetUsers(CancellationToken cancellationToken)
+        public async Task<ActionResult<List<User>>> GetUsers()
         {
             // Mediator sends a request to the handler responsible for getting users
             return await Mediator.Send(new GetUser.Query());
@@ -18,7 +18,7 @@ namespace API.Controllers
 
         // Retrieves a user by ID
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetActivity(Guid id)
+        public async Task<ActionResult<User>> GetUserById(Guid id)
         {
             // Mediator sends a request to the handler responsible for getting a user by id
             return await Mediator.Send(new GetUserById.Query { Id = id });

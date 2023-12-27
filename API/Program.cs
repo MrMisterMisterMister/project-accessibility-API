@@ -15,6 +15,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline. HTTPS will be handled by NGINX
 app.UseForwardedHeaders();
 app.MapControllers();
+app.UseCors("CorsPolicy");
 
 using var scope = app.Services.CreateScope(); // creates scope for services to setup local database and discards itself
 var services = scope.ServiceProvider;
