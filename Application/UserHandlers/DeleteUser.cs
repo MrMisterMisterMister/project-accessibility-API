@@ -20,10 +20,10 @@ namespace Application.UserHandlers
             }
             public async Task Handle(Command request, CancellationToken cancellationToken) // Logic to handle user deletion
             {
-                var activity = await _databaseContext.Users.FindAsync(request.Id) ?? // Fetches user id from the database
+                var user = await _databaseContext.Users.FindAsync(request.Id) ?? // Fetches user id from the database
                     throw new Exception("User not found"); // will fix this later
 
-                _databaseContext.Remove(activity); // Removes user from databaseContext*
+                _databaseContext.Remove(user); // Removes user from databaseContext*
 
                 await _databaseContext.SaveChangesAsync(); // Saves changes to database
             }
