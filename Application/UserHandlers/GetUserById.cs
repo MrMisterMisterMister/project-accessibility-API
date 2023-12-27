@@ -4,7 +4,7 @@ using Persistence;
 
 namespace Application.UserHandlers
 {
-    public class ReadId
+    public class GetUserById
     {
         public class Query : IRequest<User>
         {
@@ -21,7 +21,7 @@ namespace Application.UserHandlers
 
             public async Task<User> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _databaseContext.Users.FindAsync(request.Id, cancellationToken) ??
+                return await _databaseContext.Users.FindAsync(request.Id) ??
                     throw new Exception("User not found"); // will fix this later
             }
         }

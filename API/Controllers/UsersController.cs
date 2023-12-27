@@ -10,15 +10,38 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<User>>> GetUsers(CancellationToken cancellationToken)
         {
-            return await Mediator.Send(new Read.Query());
+            return await Mediator.Send(new GetUser.Query());
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetActivity(Guid id)
         {
-            return await Mediator.Send(new ReadId.Query { Id = id });
+            return await Mediator.Send(new GetUserById.Query { Id = id });
         }
 
-        // TODO create handlers for post, put and delete
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(User user)
+        {
+            await Mediator.Send(new CreateUser.Command { User = user });
+
+            return Ok(); // will fix this later
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(Guid id)
+        {
+            await Mediator.Send(new DeleteUser.Command { Id = id });
+
+            return Ok(); // will fix this later
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> EditUser(Guid id, User user)
+        {
+            user.Id = id;
+            await Mediator.Send(new EditUser.Command { User = user });
+
+            return Ok();
+        }
     }
 }

@@ -5,7 +5,7 @@ using Persistence;
 
 namespace Application.UserHandlers
 {
-    public class Read
+    public class GetUser
     {
         public class Query : IRequest<List<User>> { }
 
