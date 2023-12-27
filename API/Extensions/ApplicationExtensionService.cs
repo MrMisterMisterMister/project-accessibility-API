@@ -16,6 +16,14 @@ namespace API.Extensions
                 opt.UseMySql(config.GetConnectionString("TestDatabase"),
                     new MySqlServerVersion(new Version(8, 0, 35))));
 
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+                });
+            });
+
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetUser.Handler).Assembly)); // Adds mediatr service
             services.AddAutoMapper(typeof(MappingProfiles).Assembly); // Adds automapper service
 
