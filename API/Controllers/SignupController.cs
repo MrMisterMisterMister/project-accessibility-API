@@ -64,7 +64,45 @@ namespace API.Controllers
         [HttpPost("company")]
         public async Task<IActionResult> CompanySignup([FromBody] Company company)
         {
-            return Ok("ok");
+            // check if the kvk already exists
+            if (_databaseContext.Companies.Any(x => x.Email == company.Kvk))
+                // error
+                return BadRequest(new { 
+                    message = "Kvk is already in use." 
+                });
+
+            // Password validation
+            // something something check for password length
+            // also check if it contains 1 uppercase, 1 lowercase, 1 special character and 1 digit
+            // for now just skipping it
+
+
+            // hash password
+            var passwordHash = new PasswordHasher<Company>().HashPassword(company, company.Password);
+
+
+            Company newDisabled = new()
+            {
+                Email = company.Email,
+                Password = passwordHash,
+                Kvk = company.Kvk,
+                Name = company.Name
+            };
+
+            // save to database
+            try
+            {
+                _databaseContext.Companies.Add(newDisabled);
+                await _databaseContext.SaveChangesAsync();
+
+                return Ok("company created");
+            }
+            catch (Exception e)
+            {
+                // some basic error handling
+                Console.WriteLine(e.Message);
+                return StatusCode(500);
+            }
         }
     }
 }
