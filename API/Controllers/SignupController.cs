@@ -65,7 +65,7 @@ namespace API.Controllers
         public async Task<IActionResult> CompanySignup([FromBody] Company company)
         {
             // check if the kvk already exists
-            if (_databaseContext.Companies.Any(x => x.Email == company.Kvk))
+            if (_databaseContext.Companies.Any(x => x.Kvk == company.Kvk))
                 // error
                 return BadRequest(new { 
                     message = "Kvk is already in use." 
