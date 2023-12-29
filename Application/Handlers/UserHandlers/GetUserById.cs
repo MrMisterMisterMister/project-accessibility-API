@@ -1,28 +1,32 @@
+using Application.Core;
 using Domain;
 using MediatR;
 using Persistence;
 
 namespace Application.UserHandlers
 {
-    public class GetUserById // Handler to get user by their id
+    public class GetUserById
     {
-        public class Query : IRequest<User> // Defines query to get user by id
+        public class Query : IRequest<Result<User>>
         {
-            public Guid Id { get; set; } // Property to hold the user's id
+            public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, User> // Handles retrieval query
+        public class Handler : IRequestHandler<Query, Result<User>>
         {
             private readonly DatabaseContext _databaseContext;
-            public Handler(DatabaseContext databaseContext) // Dbcontext injection
+            public Handler(DatabaseContext databaseContext)
             {
                 _databaseContext = databaseContext;
             }
 
-            public async Task<User> Handle(Query request, CancellationToken cancellationToken) // Logic to handle retrieval proces
+            public async Task<Result<User>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _databaseContext.Users.FindAsync(request.Id) ?? // Fetches user by their id
-                    throw new Exception("User not found"); // will fix this later
+                var user = await _databaseContext.Users.FindAsync(request.Id);
+
+                if (user == null) return Result<User>.Failure("User not found");
+
+                return Result<User>.Success(user);
             }
         }
     }

@@ -13,9 +13,9 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUserById(Guid id)
+        public async Task<IActionResult> GetUserById(Guid id)
         {
-            return await Mediator.Send(new GetUserById.Query { Id = id });
+            return HandleResult(await Mediator.Send(new GetUserById.Query { Id = id }));
         }
 
         [HttpPost]
