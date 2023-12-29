@@ -23,5 +23,12 @@ namespace API.Controllers
 
             return BadRequest(result.Error);
         }
+
+        // For testing purposes, will remove later
+        [HttpGet("exception-test")]
+        public IActionResult ThrowException()
+        {
+            throw new Exception("This is a test exception");
+        }
     }
 }

@@ -1,4 +1,5 @@
 using API.Extensions;
+using API.Middleware;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.SeedData;
@@ -13,6 +14,7 @@ builder.Services.AddApplicationServices(builder.Configuration); // Services shou
 var app = builder.Build();
 
 // Configure the HTTP request pipeline. HTTPS will be handled by NGINX
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseForwardedHeaders();
 app.MapControllers();
 app.UseCors("CorsPolicy");
