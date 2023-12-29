@@ -1,3 +1,4 @@
+using Application.Core;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -5,21 +6,21 @@ using Persistence;
 
 namespace Application.UserHandlers
 {
-    public class GetUser // Handler to retrieve users
+    public class GetUser
     {
-        public class Query : IRequest<List<User>> { } // Defins query to get a list of users
+        public class Query : IRequest<Result<List<User>>> { }
 
-        public class Handler : IRequestHandler<Query, List<User>> // Handles user query retrieval
+        public class Handler : IRequestHandler<Query, Result<List<User>>>
         {
             private readonly DatabaseContext _databaseContext;
-            public Handler(DatabaseContext databaseContext) // Dbcontext injcetion
+            public Handler(DatabaseContext databaseContext)
             {
                 _databaseContext = databaseContext;
             }
 
-            public async Task<List<User>> Handle(Query request, CancellationToken cancellationToken) // Logic
+            public async Task<Result<List<User>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _databaseContext.Users.ToListAsync(); // Fetches all users from the database asynchronously
+                return Result<List<User>>.Success(await _databaseContext.Users.ToListAsync());
             }
         }
     }
