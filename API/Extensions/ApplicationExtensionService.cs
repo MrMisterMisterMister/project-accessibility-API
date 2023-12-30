@@ -23,8 +23,9 @@ namespace API.Extensions
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
-            development_google_microsoft_login
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000", "http://localhost:5000", "http://localhost:5001");
+                    policy.AllowAnyHeader()
+                    .AllowAnyMethod().
+                    WithOrigins("http://localhost:5000", "http://localhost:5001");
                 });
             });
 
