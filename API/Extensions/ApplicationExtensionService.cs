@@ -14,13 +14,16 @@ namespace API.Extensions
 
             services.AddDbContext<DatabaseContext>(opt =>
                 opt.UseMySql(config.GetConnectionString("TestDatabase"),
-                    new MySqlServerVersion(new Version(8, 0, 35))));
+                    new MySqlServerVersion(new Version(8, 0, 35))
+                )
+            );
 
             // Adds cors policy so http request can be made. Needs to be changed when going in production
             services.AddCors(opt =>
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
+            development_google_microsoft_login
                     policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000", "http://localhost:5000", "http://localhost:5001");
                 });
             });
