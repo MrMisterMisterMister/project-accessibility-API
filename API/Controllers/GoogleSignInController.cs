@@ -5,7 +5,7 @@ namespace API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class GoogleSignInController : ControllerBase
+    public class GoogleSignInController : BaseApiController
     {
         private readonly IConfiguration _configuration;
 
@@ -17,15 +17,15 @@ namespace API.Controllers
         [HttpGet("googleClientId")]
         public IActionResult GetGoogleClientId()
         {
-            // Retrieve the Google Client ID from appsettings.json
             string clientId = _configuration.GetValue<string>("GoogleAuth:ClientId");
 
             if (string.IsNullOrEmpty(clientId))
             {
-                return NotFound("Google Client ID not found");
+                return NotFound("Google Client ID not found or invalid");
             }
 
             return Ok(new { clientId });
         }
+
     }
 }
