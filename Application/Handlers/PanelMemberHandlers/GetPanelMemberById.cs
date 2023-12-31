@@ -13,15 +13,15 @@ namespace Application.PanelMemberHandlers
 
         public class Handler : IRequestHandler<Query, PanelMember>
         {
-            private readonly DatabaseContext _databaseContext;
-            public Handler(DatabaseContext databaseContext)
+            private readonly DataContext _dateContext;
+            public Handler(DataContext dataContext)
             {
-                _databaseContext = databaseContext;
+                _dateContext = dataContext;
             }
 
             public async Task<PanelMember> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _databaseContext.PanelMembers.FindAsync(request.Id) ??
+                return await _dateContext.PanelMembers.FindAsync(request.Id) ??
                     throw new Exception("PanelMember not found");
             }
         }

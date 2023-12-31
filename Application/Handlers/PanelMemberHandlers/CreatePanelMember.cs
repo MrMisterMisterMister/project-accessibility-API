@@ -13,17 +13,17 @@ namespace Application.PanelMemberHandlers
 
         public class Handler : IRequestHandler<Command>
         {
-            private readonly DatabaseContext _databaseContext;
-            public Handler(DatabaseContext databaseContext)
+            private readonly DataContext _dateContext;
+            public Handler(DataContext dataContext)
             {
-                _databaseContext = databaseContext;
+                _dateContext = dataContext;
             }
 
             public async Task Handle(Command request, CancellationToken cancellationToken)
             {
-                _databaseContext.Add(request.PanelMember);
+                _dateContext.Add(request.PanelMember);
 
-                await _databaseContext.SaveChangesAsync();
+                await _dateContext.SaveChangesAsync();
             }
         }
     }

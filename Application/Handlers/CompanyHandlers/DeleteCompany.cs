@@ -12,20 +12,20 @@ namespace Application.CompanyHandlers
 
         public class Handler : IRequestHandler<Command>
         {
-            private readonly DatabaseContext _databaseContext;
+            private readonly DataContext _dateContext;
 
-            public Handler(DatabaseContext databaseContext)
+            public Handler(DataContext dataContext)
             {
-                _databaseContext = databaseContext;
+                _dateContext = dataContext;
             }
             public async Task Handle(Command request, CancellationToken cancellationToken)
             {
-                var company = await _databaseContext.Companies.FindAsync(request.Id) ?? 
+                var company = await _dateContext.Companies.FindAsync(request.Id) ?? 
                     throw new Exception("Company not found"); 
 
-                _databaseContext.Remove(company);
+                _dateContext.Remove(company);
 
-                await _databaseContext.SaveChangesAsync();
+                await _dateContext.SaveChangesAsync();
             }
         }
     }

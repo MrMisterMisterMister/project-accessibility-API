@@ -13,17 +13,17 @@ namespace Application.CompanyHandlers
 
         public class Handler : IRequestHandler<Command>
         {
-            private readonly DatabaseContext _databaseContext;
-            public Handler(DatabaseContext databaseContext)
+            private readonly DataContext _dataContext;
+            public Handler(DataContext dataContext)
             {
-                _databaseContext = databaseContext;
+                _dataContext = dataContext;
             }
 
             public async Task Handle(Command request, CancellationToken cancellationToken)
             {
-                _databaseContext.Add(request.Company);
+                _dataContext.Add(request.Company);
 
-                await _databaseContext.SaveChangesAsync();
+                await _dataContext.SaveChangesAsync();
             }
         }
     }

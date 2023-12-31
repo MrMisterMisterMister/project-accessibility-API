@@ -13,17 +13,17 @@ namespace Application.UserHandlers
 
         public class Handler : IRequestHandler<Command> // Handles the creation Command
         {
-            private readonly DatabaseContext _databaseContext;
-            public Handler(DatabaseContext databaseContext) // Contructor for injecting the DatabaseContext
+            private readonly DataContext _dataContext;
+            public Handler(DataContext dataContext) // Contructor for injecting the DataContext
             {
-                _databaseContext = databaseContext;
+                _dataContext = dataContext;
             }
 
             public async Task Handle(Command request, CancellationToken cancellationToken) // Logic to handle user creation
             {
-                _databaseContext.Add(request.User); // Adds user to database context
+                _dataContext.Add(request.User); // Adds user to database context
 
-                await _databaseContext.SaveChangesAsync(); // Saves the changes to the database
+                await _dataContext.SaveChangesAsync(); // Saves the changes to the database
             }
         }
     }

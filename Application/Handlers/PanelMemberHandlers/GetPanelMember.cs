@@ -11,15 +11,15 @@ namespace Application.PanelMemberHandlers
 
         public class Handler : IRequestHandler<Query, List<PanelMember>>
         {
-            private readonly DatabaseContext _databaseContext;
-            public Handler(DatabaseContext databaseContext)
+            private readonly DataContext _dataContext;
+            public Handler(DataContext dataContext)
             {
-                _databaseContext = databaseContext;
+                _dataContext = dataContext;
             }
 
             public async Task<List<PanelMember>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _databaseContext.PanelMembers.ToListAsync();
+                return await _dataContext.PanelMembers.ToListAsync();
             }
         }
     }

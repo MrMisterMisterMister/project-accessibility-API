@@ -37,7 +37,7 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> EditPanelMember(Guid id, PanelMember panelMember)
         {
-            panelMember.Id = id;
+            panelMember.Id = id.ToString();
             await Mediator.Send(new EditPanelMember.Command { PanelMember = panelMember });
 
             return Ok();

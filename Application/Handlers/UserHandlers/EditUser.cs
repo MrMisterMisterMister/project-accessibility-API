@@ -15,22 +15,22 @@ namespace Application.UserHandlers
 
         public class Handler : IRequestHandler<Command>
         {
-            private readonly DatabaseContext _databaseContext;
+            private readonly DataContext _dataContext;
             private readonly IMapper _mapper;
-            // Injects DatabaseContext and IMapper (so we dont have to put each user property in the Handle method)
-            public Handler(DatabaseContext databaseContext, IMapper mapper) 
+            // Injects DataContext and IMapper (so we dont have to put each user property in the Handle method)
+            public Handler(DataContext dataContext, IMapper mapper)
             {
                 _mapper = mapper;
-                _databaseContext = databaseContext;
+                _dataContext = dataContext;
             }
 
             public async Task Handle(Command request, CancellationToken cancellationToken) // Logic to handle editing
             {
-                var user = await _databaseContext.Users.FindAsync(request.User.Id); // Fettches user from the database using the id
+                var user = await _dataContext.Users.FindAsync(request.User.Id); // Fettches user from the database using the id
 
                 _mapper.Map(request.User, user); // Maps the properties from the request User object to the fetched User
 
-                await _databaseContext.SaveChangesAsync(); // Saves changes to the database
+                await _dataContext.SaveChangesAsync(); // Saves changes to the database
             }
         }
 

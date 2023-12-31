@@ -13,15 +13,15 @@ namespace Application.CompanyHandlers
 
         public class Handler : IRequestHandler<Query, Company>
         {
-            private readonly DatabaseContext _databaseContext;
-            public Handler(DatabaseContext databaseContext)
+            private readonly DataContext _dataContext;
+            public Handler(DataContext dataContext)
             {
-                _databaseContext = databaseContext;
+                _dataContext = dataContext;
             }
 
             public async Task<Company> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _databaseContext.Companies.FindAsync(request.Id) ??
+                return await _dataContext.Companies.FindAsync(request.Id) ??
                     throw new Exception("Company not found");
             }
         }

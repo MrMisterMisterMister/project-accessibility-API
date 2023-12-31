@@ -15,20 +15,20 @@ namespace Application.PanelMemberHandlers
 
         public class Handler : IRequestHandler<Command>
         {
-            private readonly DatabaseContext _databaseContext;
+            private readonly DataContext _dataContext;
             private readonly IMapper _mapper;
-            public Handler(DatabaseContext databaseContext, IMapper mapper)
+            public Handler(DataContext dataContext, IMapper mapper)
             {
                 _mapper = mapper;
-                _databaseContext = databaseContext;
+                _dataContext = dataContext;
             }
 
             public async Task Handle(Command request, CancellationToken cancellationToken)
             {
-                var company = await _databaseContext.PanelMembers.FindAsync(request.PanelMember.Id);
+                var company = await _dataContext.PanelMembers.FindAsync(request.PanelMember.Id);
                 _mapper.Map(request.PanelMember, company);
 
-                await _databaseContext.SaveChangesAsync();
+                await _dataContext.SaveChangesAsync();
             }
         }
 

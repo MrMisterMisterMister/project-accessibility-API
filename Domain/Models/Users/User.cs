@@ -1,14 +1,6 @@
-using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace Domain
 {
-    public class User
-    {
-        public Guid Id { get; set; } // we use guid instead of int for security by obscurity 
-        [Required]
-        public string Email { get; set; } = null!;
-        [Required]
-        public string Password { get; set; } = null!;
-
-    }
+    public class User : IdentityUser {}
 }

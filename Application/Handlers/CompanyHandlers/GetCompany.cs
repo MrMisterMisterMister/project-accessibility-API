@@ -11,15 +11,15 @@ namespace Application.CompanyHandlers
 
         public class Handler : IRequestHandler<Query, List<Company>>
         {
-            private readonly DatabaseContext _databaseContext;
-            public Handler(DatabaseContext databaseContext)
+            private readonly DataContext _dataContext;
+            public Handler(DataContext dataContext)
             {
-                _databaseContext = databaseContext;
+                _dataContext = dataContext;
             }
 
             public async Task<List<Company>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _databaseContext.Companies.ToListAsync();
+                return await _dataContext.Companies.ToListAsync();
             }
         }
     }

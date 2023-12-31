@@ -12,15 +12,15 @@ namespace Application.UserHandlers
 
         public class Handler : IRequestHandler<Query, Result<List<User>>>
         {
-            private readonly DatabaseContext _databaseContext;
-            public Handler(DatabaseContext databaseContext)
+            private readonly DataContext _dataContext;
+            public Handler(DataContext dataContext)
             {
-                _databaseContext = databaseContext;
+                _dataContext = dataContext;
             }
 
             public async Task<Result<List<User>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return Result<List<User>>.Success(await _databaseContext.Users.ToListAsync());
+                return Result<List<User>>.Success(await _dataContext.Users.ToListAsync());
             }
         }
     }

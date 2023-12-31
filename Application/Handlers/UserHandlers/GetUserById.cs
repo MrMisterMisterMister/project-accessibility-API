@@ -14,15 +14,15 @@ namespace Application.UserHandlers
 
         public class Handler : IRequestHandler<Query, Result<User>>
         {
-            private readonly DatabaseContext _databaseContext;
-            public Handler(DatabaseContext databaseContext)
+            private readonly DataContext _dataContext;
+            public Handler(DataContext dataContext)
             {
-                _databaseContext = databaseContext;
+                _dataContext = dataContext;
             }
 
             public async Task<Result<User>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var user = await _databaseContext.Users.FindAsync(request.Id);
+                var user = await _dataContext.Users.FindAsync(request.Id);
 
                 if (user == null) return Result<User>.Failure("User not found");
 

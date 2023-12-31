@@ -12,20 +12,20 @@ namespace Application.UserHandlers
 
         public class Handler : IRequestHandler<Command> // Handles the Command
         {
-            private readonly DatabaseContext _databaseContext;
+            private readonly DataContext _dataContext;
 
-            public Handler(DatabaseContext databaseContext)
+            public Handler(DataContext dataContext)
             {
-                _databaseContext = databaseContext;
+                _dataContext = dataContext;
             }
             public async Task Handle(Command request, CancellationToken cancellationToken) // Logic to handle user deletion
             {
-                var user = await _databaseContext.Users.FindAsync(request.Id) ?? // Fetches user id from the database
+                var user = await _dataContext.Users.FindAsync(request.Id) ?? // Fetches user id from the database
                     throw new Exception("User not found"); // will fix this later
 
-                _databaseContext.Remove(user); // Removes user from databaseContext*
+                _dataContext.Remove(user); // Removes user from dataContext*
 
-                await _databaseContext.SaveChangesAsync(); // Saves changes to database
+                await _dataContext.SaveChangesAsync(); // Saves changes to database
             }
         }
     }
