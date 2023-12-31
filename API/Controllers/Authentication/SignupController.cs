@@ -27,7 +27,13 @@ namespace API.Controllers
         {
             if (await _userManager.Users.AnyAsync(x => x.Email == registerDTO.Email))
             {
-                return BadRequest("Email is already taken");
+                return BadRequest(
+                    new
+                    {
+                        code = "EmailTaken",
+                        description = "This email address is already taken."
+                    }
+                );
             }
 
             var user = new User
@@ -49,7 +55,13 @@ namespace API.Controllers
 
             if (await _userManager.Users.AnyAsync(x => x.Email == registerPanelMemberDTO.Email))
             {
-                return BadRequest("Email is already taken");
+                return BadRequest(
+                    new
+                    {
+                        code = "EmailTaken",
+                        description = "This email address is already taken."
+                    }
+                );
             }
 
             var panelMember = new PanelMember
@@ -78,12 +90,24 @@ namespace API.Controllers
             if (await _userManager.Users.OfType<Company>().AnyAsync(x =>
                 x.Email == registerCompanyDTO.Kvk))
             {
-                return BadRequest("Kvk is already exists");
+                return BadRequest(
+                    new
+                    {
+                        code = "KvkExists",
+                        description = "This Kvk number is already registered."
+                    }
+                );
             }
 
             if (await _userManager.Users.AnyAsync(x => x.Email == registerCompanyDTO.Email))
             {
-                return BadRequest("Email is already taken");
+                return BadRequest(
+                    new
+                    {
+                        code = "EmailTaken",
+                        description = "This email address is already taken."
+                    }
+                );
             }
 
             var company = new Company

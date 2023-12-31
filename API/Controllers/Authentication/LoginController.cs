@@ -25,13 +25,25 @@ namespace API.Controllers
         {
             var user = await _userManager.FindByEmailAsync(loginDTO.Email);
 
-            if (user == null) return Unauthorized();
+            if (user == null) return Unauthorized(
+                new
+                {
+                    code = "UserNotFound",
+                    description = "No user found with the provided email address."
+                }
+            );
 
             var result = await _userManager.CheckPasswordAsync(user, loginDTO.Password);
 
             if (result) return new UserDTO { Token = _tokenService.CreateToken(user) };
 
-            return Unauthorized();
+            return Unauthorized(
+                new
+                {
+                    code = "IncorrectPassword",
+                    description = "Incorrect password. Please check your password and try again."
+                }
+            );
         }
     }
 }
