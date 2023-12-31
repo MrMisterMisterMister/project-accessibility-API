@@ -1,3 +1,4 @@
+using Application.Core;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -8,12 +9,12 @@ namespace Application.UserHandlers
     public class EditUser
     {
 
-        public class Command : IRequest // Handler to edit a user details
+        public class Command : IRequest<Result<Unit>>
         {
-            public User User { get; set; } = null!; // The user object to be edited
+            public User User { get; set; } = null!;
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _dataContext;
             private readonly IMapper _mapper;
@@ -24,13 +25,19 @@ namespace Application.UserHandlers
                 _dataContext = dataContext;
             }
 
-            public async Task Handle(Command request, CancellationToken cancellationToken) // Logic to handle editing
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var user = await _dataContext.Users.FindAsync(request.User.Id); // Fettches user from the database using the id
+                var user = await _dataContext.Users.FindAsync(request.User.Id);
 
-                _mapper.Map(request.User, user); // Maps the properties from the request User object to the fetched User
+                if (user == null) return Result<Unit>.Failure("user not found");
 
-                await _dataContext.SaveChangesAsync(); // Saves changes to the database
+                _mapper.Map(request.User, user);
+
+                var result = await _dataContext.SaveChangesAsync() > 0;
+
+                if (!result) return Result<Unit>.Failure("Failed to update activity");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
 

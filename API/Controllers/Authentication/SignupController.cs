@@ -2,16 +2,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
-using Persistence;
 using API.Services;
 using API.DTOs;
 using Microsoft.EntityFrameworkCore;
+using API.DTOs.RegisterDTOs;
 
 namespace API.Controllers
 {
     [AllowAnonymous]
     public class SignupController : BaseApiController
     {
+        // on crack
         private readonly UserManager<User> _userManager;
         private readonly TokenService _tokenService;
 
@@ -42,95 +43,67 @@ namespace API.Controllers
             return BadRequest(result.Errors);
         }
 
-    //     [HttpPost("panelmember")]
-    //     public async Task<IActionResult> PanelmemberSignup([FromBody] PanelMember panelMember)
-    //     {
+        [HttpPost("panelmember")]
+        public async Task<ActionResult<UserDTO>> PanelmemberSignup(RegisterPanelMemberDTO registerPanelMemberDTO)
+        {
 
-    //         // check if the email already exists
-    //         if (_dataContext.PanelMembers.Any(x => x.Email == panelMember.Email))
-    //             // error
-    //             return BadRequest(new
-    //             {
-    //                 message = "Email is already in use."
-    //             });
+            if (await _userManager.Users.AnyAsync(x => x.Email == registerPanelMemberDTO.Email))
+            {
+                return BadRequest("Email is already taken");
+            }
 
-    //         // Password validation
-    //         // something something check for password length
-    //         // also check if it contains 1 uppercase, 1 lowercase, 1 special character and 1 digit
-    //         // for now just skipping it
+            var panelMember = new PanelMember
+            {
+                Email = registerPanelMemberDTO.Email,
+                UserName = registerPanelMemberDTO.Email,
+                Guardian = registerPanelMemberDTO.Guardian,
+                FirstName = registerPanelMemberDTO.FirstName,
+                LastName = registerPanelMemberDTO.LastName,
+                Zipcode = registerPanelMemberDTO.Zipcode,
+                DateOfBirth = DateTime.TryParse(registerPanelMemberDTO.DateOfBirth,
+                    out DateTime parsedDate)
+                    ? parsedDate : DateTime.MinValue
+            };
 
+            var result = await _userManager.CreateAsync(panelMember, registerPanelMemberDTO.Password);
 
-    //         // hash password
-    //         var passwordHash = new PasswordHasher<PanelMember>().HashPassword(panelMember, panelMember.Password);
+            if (result.Succeeded) return new UserDTO { Token = _tokenService.CreateToken(panelMember) };
 
+            return BadRequest(result.Errors);
+        }
 
-    //         PanelMember newDisabled = new()
-    //         {
-    //             Email = panelMember.Email,
-    //             Password = passwordHash,
-    //             FirstName = panelMember.FirstName,
-    //             LastName = panelMember.LastName
-    //         };
+        [HttpPost("company")]
+        public async Task<ActionResult<UserDTO>> CompanySignup(RegisterCompanyDTO registerCompanyDTO)
+        {
+            if (await _userManager.Users.OfType<Company>().AnyAsync(x =>
+                x.Email == registerCompanyDTO.Kvk))
+            {
+                return BadRequest("Kvk is already exists");
+            }
 
-    //         // save to database
-    //         try
-    //         {
-    //             _dataContext.PanelMembers.Add(newDisabled);
-    //             await _dataContext.SaveChangesAsync();
+            if (await _userManager.Users.AnyAsync(x => x.Email == registerCompanyDTO.Email))
+            {
+                return BadRequest("Email is already taken");
+            }
 
-    //             return Ok("created new disabled");
-    //         }
-    //         catch (Exception e)
-    //         {
-    //             // some basic error handling
-    //             Console.WriteLine(e.Message);
-    //             return StatusCode(500);
-    //         }
-    //     }
+            var company = new Company
+            {
+                Email = registerCompanyDTO.Email,
+                UserName = registerCompanyDTO.Email,
+                Kvk = registerCompanyDTO.Kvk,
+                Name = registerCompanyDTO.Name,
+                Adres = registerCompanyDTO.Adres,
+                Location = registerCompanyDTO.Location,
+                Country = registerCompanyDTO.Country,
+                Url = registerCompanyDTO.Url,
+                Contact = registerCompanyDTO.Contact
+            };
 
-    //     [HttpPost("company")]
-    //     public async Task<IActionResult> CompanySignup([FromBody] Company company)
-    //     {
-    //         // check if the kvk already exists
-    //         if (_dataContext.Companies.Any(x => x.Kvk == company.Kvk))
-    //             // error
-    //             return BadRequest(new
-    //             {
-    //                 message = "Kvk is already in use."
-    //             });
+            var result = await _userManager.CreateAsync(company, registerCompanyDTO.Password);
 
-    //         // Password validation
-    //         // something something check for password length
-    //         // also check if it contains 1 uppercase, 1 lowercase, 1 special character and 1 digit
-    //         // for now just skipping it
+            if (result.Succeeded) return new UserDTO { Token = _tokenService.CreateToken(company) };
 
-
-    //         // hash password
-    //         var passwordHash = new PasswordHasher<Company>().HashPassword(company, company.Password);
-
-
-    //         Company newDisabled = new()
-    //         {
-    //             Email = company.Email,
-    //             Password = passwordHash,
-    //             Kvk = company.Kvk,
-    //             Name = company.Name
-    //         };
-
-    //         // save to database
-    //         try
-    //         {
-    //             _dataContext.Companies.Add(newDisabled);
-    //             await _dataContext.SaveChangesAsync();
-
-    //             return Ok("company created");
-    //         }
-    //         catch (Exception e)
-    //         {
-    //             // some basic error handling
-    //             Console.WriteLine(e.Message);
-    //             return StatusCode(500);
-    //         }
-    //     }
+            return BadRequest(result.Errors);
+        }
     }
 }

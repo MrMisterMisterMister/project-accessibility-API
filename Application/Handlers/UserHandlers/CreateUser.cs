@@ -1,29 +1,34 @@
+using Application.Core;
 using Domain;
 using MediatR;
 using Persistence;
 
 namespace Application.UserHandlers
 {
-    public class CreateUser // Handler to create a user
+    public class CreateUser
     {
-        public class Command : IRequest // A Command to create a user
+        public class Command : IRequest<Result<Unit>>
         {
-            public User User { get; set; } = null!; // User information to create a user
+            public User User { get; set; } = null!;
         }
 
-        public class Handler : IRequestHandler<Command> // Handles the creation Command
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _dataContext;
-            public Handler(DataContext dataContext) // Contructor for injecting the DataContext
+            public Handler(DataContext dataContext)
             {
                 _dataContext = dataContext;
             }
 
-            public async Task Handle(Command request, CancellationToken cancellationToken) // Logic to handle user creation
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                _dataContext.Add(request.User); // Adds user to database context
+                _dataContext.Add(request.User);
 
-                await _dataContext.SaveChangesAsync(); // Saves the changes to the database
+                var result = await _dataContext.SaveChangesAsync() > 0;
+
+                if (!result) return Result<Unit>.Failure("Failed to create user");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

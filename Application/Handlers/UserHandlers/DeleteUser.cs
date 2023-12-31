@@ -1,16 +1,17 @@
+using Application.Core;
 using MediatR;
 using Persistence;
 
 namespace Application.UserHandlers
 {
-    public class DeleteUser // Handler to delete a user
+    public class DeleteUser
     {
-        public class Command : IRequest // Defines Command to delete a user
+        public class Command : IRequest<Result<Unit>>
         {
-            public Guid Id { get; set; } // Identifier for the user to be deleted
+            public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command> // Handles the Command
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _dataContext;
 
@@ -18,14 +19,19 @@ namespace Application.UserHandlers
             {
                 _dataContext = dataContext;
             }
-            public async Task Handle(Command request, CancellationToken cancellationToken) // Logic to handle user deletion
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var user = await _dataContext.Users.FindAsync(request.Id) ?? // Fetches user id from the database
-                    throw new Exception("User not found"); // will fix this later
+                var user = await _dataContext.Users.FindAsync(request.Id.ToString());
 
-                _dataContext.Remove(user); // Removes user from dataContext*
+                if (user == null) return Result<Unit>.Failure("user not found");
 
-                await _dataContext.SaveChangesAsync(); // Saves changes to database
+                _dataContext.Remove(user);
+
+                var result = await _dataContext.SaveChangesAsync() > 0;
+
+                if (!result) return Result<Unit>.Failure("Failed to delete the user");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

@@ -20,7 +20,7 @@ namespace API.Services
             // Crack for now?
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email!)
             };
 

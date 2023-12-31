@@ -21,27 +21,20 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
-            await Mediator.Send(new CreateUser.Command { User = user });
-
-            return Ok();
+            return HandleResult(await Mediator.Send(new CreateUser.Command { User = user }));
         }
 
-        // Deletes a user by ID
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
-            await Mediator.Send(new DeleteUser.Command { Id = id });
-
-            return Ok();
+            return HandleResult(await Mediator.Send(new DeleteUser.Command { Id = id }));
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult> EditUser(Guid id, User user)
         {
             user.Id = id.ToString();
-            await Mediator.Send(new EditUser.Command { User = user });
-
-            return Ok();
+            return HandleResult(await Mediator.Send(new EditUser.Command { User = user }));
         }
     }
 }

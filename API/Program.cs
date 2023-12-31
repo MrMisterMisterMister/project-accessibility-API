@@ -26,8 +26,10 @@ var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseForwardedHeaders();
 app.UseCors("CorsPolicy");
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 // creates scope for services to setup local database and discards itself
