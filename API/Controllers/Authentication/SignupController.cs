@@ -52,7 +52,6 @@ namespace API.Controllers
         [HttpPost("panelmember")]
         public async Task<ActionResult<UserDTO>> PanelmemberSignup(RegisterPanelMemberDTO registerPanelMemberDTO)
         {
-
             if (await _userManager.Users.AnyAsync(x => x.Email == registerPanelMemberDTO.Email))
             {
                 return BadRequest(
@@ -87,8 +86,7 @@ namespace API.Controllers
         [HttpPost("company")]
         public async Task<ActionResult<UserDTO>> CompanySignup(RegisterCompanyDTO registerCompanyDTO)
         {
-            if (await _userManager.Users.OfType<Company>().AnyAsync(x =>
-                x.Email == registerCompanyDTO.Kvk))
+            if (await _userManager.Users.OfType<Company>().AnyAsync(x => x.Kvk == registerCompanyDTO.Kvk))
             {
                 return BadRequest(
                     new
