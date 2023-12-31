@@ -1,3 +1,4 @@
+using Application.Core;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -8,12 +9,12 @@ namespace Application.PanelMemberHandlers
     public class EditPanelMember
     {
 
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public PanelMember PanelMember { get; set; } = null!;
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _dataContext;
             private readonly IMapper _mapper;
@@ -23,14 +24,20 @@ namespace Application.PanelMemberHandlers
                 _dataContext = dataContext;
             }
 
-            public async Task Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var company = await _dataContext.PanelMembers.FindAsync(request.PanelMember.Id);
-                _mapper.Map(request.PanelMember, company);
+                var panelMember = await _dataContext.PanelMembers.FindAsync(request.PanelMember.Id);
 
-                await _dataContext.SaveChangesAsync();
+                if (panelMember == null) return Result<Unit>.Failure("Panel member not found");
+
+                _mapper.Map(request.PanelMember, panelMember);
+
+                var result = await _dataContext.SaveChangesAsync() > 0;
+
+                if (!result) return Result<Unit>.Failure("Failed to update panel member");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
-
     }
 }

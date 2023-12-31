@@ -1,3 +1,4 @@
+using Application.Core;
 using Domain;
 using MediatR;
 using Persistence;
@@ -6,12 +7,12 @@ namespace Application.CompanyHandlers
 {
     public class GetCompanyById
     {
-        public class Query : IRequest<Company>
+        public class Query : IRequest<Result<Company>>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Company>
+        public class Handler : IRequestHandler<Query, Result<Company>>
         {
             private readonly DataContext _dataContext;
             public Handler(DataContext dataContext)
@@ -19,10 +20,13 @@ namespace Application.CompanyHandlers
                 _dataContext = dataContext;
             }
 
-            public async Task<Company> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<Company>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _dataContext.Companies.FindAsync(request.Id) ??
-                    throw new Exception("Company not found");
+                var company = await _dataContext.Companies.FindAsync(request.Id.ToString());
+
+                if (company == null) return Result<Company>.Failure("Company not found");
+
+                return Result<Company>.Success(company);
             }
         }
     }

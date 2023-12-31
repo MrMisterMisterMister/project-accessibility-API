@@ -1,3 +1,4 @@
+using Application.Core;
 using Domain;
 using MediatR;
 using Persistence;
@@ -6,24 +7,28 @@ namespace Application.PanelMemberHandlers
 {
     public class CreatePanelMember
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public PanelMember PanelMember { get; set; } = null!;
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
-            private readonly DataContext _dateContext;
+            private readonly DataContext _dataContext;
             public Handler(DataContext dataContext)
             {
-                _dateContext = dataContext;
+                _dataContext = dataContext;
             }
 
-            public async Task Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                _dateContext.Add(request.PanelMember);
+                _dataContext.Add(request.PanelMember);
 
-                await _dateContext.SaveChangesAsync();
+                var result = await _dataContext.SaveChangesAsync() > 0;
+
+                if (!result) return Result<Unit>.Failure("Failed to create panel member");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

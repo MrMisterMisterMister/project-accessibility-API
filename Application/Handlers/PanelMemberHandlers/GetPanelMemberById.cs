@@ -1,3 +1,4 @@
+using Application.Core;
 using Domain;
 using MediatR;
 using Persistence;
@@ -6,23 +7,26 @@ namespace Application.PanelMemberHandlers
 {
     public class GetPanelMemberById
     {
-        public class Query : IRequest<PanelMember>
+        public class Query : IRequest<Result<PanelMember>>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, PanelMember>
+        public class Handler : IRequestHandler<Query, Result<PanelMember>>
         {
-            private readonly DataContext _dateContext;
+            private readonly DataContext _dataContext;
             public Handler(DataContext dataContext)
             {
-                _dateContext = dataContext;
+                _dataContext = dataContext;
             }
 
-            public async Task<PanelMember> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<PanelMember>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _dateContext.PanelMembers.FindAsync(request.Id) ??
-                    throw new Exception("PanelMember not found");
+                var panelMember = await _dataContext.PanelMembers.FindAsync(request.Id.ToString());
+
+                if (panelMember == null) return Result<PanelMember>.Failure("Panel member not found");
+
+                return Result<PanelMember>.Success(panelMember);
             }
         }
     }

@@ -7,40 +7,34 @@ namespace API.Controllers
     public class CompaniesController : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<List<Company>>> GetCompany()
+        public async Task<IActionResult> GetCompanies()
         {
-            return await Mediator.Send(new GetCompany.Query());
+            return HandleResult(await Mediator.Send(new GetCompany.Query()));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Company>> GetCompanyById(Guid id)
+        public async Task<IActionResult> GetCompanyById(Guid id)
         {
-            return await Mediator.Send(new GetCompanyById.Query { Id = id });
+            return HandleResult(await Mediator.Send(new GetCompanyById.Query { Id = id }));
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateCompany(Company company)
         {
-            await Mediator.Send(new CreateCompany.Command { Company = company });
-
-            return Ok();
+            return HandleResult(await Mediator.Send(new CreateCompany.Command {Company = company }));
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCompany(Guid id)
+        public async Task<IActionResult> DelettCompanyGetCompany(Guid id)
         {
-            await Mediator.Send(new DeleteCompany.Command { Id = id });
-
-            return Ok();
+            return HandleResult(await Mediator.Send(new DeleteCompany.Command { Id = id }));
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> EditCompany(Guid id, Company company)
+        public async Task<ActionResult> EditCompanyGetCompany(Guid id, Company company)
         {
             company.Id = id.ToString();
-            await Mediator.Send(new EditCompany.Command { Company = company });
-
-            return Ok();
+            return HandleResult(await Mediator.Send(new EditCompany.Command {Company = company }));
         }
     }
 }

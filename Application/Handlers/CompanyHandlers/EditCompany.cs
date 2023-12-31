@@ -1,3 +1,4 @@
+using Application.Core;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -8,12 +9,12 @@ namespace Application.CompanyHandlers
     public class EditCompany
     {
 
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public Company Company { get; set; } = null!;
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _dataContext;
             private readonly IMapper _mapper;
@@ -23,12 +24,19 @@ namespace Application.CompanyHandlers
                 _dataContext = dataContext;
             }
 
-            public async Task Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var company = await _dataContext.Companies.FindAsync(request.Company.Id);
+
+                if (company == null) return Result<Unit>.Failure("Company not found");
+
                 _mapper.Map(request.Company, company);
 
-                await _dataContext.SaveChangesAsync();
+                var result = await _dataContext.SaveChangesAsync() > 0;
+
+                if (!result) return Result<Unit>.Failure("Failed to update company");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
 

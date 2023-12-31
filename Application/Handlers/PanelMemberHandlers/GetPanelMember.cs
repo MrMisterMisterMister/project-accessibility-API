@@ -1,3 +1,4 @@
+using Application.Core;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +8,9 @@ namespace Application.PanelMemberHandlers
 {
     public class GetPanelMember
     {
-        public class Query : IRequest<List<PanelMember>> { }
+        public class Query : IRequest<Result<List<PanelMember>>> { }
 
-        public class Handler : IRequestHandler<Query, List<PanelMember>>
+        public class Handler : IRequestHandler<Query, Result<List<PanelMember>>>
         {
             private readonly DataContext _dataContext;
             public Handler(DataContext dataContext)
@@ -17,9 +18,9 @@ namespace Application.PanelMemberHandlers
                 _dataContext = dataContext;
             }
 
-            public async Task<List<PanelMember>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<PanelMember>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _dataContext.PanelMembers.ToListAsync();
+                return Result<List<PanelMember>>.Success(await _dataContext.PanelMembers.ToListAsync());
             }
         }
     }
