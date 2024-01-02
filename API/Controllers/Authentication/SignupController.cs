@@ -44,7 +44,7 @@ namespace API.Controllers
 
             var result = await _userManager.CreateAsync(user, registerDTO.Password);
 
-            if (result.Succeeded) return new UserDTO { Token = _tokenService.CreateToken(user) };
+            if (result.Succeeded) return new UserDTO { Token = _tokenService.CreateAndSetCookie(user) };
 
             return BadRequest(result.Errors);
         }
@@ -78,7 +78,7 @@ namespace API.Controllers
 
             var result = await _userManager.CreateAsync(panelMember, registerPanelMemberDTO.Password);
 
-            if (result.Succeeded) return new UserDTO { Token = _tokenService.CreateToken(panelMember) };
+            if (result.Succeeded) return new UserDTO { Token = _tokenService.CreateAndSetCookie(panelMember) };
 
             return BadRequest(result.Errors);
         }
@@ -123,7 +123,7 @@ namespace API.Controllers
 
             var result = await _userManager.CreateAsync(company, registerCompanyDTO.Password);
 
-            if (result.Succeeded) return new UserDTO { Token = _tokenService.CreateToken(company) };
+            if (result.Succeeded) return new UserDTO { Token = _tokenService.CreateAndSetCookie(company) };
 
             return BadRequest(result.Errors);
         }
