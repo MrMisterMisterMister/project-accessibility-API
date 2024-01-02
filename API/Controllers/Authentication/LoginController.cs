@@ -35,7 +35,7 @@ namespace API.Controllers
 
             var result = await _userManager.CheckPasswordAsync(user, loginDTO.Password);
 
-            if (result) return new UserDTO { Token = _tokenService.CreateToken(user) };
+            if (result) return new UserDTO { Token = _tokenService.CreateAndSetCookie(user) };
 
             return Unauthorized(
                 new

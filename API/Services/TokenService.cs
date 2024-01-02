@@ -9,9 +9,11 @@ namespace API.Services
     public class TokenService
     {
         private readonly IConfiguration _config;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TokenService(IConfiguration config)
+        public TokenService(IConfiguration config, IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
             _config = config;
 
         }
@@ -39,6 +41,25 @@ namespace API.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+        }
+
+        public string CreateAndSetCookie(User user)
+        {
+            var jwtToken = CreateToken(user);
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddMinutes(30)
+            };
+
+            // might need to fix this later
+            var httpContext = _httpContextAccessor.HttpContext;
+            httpContext?.Response.Cookies.Append("userCookie", jwtToken, cookieOptions);
+
+            return jwtToken;
         }
     }
 }

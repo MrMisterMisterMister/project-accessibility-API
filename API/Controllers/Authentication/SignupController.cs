@@ -23,7 +23,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
+        public async Task<ActionResult<UserDTO>> Signup(RegisterDTO registerDTO)
         {
             if (await _userManager.Users.AnyAsync(x => x.Email == registerDTO.Email))
             {
