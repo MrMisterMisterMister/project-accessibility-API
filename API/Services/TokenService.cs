@@ -55,7 +55,6 @@ namespace API.Services
                 Expires = DateTime.UtcNow.AddMinutes(30)
             };
 
-            // might need to fix this later
             var httpContext = _httpContextAccessor.HttpContext;
             httpContext?.Response.Cookies.Append("userCookie", jwtToken, cookieOptions);
 
