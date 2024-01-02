@@ -45,5 +45,18 @@ namespace API.Controllers
                 }
             );
         }
+
+        // for testing purposes
+        [HttpGet("set-cookie")]
+        public IActionResult SetCookie()
+        {
+            _tokenService.CreateAndSetCookie(new User
+            {
+                Email = "test@dad.com",
+                Id = Guid.NewGuid().ToString(),
+            });
+
+            return Ok("Cookie Set!");
+        }
     }
 }
