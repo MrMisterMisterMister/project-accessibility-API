@@ -56,7 +56,8 @@ namespace API.Services
             };
 
             var httpContext = _httpContextAccessor.HttpContext;
-            httpContext?.Response.Cookies.Append("userCookie", jwtToken, cookieOptions);
+            if (httpContext != null)
+                httpContext.Response.Cookies.Append("userCookie", jwtToken, cookieOptions);
 
             return jwtToken;
         }
