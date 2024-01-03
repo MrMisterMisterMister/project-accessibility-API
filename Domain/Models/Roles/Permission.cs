@@ -1,9 +1,10 @@
 namespace Domain{
     public enum Permission{
         //Research
-        CanCreateResearch,
-        CanDeleteResearch,
-        CanEditResearch,
+        CreateResearch,
+        DeleteResearch,
+        EditResearch,
+        AddParticipant,
 
         //Panelmember
         CanParticipate,

@@ -10,6 +10,7 @@ namespace Persistence
 
         public DbSet<Company> Companies { get; set; }
         public DbSet<PanelMember> PanelMembers { get; set; }
+        public DbSet<Research> Researches {get;set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
