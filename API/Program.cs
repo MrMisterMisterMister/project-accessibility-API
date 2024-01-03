@@ -1,5 +1,6 @@
 using API.Extensions;
 using API.Middleware;
+using API.Services;
 using Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -41,8 +42,12 @@ if (app.Environment.IsDevelopment())
     {
         var databaseContext = serviceProvider.GetRequiredService<DataContext>();
         var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var roleService = new RoleService(userManager, roleManager);
         await databaseContext.Database.MigrateAsync(); // executes dotnet ef update on the latest migrations
         await Seed.SeedAll(databaseContext, userManager); // inserts seed data into the database
+        await roleService.SeedRoles();
+        await roleService.AssignRoleToUser("admin@admin.com", nameof(RoleTypes.Admin)); // asigns admin role to test user... whack
     }
     catch (Exception e)
     {
