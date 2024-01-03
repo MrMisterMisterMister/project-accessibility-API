@@ -1,75 +1,57 @@
-using System.Security.Claims;
 using Application.UserHandlers;
 using Domain;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    // Controller handling user-related operations
     public class UsersController : BaseApiController
     {
-        // Will add more specific comments later
-        // meh
-        // Retrieves all users
+        // Retrieves list of users
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public async Task<ActionResult<List<User>>> GetUsers()
         {
-            return HandleResult(await Mediator.Send(new GetUser.Query()));
+            // Mediator sends a request to the handler responsible for getting users
+            return await Mediator.Send(new GetUser.Query());
         }
 
-        // Retrieves a specific user by their ID
+        // Retrieves a user by ID
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(Guid id)
+        public async Task<ActionResult<User>> GetUserById(Guid id)
         {
-            return HandleResult(await Mediator.Send(new GetUserById.Query { Id = id }));
+            // Mediator sends a request to the handler responsible for getting a user by id
+            return await Mediator.Send(new GetUserById.Query { Id = id });
         }
 
         // Creates a new user
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
-            return HandleResult(await Mediator.Send(new CreateUser.Command { User = user }));
+            // Mediator sends a request to the handler responsible for creating a new user
+            await Mediator.Send(new CreateUser.Command { User = user });
+
+            return Ok(); // Placeholder reponse
         }
 
-        // Deletes a user by their ID
+        // Deletes a user by ID
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
-            return HandleResult(await Mediator.Send(new DeleteUser.Command { Id = id }));
+            // Mediator sends a request to the handler responsible for deleting a user by ID
+            await Mediator.Send(new DeleteUser.Command { Id = id });
+
+            return Ok(); // Placeholder response
         }
 
-        // Updates a user's details by their ID
+        // Updates/edit a user by ID, might add more options later
         [HttpPut("{id}")]
         public async Task<ActionResult> EditUser(Guid id, User user)
         {
-            user.Id = id.ToString();
-            return HandleResult(await Mediator.Send(new EditUser.Command { User = user }));
-        }
+            user.Id = id; // Sets the ID in the user object
+            // Mediator sends a request to the handler responsible for updating/editing a user by ID
+            await Mediator.Send(new EditUser.Command { User = user });
 
-        // For testing purposes: Retrieves user information including UserID, Email, Cookie, and JWT Token
-        [HttpGet("userinfo")]
-        public IActionResult GetUserInfo()
-        {
-            // Extracts UserID and Email from the authenticated user's claims
-            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userEmail = HttpContext.User.FindFirstValue(ClaimTypes.Email);
-
-            // Retrieves the 'userCookie' from the HTTP request cookies
-            var cookie = Request.Cookies["userCookie"];
-
-            // Retrieves the JWT token from the HTTP context's authentication tokens
-            var jwtToken = HttpContext.GetTokenAsync("Bearer", "access_token").Result;
-
-            // Constructs a response object with retrieved user information
-            var response = new
-            {
-                UserId = userId,
-                Email = userEmail,
-                Cookie = cookie,
-                JwtToken = jwtToken
-            };
-
-            return Ok(response); // Returns the constructed response as OK
+            return Ok(); // Placeholder response
         }
     }
 }
