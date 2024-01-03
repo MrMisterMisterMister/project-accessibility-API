@@ -8,6 +8,7 @@ namespace API.Controllers
 {
     // This controller is the base for other controllers to inherit common functionalities
     // Ensures that only authenticated users can access these controllers
+    // Will add other roles or a policy when we have more roles
     [Authorize(Roles = nameof(RoleTypes.Admin))]
     [ApiController] // Indicates that this controller handles HTTP API requests
     [Route("[controller]")] // Routes requests to endpoints based on the controller's name
