@@ -30,7 +30,7 @@ namespace API.Controllers
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteResearch(Guid id){
-        return HandleResult(await _mediator.Send(new DeleteResearch.Command { ResearchId  = Guid.Parse(id.ToString()) }));
+        return HandleResult(await _mediator.Send(new DeleteResearch.Command { ResearchId  = id}));
         }
 
         [HttpPost("addparticipant")]
