@@ -4,6 +4,8 @@ using Domain;
 using API.Services;
 using API.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 namespace API.Controllers
 {
@@ -39,8 +41,11 @@ namespace API.Controllers
             var result = await _userManager.CheckPasswordAsync(user, loginDTO.Password);
 
             // Return a JWT token cookie if credentials are valid
-            if (result) return new UserDTO { Token = _tokenService.CreateAndSetCookie(user) };
-
+            if (result)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                return new UserDTO { Token = _tokenService.CreateAndSetCookie(user, roles.ToList()) };
+            }
             // Return Unauthorized if the password is incorrect
             return Unauthorized(
                 new
@@ -49,6 +54,36 @@ namespace API.Controllers
                     description = "Incorrect password. Please check your password and try again."
                 }
             );
+        }
+
+        // For testing purposes: Retrieves user information including 
+        // UserID, Email, Cookie, and JWT Token and roles
+        [HttpGet("userinfo")]
+        public async Task<IActionResult> GetUserInfo()
+        {
+            // Extracts user Email from the authenticated user's claims
+            // and finds it in the database  
+            var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email)!);
+
+            var roles = await _userManager.GetRolesAsync(user!);
+
+            // Retrieves the 'userCookie' from the HTTP request cookies
+            var cookie = Request.Cookies["userCookie"];
+
+            // Retrieves the JWT token from the HTTP context's authentication tokens
+            var jwtToken = HttpContext.GetTokenAsync("Bearer", "access_token").Result;
+
+            // Constructs a response object with retrieved user information
+            var response = new
+            {
+                UserId = user!.Id,
+                Email = user.Email,
+                Cookie = cookie,
+                JwtToken = jwtToken,
+                UserRoles = roles
+            };
+
+            return Ok(response); // Returns the constructed response as OK
         }
 
         // Endpoint to set a test cookie (for demonstration or testing purposes)
@@ -60,7 +95,7 @@ namespace API.Controllers
             {
                 Email = "test@dad.com",
                 Id = Guid.NewGuid().ToString(),
-            });
+            }, new List<string> { "Admin" });
 
             return Ok("Cookie Set!"); // Returns a success message when the cookie is set
         }
