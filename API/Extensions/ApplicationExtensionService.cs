@@ -12,7 +12,7 @@ namespace API.Extensions
         {
             // This is where all the services should be placed for cleaner clode
 
-            services.AddDbContext<DatabaseContext>(opt =>
+            services.AddDbContext<DataContext>(opt =>
                 opt.UseMySql(config.GetConnectionString("TestDatabase"),
                     new MySqlServerVersion(new Version(8, 0, 35))
                 )
@@ -23,9 +23,10 @@ namespace API.Extensions
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyHeader()
+                    policy
+                    .AllowAnyHeader()
                     .AllowAnyMethod().
-                    WithOrigins("http://localhost:5000", "http://localhost:5001");
+                    WithOrigins("http://localhost:5001");
                 });
             });
 
