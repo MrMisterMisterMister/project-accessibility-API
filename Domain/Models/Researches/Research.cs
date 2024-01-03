@@ -14,6 +14,10 @@ namespace Domain{
         public Company ?Organizer {get;set;}
         [Required]
         public List<Category> Categories{get;set;} = null!;
-    
+
+        public static implicit operator Research(Guid v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

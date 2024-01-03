@@ -8,7 +8,7 @@ using Persistence;
 namespace Application.ResearchHandlers{
     public class DeleteResearch{
         public class Command : IRequest<Result<Unit>>{
-            public Research research { get; set; } = null!;
+            public Guid ResearchId  { get; set; }
         }
         //Moet nog wel ff ervoor zorgen dat alleen een bedrijf een onderzoek kan verwijderen, als rbac correct werkt doe ik dit ff.
         public class Handler : IRequestHandler<Command, Result<Unit>>{
@@ -19,29 +19,31 @@ namespace Application.ResearchHandlers{
                 _logger = logger;
             }
 
-          public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken){
-                _logger.LogInformation("Bezig met onderzoek verwijderen...");
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken){
+            _logger.LogInformation("Bezig met onderzoek verwijderen...");
 
-                try{
-                    if (request.research == null){
-                        return Result<Unit>.Failure("Onderzoek niet gevonden.");
-                    }
+            try{
+                var research = await _dataContext.Researches.FindAsync(request.ResearchId );
 
-                    _dataContext.Remove(request.research);
-
-                    var result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
-
-                    if (!result){
-                        return Result<Unit>.Failure("Fout opgetreden bij het verwijderen van het onderzoek.");
-                    }
-                    return Result<Unit>.Success(Unit.Value);
+                if (research == null){
+                    return Result<Unit>.Failure("Onderzoek niet gevonden.");
                 }
-                catch (Exception e)
-                {
-                    _logger.LogError("Er is een fout opgetreden bij het verwijderen of ophalen van het onderzoek.", e.Message);
-                    return Result<Unit>.Failure("Er is een fout opgetreden bij het verwijderen of ophalen van het onderzoek.");
+
+                _dataContext.Remove(research);
+
+                var result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
+
+                if (!result){
+                    return Result<Unit>.Failure("Fout opgetreden bij het verwijderen van het onderzoek.");
                 }
+
+                return Result<Unit>.Success(Unit.Value);
+            }
+            catch (Exception e){
+                _logger.LogError("Er is een fout opgetreden bij het verwijderen of ophalen van het onderzoek.", e.Message);
+                return Result<Unit>.Failure("Er is een fout opgetreden bij het verwijderen of ophalen van het onderzoek.");
             }
         }
+    }
     }
 }
