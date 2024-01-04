@@ -27,7 +27,7 @@ namespace API.Extensions
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials()
-                    .WithOrigins("http://localhost:5001");
+                    .WithOrigins("https://accounts.google.com", "http://localhost:5001");
                 });
             });
 

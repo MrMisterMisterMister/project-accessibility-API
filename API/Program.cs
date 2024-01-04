@@ -19,8 +19,6 @@ services.AddControllers();
 
 services.AddApplicationServices(config);
 services.AddIdentityServices(config);
-services.AddAuthorizationServices(config);
-
 
 builder.Services.AddAuthentication( options =>
 {
@@ -33,6 +31,8 @@ builder.Services.AddAuthentication( options =>
     options.ClientId = builder.Configuration["GoogleAuth:ClientId"]; // Retrieve ClientId from appsettings.json
     options.ClientSecret = builder.Configuration["GoogleAuth:ClientSecret"]; // You may store ClientSecret similarly
 });
+
+services.AddAuthorizationServices(config);
 
 var app = builder.Build();
 
