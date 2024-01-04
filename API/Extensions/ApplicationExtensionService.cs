@@ -24,9 +24,9 @@ namespace API.Extensions
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
                     policy
+                    .AllowAnyMethod()
                     .AllowAnyHeader()
-                    .AllowAnyMethod().
-                    WithOrigins("http://localhost:5001");
+                    .WithOrigins("http://localhost:5001");
                 });
             });
 
