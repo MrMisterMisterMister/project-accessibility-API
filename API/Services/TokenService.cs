@@ -18,7 +18,7 @@ namespace API.Services
         }
 
         // Generates a JWT token based on the provided user details
-        public string CreateToken(User user)
+        public string CreateToken(User user, List<string> roles)
         {
             // Claims represent the user's identity information
             var claims = new List<Claim>
@@ -27,9 +27,14 @@ namespace API.Services
                 new Claim(ClaimTypes.Email, user.Email!)
             };
 
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
             // Key to sign the token using a secret key stored in configuration
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"]!));
-            
+
             // Credentials used to sign the token
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
@@ -42,7 +47,7 @@ namespace API.Services
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            
+
             // Create the token based on the token descriptor
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
@@ -51,10 +56,10 @@ namespace API.Services
         }
 
         // Creates a JWT token and sets it as a cookie in the HTTP response
-        public string CreateAndSetCookie(User user)
+        public string CreateAndSetCookie(User user, List<string> roles)
         {
             // Create a JWT token
-            var jwtToken = CreateToken(user);
+            var jwtToken = CreateToken(user, roles);
 
             // Cookie options for the JWT token
             var cookieOptions = new CookieOptions

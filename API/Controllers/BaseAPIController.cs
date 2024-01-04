@@ -1,4 +1,5 @@
 using Application.Core;
+using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     // This controller is the base for other controllers to inherit common functionalities
-    [Authorize] // Ensures that only authenticated users can access these controllers
+    // Ensures that only authenticated users can access these controllers
+    // Will add other roles or a policy when we have more roles
+    [Authorize(Roles = nameof(RoleTypes.Admin))]
     [ApiController] // Indicates that this controller handles HTTP API requests
     [Route("[controller]")] // Routes requests to endpoints based on the controller's name
     public class BaseApiController : ControllerBase // Inherits from ControllerBase for API functionalities

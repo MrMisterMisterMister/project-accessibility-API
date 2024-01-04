@@ -3,6 +3,7 @@ using API.Services;
 using Domain;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
 
@@ -20,6 +21,7 @@ namespace API.Extensions
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.User.RequireUniqueEmail = true;
             })
+            .AddRoles<IdentityRole>() // adds role based authorization
             .AddEntityFrameworkStores<DataContext>();
 
             // Retrieveing security key for JWT token generation and validation

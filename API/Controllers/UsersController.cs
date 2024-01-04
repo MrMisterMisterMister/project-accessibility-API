@@ -1,7 +1,5 @@
-using System.Security.Claims;
 using Application.UserHandlers;
 using Domain;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -44,32 +42,6 @@ namespace API.Controllers
         {
             user.Id = id.ToString();
             return HandleResult(await Mediator.Send(new EditUser.Command { User = user }));
-        }
-
-        // For testing purposes: Retrieves user information including UserID, Email, Cookie, and JWT Token
-        [HttpGet("userinfo")]
-        public IActionResult GetUserInfo()
-        {
-            // Extracts UserID and Email from the authenticated user's claims
-            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userEmail = HttpContext.User.FindFirstValue(ClaimTypes.Email);
-
-            // Retrieves the 'userCookie' from the HTTP request cookies
-            var cookie = Request.Cookies["userCookie"];
-
-            // Retrieves the JWT token from the HTTP context's authentication tokens
-            var jwtToken = HttpContext.GetTokenAsync("Bearer", "access_token").Result;
-
-            // Constructs a response object with retrieved user information
-            var response = new
-            {
-                UserId = userId,
-                Email = userEmail,
-                Cookie = cookie,
-                JwtToken = jwtToken
-            };
-
-            return Ok(response); // Returns the constructed response as OK
         }
     }
 }
