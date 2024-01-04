@@ -24,10 +24,9 @@ services.AddAuthorizationServices(config);
 builder.Services.AddAuthentication( options =>
 {
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    //options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme; // Use Google authentication
 })
-.AddCookie()
 .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
 {
     options.ClientId = builder.Configuration["GoogleAuth:ClientId"]; // Retrieve ClientId from appsettings.json
@@ -42,9 +41,7 @@ app.UseForwardedHeaders();
 app.UseCors("CorsPolicy");
 app.UseAuthentication();
 
-app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 // creates scope for services to setup local database and discards itself
