@@ -1,4 +1,5 @@
 using Application.PanelMemberHandlers;
+using Application.ResearchHandlers;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +36,11 @@ namespace API.Controllers
         {
             panelMember.Id = id.ToString();
             return HandleResult(await Mediator.Send(new EditPanelMember.Command { PanelMember = panelMember }));
+        }
+        [HttpPut("{id}/participate")]
+        public async Task<ActionResult> ParticipateInResearch(Guid id, PanelMember panelMember){
+            panelMember.Id = id.ToString();
+        return HandleResult(await Mediator.Send(new ParticipateInResearch.Command { ParticipantId = Guid.Parse(panelMember.Id) }));
         }
     }
 }

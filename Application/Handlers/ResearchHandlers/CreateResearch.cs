@@ -34,11 +34,11 @@ namespace Application.ResearchHandlers
 
                 try{
                     _dataContext.Add(request.Research);
+                    
+                    //resultaat is true als er changes zijn opgeslagen en false als er geen zijn opgeslagen.
+                    bool resultaat = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
 
-                    var resultaat = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
-
-                    if (!resultaat)
-                    {
+                    if (!resultaat) {
                         return Result<Unit>.Failure("Fout opgetreden bij het maken van het onderzoek.");
                     }
 

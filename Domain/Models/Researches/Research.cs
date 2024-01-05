@@ -5,6 +5,8 @@ using System.Dynamic;
 namespace Domain{
     public class Research{
         [Required]
+        public Guid Id{get;set;}
+        [Required]
         public string Title{get;set;} = null!;
         public string? Description{get;set;}
         public DateTime Date{get;set;}

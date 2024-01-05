@@ -45,7 +45,8 @@ namespace Application.ResearchHandlers{
                     onderzoek.Participants.Add(deelnemer);
 #pragma warning restore CS8602
 
-                    var resultaat = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
+                    //resultaat is true als er changes zijn opgeslagen en false als er geen zijn opgeslagen.
+                    bool resultaat = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
                     if(!resultaat){
                     return Result<Unit>.Failure($"Probleem opgetreden bij het toevoegen van de deelnemer. Id: {request.ParticipantId}");
                     }

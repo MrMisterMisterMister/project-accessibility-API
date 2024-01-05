@@ -24,14 +24,14 @@ namespace Application.ResearchHandlers{
 
             try{
                 var research = await _dataContext.Researches.FindAsync(request.ResearchId );
-
                 if (research == null){
                     return Result<Unit>.Failure("Onderzoek niet gevonden.");
                 }
 
                 _dataContext.Remove(research);
-
-                var result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
+                
+                //resultaat is true als er changes zijn opgeslagen en false als er geen zijn opgeslagen.
+                bool result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
 
                 if (!result){
                     return Result<Unit>.Failure("Fout opgetreden bij het verwijderen van het onderzoek.");

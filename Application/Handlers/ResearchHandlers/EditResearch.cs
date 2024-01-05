@@ -31,6 +31,7 @@ namespace Application.ResearchHandlers{
                     if (research == null){
                         return Result<Unit>.Failure("Onderzoek niet gevonden");
                     }
+                    //Niet perse nodig maar zorgt ervoor dat er geen onnodige updates worden gemaakt naar onze database.
                     if(research.Title.Equals(request.NieuweTitel)){
                         return Result<Unit>.Failure("Titel is hetzelfde");
                     }
