@@ -13,7 +13,7 @@ namespace API.Extensions
             // This is where all the services should be placed for cleaner clode
 
             services.AddDbContext<DataContext>(opt =>
-                opt.UseMySql(config.GetConnectionString("TestDatabase"),
+                opt.UseMySql(config.GetConnectionString("MyAccessibleDatabase"),
                     new MySqlServerVersion(new Version(8, 0, 35))
                 )
             );
