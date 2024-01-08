@@ -1,18 +1,15 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain
+namespace API.DTOs.RegisterDTOs
 {
-    public class PanelMember : User
+    public class RegisterPanelMemberDTO : RegisterDTO
     {
         public int Guardian { get; set; } // TODO ...
         [Required]
         public string FirstName { get; set; } = null!;
         [Required]
         public string LastName { get; set; } = null!;
-        [Required]
-        public string Zipcode { get; set; } = null!;
-        [Required]
-        public DateTime DateOfBirth { get; set; }
-        
+        public string? Zipcode { get; set; }
+        public string? DateOfBirth { get; set; }
     }
 }

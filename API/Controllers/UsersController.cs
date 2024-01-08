@@ -1,33 +1,47 @@
-
+using Application.UserHandlers;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
 
 namespace API.Controllers
 {
     public class UsersController : BaseApiController
     {
-        private readonly DatabaseContext _databaseContext;
-        public UsersController(DatabaseContext databaseContext)
-        {
-            _databaseContext = databaseContext;
-        }
-
+        // Will add more specific comments later
+        // meh
+        // Retrieves all users
         [HttpGet]
-        public async Task<ActionResult<List<User>>> GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
-            return await _databaseContext.Users.ToListAsync();
+            return HandleResult(await Mediator.Send(new GetUser.Query()));
         }
 
+        // Retrieves a specific user by their ID
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(Guid id)
+        public async Task<IActionResult> GetUserById(Guid id)
         {
-            var user = await _databaseContext.Users.FindAsync(id);
-
-            return user != null ? Ok(user) : NotFound();
+            return HandleResult(await Mediator.Send(new GetUserById.Query { Id = id }));
         }
 
-        // TODO create handlers for post, put and delete
+        // Creates a new user
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(User user)
+        {
+            return HandleResult(await Mediator.Send(new CreateUser.Command { User = user }));
+        }
+
+        // Deletes a user by their ID
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new DeleteUser.Command { Id = id }));
+        }
+
+        // Updates a user's details by their ID
+        [HttpPut("{id}")]
+        public async Task<ActionResult> EditUser(Guid id, User user)
+        {
+            user.Id = id.ToString();
+            return HandleResult(await Mediator.Send(new EditUser.Command { User = user }));
+        }
     }
 }

@@ -1,14 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain
+namespace API.DTOs
 {
-    public class User
+    public class RegisterDTO
     {
-        public Guid Id { get; set; } // we use guid instead of int for security by obscurity 
+        // Might have more properties later
         [Required]
+        [EmailAddress]
         public string Email { get; set; } = null!;
         [Required]
         public string Password { get; set; } = null!;
-
     }
 }
