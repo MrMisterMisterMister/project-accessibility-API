@@ -36,24 +36,20 @@ app.MapControllers();
 using var scope = app.Services.CreateScope();
 var serviceProvider = scope.ServiceProvider;
 
-if (app.Environment.IsDevelopment())
+try
 {
-    try
-    {
-        var databaseContext = serviceProvider.GetRequiredService<DataContext>();
-        var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
-        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-        var roleService = new RoleService(userManager, roleManager);
-        await databaseContext.Database.MigrateAsync(); // executes dotnet ef update on the latest migrations
-        await Seed.SeedAll(databaseContext, userManager); // inserts seed data into the database
-        await roleService.SeedRoles();
-        await roleService.AssignRoleToUser("admin@admin.com", nameof(RoleTypes.Admin)); // asigns admin role to test user... whack
-    }
-    catch (Exception e)
-    {
-        var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(e, "An error occured during migration");
-    }
+    var databaseContext = serviceProvider.GetRequiredService<DataContext>();
+    var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var roleService = new RoleService(userManager, roleManager);
+    await databaseContext.Database.MigrateAsync(); // executes dotnet ef update on the latest migrations
+    await Seed.SeedAll(databaseContext, userManager); // inserts seed data into the database
+    await roleService.SeedRoles();
+}
+catch (Exception e)
+{
+    var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+    logger.LogError(e, "An error occured during migration");
 }
 
 app.Run();
