@@ -124,7 +124,7 @@ namespace Persistence
                         Email = "panelmember2@email.com",
                         UserName = "panelmember2@email.com",
                         Guardian = new Random().Next(0, 100),
-                        FirstName = "jane",
+                        FirstName = "Jane",
                         LastName = "Doe",
                         Zipcode = "1234Ac",
                         DateOfBirth = DateTime.UtcNow.AddMonths(2),
