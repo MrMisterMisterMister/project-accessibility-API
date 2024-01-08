@@ -7,11 +7,14 @@ namespace API.DTOs.RegisterDTOs
         [Required]
         public string Kvk { get; set; } = null!;
         [Required]
-        public string Name { get; set; } = null!;
-        public string? Adres { get; set; }
-        public string? Location { get; set; }
+        public string CompanyName { get; set; } = null!;
+        [Phone]
+        public string? Phone { get; set; }
+        public string? Address { get; set; }
+        public string? PostalCode { get; set; }
+        public string? Province { get; set; }
         public string? Country { get; set; }
-        public string? Url { get; set; }
-        public string? Contact { get; set; }
+        public string? WebsiteUrl { get; set; }
+        public string? ContactPerson { get; set; }
     }
 }
