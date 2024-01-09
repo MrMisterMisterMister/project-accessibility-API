@@ -125,12 +125,14 @@ namespace API.Controllers
                 Email = registerCompanyDTO.Email,
                 UserName = registerCompanyDTO.Email,
                 Kvk = registerCompanyDTO.Kvk,
-                Name = registerCompanyDTO.Name,
-                Adres = registerCompanyDTO.Adres,
-                Location = registerCompanyDTO.Location,
+                CompanyName = registerCompanyDTO.CompanyName,
+                Phone = registerCompanyDTO.Phone,
+                Address = registerCompanyDTO.Address,
+                PostalCode = registerCompanyDTO.PostalCode,
+                Province = registerCompanyDTO.Province,
                 Country = registerCompanyDTO.Country,
-                Url = registerCompanyDTO.Url,
-                Contact = registerCompanyDTO.Contact
+                WebsiteUrl = registerCompanyDTO.WebsiteUrl,
+                ContactPerson = registerCompanyDTO.ContactPerson
             };
 
             var result = await _userManager.CreateAsync(company, registerCompanyDTO.Password);
