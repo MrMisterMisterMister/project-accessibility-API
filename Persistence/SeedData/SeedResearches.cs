@@ -1,9 +1,4 @@
 using Domain;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.SeedData{
@@ -30,10 +25,10 @@ namespace Persistence.SeedData{
                         Reward = 50,
                         Organizer = companies[0],
                         Participants = panelMembers.Take(2).ToList(), 
-                        ResearchCategories = new List<ResearchCategory>
+                        Categories = new List<Category>
                         {
-                            new ResearchCategory { Category = new Category { Name = "Category1" } },
-                            new ResearchCategory { Category = new Category { Name = "Category2" } }
+                            new Category { Name = "Banana" },
+                            new Category { Name = "Apple" }
                         }
                     },
                     new Research
@@ -45,10 +40,10 @@ namespace Persistence.SeedData{
                         Reward = 30,
                         Organizer = companies[1],  
                         Participants = panelMembers.Skip(2).Take(2).ToList(), 
-                        ResearchCategories = new List<ResearchCategory>
+                        Categories = new List<Category>
                         {
-                            new ResearchCategory { Category = new Category { Name = "Category3" } },
-                            new ResearchCategory { Category = new Category { Name = "Category4" } }
+                            new Category { Name = "Horse" },
+                            new Category { Name = "Cow" }
                         }
                     },
                 };

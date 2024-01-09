@@ -13,7 +13,7 @@ namespace Application.ResearchHandlers{
     public class ParticipateInResearch{
         public class Command : IRequest<Result<Unit>>
         {
-            public Guid ResearchId { get; set; }
+            public int ResearchId { get; set; }
             public Guid ParticipantId { get; set; }
         }
 

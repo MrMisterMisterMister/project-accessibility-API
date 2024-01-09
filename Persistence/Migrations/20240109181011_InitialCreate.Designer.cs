@@ -11,7 +11,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240108184902_InitialCreate")]
+    [Migration("20240109181011_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -21,6 +21,58 @@ namespace Persistence.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("Domain.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("ResearchId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResearchId");
+
+                    b.ToTable("Categories", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Research", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OrganizerId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("Reward")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("isOnline")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizerId");
+
+                    b.ToTable("Researches", (string)null);
+                });
 
             modelBuilder.Entity("Domain.User", b =>
                 {
@@ -270,10 +322,31 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("ResearchId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Zipcode")
                         .HasColumnType("longtext");
 
+                    b.HasIndex("ResearchId");
+
                     b.ToTable("PanelMembers", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Category", b =>
+                {
+                    b.HasOne("Domain.Research", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("ResearchId");
+                });
+
+            modelBuilder.Entity("Domain.Research", b =>
+                {
+                    b.HasOne("Domain.Company", "Organizer")
+                        .WithMany()
+                        .HasForeignKey("OrganizerId");
+
+                    b.Navigation("Organizer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -343,6 +416,17 @@ namespace Persistence.Migrations
                         .HasForeignKey("Domain.PanelMember", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Domain.Research", null)
+                        .WithMany("Participants")
+                        .HasForeignKey("ResearchId");
+                });
+
+            modelBuilder.Entity("Domain.Research", b =>
+                {
+                    b.Navigation("Categories");
+
+                    b.Navigation("Participants");
                 });
 #pragma warning restore 612, 618
         }
