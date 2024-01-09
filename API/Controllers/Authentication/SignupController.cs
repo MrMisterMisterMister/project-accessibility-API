@@ -22,30 +22,38 @@ namespace API.Controllers
             _userManager = userManager;
         }
 
+        // Handles user signup and generates a JWT token as a cookie
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
+        public async Task<ActionResult<UserDTO>> Signup(RegisterDTO registerDTO)
         {
+            // Check if the provided email already exists in the database
             if (await _userManager.Users.AnyAsync(x => x.Email == registerDTO.Email))
             {
-                return BadRequest(
-                    new
-                    {
-                        code = "EmailTaken",
-                        description = "This email address is already taken."
-                    }
-                );
+                return BadRequest(new
+                {
+                    code = "EmailTaken",
+                    description = "This email address is already taken."
+                });
             }
 
+            // Create a new user instance with the provided email and password
             var user = new User
             {
                 Email = registerDTO.Email,
                 UserName = registerDTO.Email
             };
 
+            // Attempt to create the user in the database
             var result = await _userManager.CreateAsync(user, registerDTO.Password);
 
-            if (result.Succeeded) return new UserDTO { Token = _tokenService.CreateToken(user) };
+            // If the user creation is successful, return a JWT token as a cookie
+            if (result.Succeeded)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                return new UserDTO { Token = _tokenService.CreateAndSetCookie(user, roles.ToList()) };
+            }
 
+            // Return error messages if user creation fails
             return BadRequest(result.Errors);
         }
 
@@ -78,7 +86,11 @@ namespace API.Controllers
 
             var result = await _userManager.CreateAsync(panelMember, registerPanelMemberDTO.Password);
 
-            if (result.Succeeded) return new UserDTO { Token = _tokenService.CreateToken(panelMember) };
+            if (result.Succeeded)
+            {
+                var roles = await _userManager.GetRolesAsync(panelMember);
+                return new UserDTO { Token = _tokenService.CreateAndSetCookie(panelMember, roles.ToList()) };
+            }
 
             return BadRequest(result.Errors);
         }
@@ -113,17 +125,23 @@ namespace API.Controllers
                 Email = registerCompanyDTO.Email,
                 UserName = registerCompanyDTO.Email,
                 Kvk = registerCompanyDTO.Kvk,
-                Name = registerCompanyDTO.Name,
-                Adres = registerCompanyDTO.Adres,
-                Location = registerCompanyDTO.Location,
+                CompanyName = registerCompanyDTO.CompanyName,
+                Phone = registerCompanyDTO.Phone,
+                Address = registerCompanyDTO.Address,
+                PostalCode = registerCompanyDTO.PostalCode,
+                Province = registerCompanyDTO.Province,
                 Country = registerCompanyDTO.Country,
-                Url = registerCompanyDTO.Url,
-                Contact = registerCompanyDTO.Contact
+                WebsiteUrl = registerCompanyDTO.WebsiteUrl,
+                ContactPerson = registerCompanyDTO.ContactPerson
             };
 
             var result = await _userManager.CreateAsync(company, registerCompanyDTO.Password);
 
-            if (result.Succeeded) return new UserDTO { Token = _tokenService.CreateToken(company) };
+            if (result.Succeeded)
+            {
+                var roles = await _userManager.GetRolesAsync(company);
+                return new UserDTO { Token = _tokenService.CreateAndSetCookie(company, roles.ToList()) };
+            }
 
             return BadRequest(result.Errors);
         }

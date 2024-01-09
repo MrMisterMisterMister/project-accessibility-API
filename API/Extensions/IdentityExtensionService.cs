@@ -1,7 +1,9 @@
 using System.Text;
 using API.Services;
 using Domain;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
 
@@ -19,6 +21,7 @@ namespace API.Extensions
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.User.RequireUniqueEmail = true;
             })
+            .AddRoles<IdentityRole>() // adds role based authorization
             .AddEntityFrameworkStores<DataContext>();
 
             // Retrieveing security key for JWT token generation and validation
@@ -26,7 +29,11 @@ namespace API.Extensions
             (config["TokenKey"]!));
 
             // Adding JWT authentication services
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(o =>
+                {
+                    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(opt =>
                 {
                     // Configuring token validation parameters for JWT bearer authentication
@@ -37,9 +44,12 @@ namespace API.Extensions
                         ValidateIssuer = false, // MUST change when going into production
                         ValidateAudience = false // MUST change when going into production
                     };
-                });
+                })
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
 
             // Registering TokenService as a scoped service within the application's service collection
+            // And adding the httpcontext as a service.
+            services.AddHttpContextAccessor();
             services.AddScoped<TokenService>();
 
             return services;
