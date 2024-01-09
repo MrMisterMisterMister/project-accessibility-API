@@ -1,15 +1,15 @@
 using System.ComponentModel.DataAnnotations;
+using Domain;
 
-namespace Domain
+public class PanelMember : User
 {
-    public class PanelMember : User
-    {
-        public int Guardian { get; set; } // TODO ...
-        [Required]
-        public string FirstName { get; set; } = null!;
-        [Required]
-        public string LastName { get; set; } = null!;
-        public string? Zipcode { get; set; }
-        public DateTime DateOfBirth { get; set; }
-    }
+    [Required]
+    public int Guardian { get; set; }
+    [Required]
+    public string FirstName { get; set; }
+    [Required]
+    public string LastName { get; set; }
+    public string? Zipcode { get; set; }
+    public DateTime DateOfBirth { get; set; }
+
 }
