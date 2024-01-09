@@ -23,7 +23,7 @@ namespace API.Controllers.Authentication
         }
 
         [HttpPost("google-signup")]
-        public async Task<ActionResult<UserDTO>> GoogleSignUp([FromBody] GoogleSignInDTO signInDTO)
+        public async Task<ActionResult<UserDTO>> GoogleSignUp(GoogleSignInDTO signInDTO)
         {
             string googleJWTToken = signInDTO.GoogleJWTToken;
 
@@ -46,33 +46,34 @@ namespace API.Controllers.Authentication
 
             if (existingUser != null)
             {
-                // If the user already exists, return an error indicating the email is taken
-                return BadRequest(new
+                // User exists, generate a JWT token for them
+                var roles = await _userManager.GetRolesAsync(existingUser);
+                return new UserDTO { Token = _tokenService.CreateToken(existingUser, roles.ToList()) };
+            }
+            else
+            {
+
+                // If the email doesn't exist, create a new panelmember in the database
+                var panelMember = new PanelMember
                 {
-                    code = "EmailTaken",
-                    description = "This email address is already registered."
-                });
+                    Email = userEmail,
+                    UserName = userEmail,
+                    FirstName = userFirstName,
+                    LastName = userLastName
+                };
+
+                var result = await _userManager.CreateAsync(panelMember);
+
+                if (result.Succeeded)
+                {
+                    // User creation successful, generate a JWT token for the new user
+                    var newRoles = await _userManager.GetRolesAsync(panelMember);
+                    return new UserDTO { Token = _tokenService.CreateAndSetCookie(panelMember, newRoles.ToList()) };
+                }
+
+                // Return errors if user creation fails
+                return BadRequest(result.Errors);
             }
-
-            // If the email doesn't exist, create a new panelmember in the database
-            var panelMember = new PanelMember
-            {
-                Email = userEmail,
-                FirstName = userFirstName,
-                LastName = userLastName
-            };
-
-            var result = await _userManager.CreateAsync(panelMember);
-
-            if (result.Succeeded)
-            {
-                // User creation successful, generate a JWT token for the new user
-                var roles = await _userManager.GetRolesAsync(panelMember);
-                return new UserDTO { Token = _tokenService.CreateAndSetCookie(panelMember, roles.ToList()) };
-            }
-
-            // Return errors if user creation fails
-            return BadRequest(result.Errors);
         }
     }
 }
