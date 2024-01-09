@@ -1,5 +1,8 @@
+using System.Security.Claims;
 using Application.UserHandlers;
 using Domain;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -42,6 +45,36 @@ namespace API.Controllers
         {
             user.Id = id.ToString();
             return HandleResult(await Mediator.Send(new EditUser.Command { User = user }));
+        }
+
+        // Get's the current user using the auth token
+        [HttpGet("getCurrentUser")]
+        public async Task<IActionResult> GetCurrentUser([FromServices] UserManager<User> userManager)
+        {
+            // Extracts user Email from the authenticated user's claims
+            // and finds it in the database  
+            var user = await userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email)!);
+
+            var roles = await userManager.GetRolesAsync(user!);
+
+            // Retrieves the 'userCookie' from the HTTP request cookies
+            var cookie = Request.Cookies["userCookie"];
+
+            // Retrieves the JWT token from the HTTP context's authentication tokens
+            var jwtToken = HttpContext.GetTokenAsync("Bearer", "access_token").Result;
+
+            // Constructs a response object with retrieved user information
+            var response = new
+            {
+                UserId = user!.Id,
+                user.UserName,
+                user.Email,
+                Cookie = cookie,
+                JwtToken = jwtToken,
+                UserRoles = roles
+            };
+
+            return Ok(response); // Returns the constructed response as OK
         }
     }
 }
