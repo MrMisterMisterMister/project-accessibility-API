@@ -253,6 +253,15 @@ namespace Persistence.Migrations
                 {
                     b.HasBaseType("Domain.User");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("City")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime(6)");
 
@@ -267,7 +276,7 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Zipcode")
+                    b.Property<string>("PostalCode")
                         .HasColumnType("longtext");
 
                     b.ToTable("PanelMembers", (string)null);

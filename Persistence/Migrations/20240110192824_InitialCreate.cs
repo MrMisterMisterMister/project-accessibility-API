@@ -244,9 +244,15 @@ namespace Persistence.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Zipcode = table.Column<string>(type: "longtext", nullable: true)
+                    DateOfBirth = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Address = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    PostalCode = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    City = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Country = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {

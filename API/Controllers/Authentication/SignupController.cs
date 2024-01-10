@@ -78,10 +78,11 @@ namespace API.Controllers
                 Guardian = registerPanelMemberDTO.Guardian,
                 FirstName = registerPanelMemberDTO.FirstName,
                 LastName = registerPanelMemberDTO.LastName,
-                Zipcode = registerPanelMemberDTO.Zipcode,
-                DateOfBirth = DateTime.TryParse(registerPanelMemberDTO.DateOfBirth,
-                    out DateTime parsedDate)
-                    ? parsedDate : DateTime.MinValue
+                DateOfBirth = DateTime.TryParse(registerPanelMemberDTO.DateOfBirth, out DateTime parsedDate) ? parsedDate : DateTime.MinValue,
+                Address = registerPanelMemberDTO.Address,
+                PostalCode = registerPanelMemberDTO.PostalCode,
+                City = registerPanelMemberDTO.City,
+                Country = registerPanelMemberDTO.Country
             };
 
             var result = await _userManager.CreateAsync(panelMember, registerPanelMemberDTO.Password);
