@@ -12,6 +12,9 @@ namespace Application.Core
             CreateMap<User, User>();
             CreateMap<Company, Company>();
             CreateMap<PanelMember, PanelMember>();
+            CreateMap<Research, Research>();
+            CreateMap<Category, Category>();
+            CreateMap<Participant, Participant>();
         }
     }
 }

@@ -1,16 +1,11 @@
-using System;
-using System.Threading.Tasks;
-using Application.Core;
 using Application.ResearchHandlers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ResearchController : ControllerBase{
+    public class ResearchController : BaseApiController 
+    {
         private readonly IMediator _mediator;
 
         public ResearchController(IMediator mediator){
@@ -42,13 +37,6 @@ namespace API.Controllers
         [HttpPut("removeparticipant")]
         public async Task<IActionResult> RemoveParticipantFromResearch([FromBody] RemoveParticipant.Command command){
             return HandleResult(await _mediator.Send(command));
-        }
-
-        private IActionResult HandleResult<T>(Result<T> result){
-            if (result.IsSuccess){
-                return Ok(result.Value);
-            }
-            return BadRequest(result.Error);
         }
     }
 }
