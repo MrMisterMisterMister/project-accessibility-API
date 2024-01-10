@@ -14,8 +14,8 @@ namespace Application.ResearchHandlers
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public int ResearchId { get; set; }
-            public Guid ParticipantId { get; set; }
+            public Research Research { get; set; }
+            public PanelMember Participant { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -34,14 +34,14 @@ namespace Application.ResearchHandlers
                 _logger.LogInformation("Bezig met toevoegen van deelnemer...");
                 try
                 {
-                    var onderzoek = await _dataContext.Researches.FindAsync(request.ResearchId);
+                    var onderzoek = await _dataContext.Researches.FindAsync(request.Research.Id);
 
                     if (onderzoek == null)
                     {
                         return Result<Unit>.Failure("Onderzoek bestaat niet.");
                     }
 
-                    var deelnemer = await _dataContext.PanelMembers.FindAsync(request.ParticipantId);
+                    var deelnemer = await _dataContext.PanelMembers.FindAsync(request.Participant.Id);
 
                     if (deelnemer == null)
                     {
@@ -49,12 +49,12 @@ namespace Application.ResearchHandlers
                     }
 
                     // Check of de deelnemer al voorkomt in het onderzoek om dubbele toevoegingen te voorkomen
-                if (onderzoek.Participants?.Any(dp => dp.PanelMemberId == Guid.Parse(deelnemer.Id)) == true){
+                if (onderzoek.Participants?.Any(dp => dp.PanelMember.Id == deelnemer.Id) == true){
                      return Result<Unit>.Failure($"Deelnemer {deelnemer.UserName} komt al voor in het onderzoek");
 }
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-                    onderzoek.Participants.Add(new Participant { PanelMemberId = Guid.Parse(deelnemer.Id)});
+                    onderzoek.Participants.Add(new Participant { PanelMember = deelnemer});
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
                     // Resultaat is true als er changes zijn opgeslagen en false als er geen zijn opgeslagen.
@@ -62,7 +62,7 @@ namespace Application.ResearchHandlers
 
                     if (!resultaat)
                     {
-                        return Result<Unit>.Failure($"Probleem opgetreden bij het toevoegen van de deelnemer. Id: {request.ParticipantId}");
+                        return Result<Unit>.Failure($"Probleem opgetreden bij het toevoegen van de deelnemer. Id: {request.Participant.Id}");
                     }
 
                     _logger.LogInformation($"Succesvol deelnemer {deelnemer.UserName} toegevoegd aan onderzoek");

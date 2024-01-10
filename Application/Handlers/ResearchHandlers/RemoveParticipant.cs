@@ -14,8 +14,8 @@ namespace Application.ResearchHandlers
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public int ResearchId { get; set; }
-            public Guid ParticipantId { get; set; }
+            public Research Research { get; set; }
+            public PanelMember Participant { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -34,7 +34,7 @@ namespace Application.ResearchHandlers
                 _logger.LogInformation("Bezig met ophalen van onderzoek...");
                 try
                 {
-                    var onderzoek = await _dataContext.Researches.FindAsync(request.ResearchId);
+                    var onderzoek = await _dataContext.Researches.FindAsync(request.Research.Id);
 
                     if (onderzoek == null)
                     {
@@ -47,7 +47,7 @@ namespace Application.ResearchHandlers
                     }
 
                     var deelnemerTeVewijderen = onderzoek.Participants
-                        .FirstOrDefault(p => p.PanelMemberId == request.ParticipantId);
+                        .FirstOrDefault(p => p.PanelMember.Id == request.Participant.Id);
 
                     if (deelnemerTeVewijderen == null)
                     {
@@ -63,7 +63,7 @@ namespace Application.ResearchHandlers
                         return Result<Unit>.Failure("Probleem opgetreden bij het verwijderen van de geselecteerde deelnemer.");
                     }
 
-                    _logger.LogInformation($"Succesvol deelnemer {deelnemerTeVewijderen.PanelMemberId} verwijderd van onderzoek.");
+                    _logger.LogInformation($"Succesvol deelnemer {deelnemerTeVewijderen.PanelMember.Id} verwijderd van onderzoek.");
                     return Result<Unit>.Success(Unit.Value);
 
                 }

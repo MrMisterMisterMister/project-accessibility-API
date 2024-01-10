@@ -15,8 +15,8 @@ namespace Application.ResearchHandlers
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public int ResearchId { get; set; }
-            public Guid ParticipantId { get; set; }
+            public Research Research { get; set; }
+            public PanelMember Participant { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -30,29 +30,29 @@ namespace Application.ResearchHandlers
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken){
-                _logger.LogInformation($"Bezig met inschrijven voor onderzoek voor deelnemer: {request.ParticipantId}...");
+                _logger.LogInformation($"Bezig met inschrijven voor onderzoek voor deelnemer: {request.Participant.Id}...");
 
                 try {
                     var research = await _dataContext.Researches
                         .Include(r => r.Participants)
-                        .FirstOrDefaultAsync(r => r.Id == request.ResearchId, cancellationToken);
+                        .FirstOrDefaultAsync(r => r.Id == request.Research.Id, cancellationToken);
 
                     if (research == null){
                         return Result<Unit>.Failure("Onderzoek niet gevonden of bestaat niet.");
                     }
 
                     var participant = await _dataContext.PanelMembers
-                        .FirstOrDefaultAsync(p => p.Id == request.ParticipantId.ToString(), cancellationToken);
+                        .FirstOrDefaultAsync(p => p.Id == request.Participant.Id.ToString(), cancellationToken);
 
                     if (participant == null){
                         return Result<Unit>.Failure("Deelnemer niet gevonden.");
                     }
 
-                    if (research.Participants.Any(p => p.PanelMemberId == request.ParticipantId)){
+                    if (research.Participants.Any(p => p.PanelMember.Id == request.Participant.Id)){
                         return Result<Unit>.Failure("Deelnemer is al ingeschreven voor dit onderzoek.");
                     }
 
-                    research.Participants.Add(new Participant { PanelMemberId = request.ParticipantId });
+                    research.Participants.Add(new Participant { PanelMember = request.Participant });
 
                     var result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
 
