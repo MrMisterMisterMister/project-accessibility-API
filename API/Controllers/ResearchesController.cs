@@ -23,20 +23,10 @@ namespace API.Controllers
             return HandleResult(await _mediator.Send(command));
         }
 
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteResearch(Guid id){
         return HandleResult(await _mediator.Send(new DeleteResearch.Command { ResearchId  = id}));
-        }
-
-        [HttpPost("addparticipant")]
-        public async Task<IActionResult> AddParticipantToResearch([FromBody] AddParticipant.Command command)
-        {
-            return HandleResult(await _mediator.Send(command));
-        }
-
-        [HttpPut("removeparticipant")]
-        public async Task<IActionResult> RemoveParticipantFromResearch([FromBody] RemoveParticipant.Command command){
-            return HandleResult(await _mediator.Send(command));
         }
     }
 }
