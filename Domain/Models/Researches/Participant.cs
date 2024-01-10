@@ -7,20 +7,12 @@ namespace Domain
     public class Participant
     {
         [Key]
-        [Column(Order = 0)]
-        [Required]
-        [ForeignKey("Research")]
+        public int Id { get; set; }
+
         public int ResearchId { get; set; }
 
-        [Key]
-        [Column(Order = 1)]
-        [Required]
-        [ForeignKey("PanelMember")]
-        public Guid PanelMemberId { get; set;}
+        public Guid PanelMemberId { get; set; }
 
-        public string ?Status { get; set; }
-
-        public Research Research { get; set; } = null!;
-        public PanelMember PanelMember { get; set; } = null!;
+        public string? Status { get; set; }
     }
 }

@@ -12,13 +12,12 @@ namespace Persistence
         public DbSet<PanelMember> PanelMembers { get; set; }
         public DbSet<Research> Researches { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Participant> Participants {get;set;}
+        public DbSet<Participant> Participants { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Participant>()
-                .HasKey(p => new { p.ResearchId, p.PanelMemberId });
+            base.OnModelCreating(modelBuilder);
 
             // Creates a separate table instead of combining the properties in use
             modelBuilder.Entity<Company>().ToTable("Companies");

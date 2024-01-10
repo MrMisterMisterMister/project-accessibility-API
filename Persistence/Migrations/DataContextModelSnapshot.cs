@@ -39,6 +39,28 @@ namespace Persistence.Migrations
                     b.ToTable("Categories", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Participant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("PanelMemberId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("ResearchId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResearchId");
+
+                    b.ToTable("Participants", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Research", b =>
                 {
                     b.Property<int>("Id")
@@ -319,13 +341,8 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("ResearchId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Zipcode")
                         .HasColumnType("longtext");
-
-                    b.HasIndex("ResearchId");
 
                     b.ToTable("PanelMembers", (string)null);
                 });
@@ -335,6 +352,15 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Research", null)
                         .WithMany("Categories")
                         .HasForeignKey("ResearchId");
+                });
+
+            modelBuilder.Entity("Domain.Participant", b =>
+                {
+                    b.HasOne("Domain.Research", null)
+                        .WithMany("Participants")
+                        .HasForeignKey("ResearchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Research", b =>
@@ -413,10 +439,6 @@ namespace Persistence.Migrations
                         .HasForeignKey("Domain.PanelMember", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Domain.Research", null)
-                        .WithMany("Participants")
-                        .HasForeignKey("ResearchId");
                 });
 
             modelBuilder.Entity("Domain.Research", b =>
