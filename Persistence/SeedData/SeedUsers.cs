@@ -129,7 +129,8 @@ namespace Persistence
                         DateOfBirth = DateTime.UtcNow.AddMonths(1),
                         Address = "I live in your head",
                         PostalCode = "9584BR",
-                        City = "Muckanaghederdauhaulia"
+                        City = "Muckanaghederdauhaulia",
+                        Country = "Africa",
                     },
                     new PanelMember
                     {
@@ -142,6 +143,7 @@ namespace Persistence
                         Address = "Johanna Westerdijkplein 75",
                         PostalCode = "2521EN",
                         City = "Den Haag",
+                        Country = "The Netherlands",
                     },
                     new PanelMember
                     {
@@ -154,6 +156,7 @@ namespace Persistence
                         Address = "Eyjafjallajokull 54",
                         PostalCode = "9184AZ",
                         City = "Middle of Nowhere",
+                        Country = "Your Backyard",
                     },
                     new PanelMember
                     {
@@ -166,6 +169,7 @@ namespace Persistence
                         Address = "Trashbin street 85",
                         PostalCode = "9194MA",
                         City = "Bisolavska",
+                        Country = "Russia",
                     },
                     new PanelMember
                     {
@@ -178,6 +182,7 @@ namespace Persistence
                         Address = "Route 20 and 21",
                         PostalCode = "7777MM",
                         City = "Cinnabar Island",
+                        Country = "Kanto",
                     }
                 };
 

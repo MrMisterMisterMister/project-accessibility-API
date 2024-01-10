@@ -11,7 +11,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240110190455_InitialCreate")]
+    [Migration("20240110192824_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -260,6 +260,9 @@ namespace Persistence.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("City")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Country")
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("DateOfBirth")

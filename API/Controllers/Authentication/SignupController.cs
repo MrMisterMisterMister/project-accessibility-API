@@ -81,7 +81,8 @@ namespace API.Controllers
                 DateOfBirth = DateTime.TryParse(registerPanelMemberDTO.DateOfBirth, out DateTime parsedDate) ? parsedDate : DateTime.MinValue,
                 Address = registerPanelMemberDTO.Address,
                 PostalCode = registerPanelMemberDTO.PostalCode,
-                City = registerPanelMemberDTO.City
+                City = registerPanelMemberDTO.City,
+                Country = registerPanelMemberDTO.Country
             };
 
             var result = await _userManager.CreateAsync(panelMember, registerPanelMemberDTO.Password);

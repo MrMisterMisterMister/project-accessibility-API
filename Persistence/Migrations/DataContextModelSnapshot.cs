@@ -259,6 +259,9 @@ namespace Persistence.Migrations
                     b.Property<string>("City")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Country")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime(6)");
 
