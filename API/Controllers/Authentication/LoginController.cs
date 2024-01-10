@@ -8,8 +8,8 @@ using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 
-namespace API.Controllers
-{
+namespace API.Controllers{
+    [AllowAnonymous]
  // Allows access to the Login endpoints without authentication
     public class LoginController : BaseApiController
     {

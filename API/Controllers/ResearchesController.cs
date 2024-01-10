@@ -25,8 +25,8 @@ namespace API.Controllers
 
         
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteResearch(Guid id){
-        return HandleResult(await _mediator.Send(new DeleteResearch.Command { ResearchId  = id}));
+        public async Task<IActionResult> DeleteResearch(int id){
+        return HandleResult(await _mediator.Send(new DeleteResearch.Command {ResearchId  = id}));
         }
     }
 }

@@ -8,7 +8,7 @@ using Persistence;
 namespace Application.ResearchHandlers{
     public class DeleteResearch{
         public class Command : IRequest<Result<Unit>>{
-            public Guid ResearchId  { get; set; }
+            public int ResearchId  { get; set; }
         }
         //Moet nog wel ff ervoor zorgen dat alleen een bedrijf een onderzoek kan verwijderen, als rbac correct werkt doe ik dit ff.
         public class Handler : IRequestHandler<Command, Result<Unit>>{
