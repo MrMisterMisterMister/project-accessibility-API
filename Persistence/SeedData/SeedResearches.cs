@@ -24,7 +24,7 @@ namespace Persistence.SeedData{
                         isOnline = true,
                         Reward = 50,
                         Organizer = companies[0],
-                        Participants = panelMembers.Take(2).ToList(), 
+        Participants = panelMembers.Skip(2).Take(2).Select(pm => new Participant { PanelMemberId = Guid.Parse(pm.Id)}).ToList(),
                         Categories = new List<Category>
                         {
                             new Category { Name = "Banana" },
@@ -39,7 +39,7 @@ namespace Persistence.SeedData{
                         isOnline = false,
                         Reward = 30,
                         Organizer = companies[1],  
-                        Participants = panelMembers.Skip(2).Take(2).ToList(), 
+                        Participants = panelMembers.Take(2).Select(pm => new Participant { PanelMemberId = Guid.Parse(pm.Id) }).ToList(),
                         Categories = new List<Category>
                         {
                             new Category { Name = "Horse" },

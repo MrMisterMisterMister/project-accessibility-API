@@ -28,7 +28,7 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
-            return HandleResult(await Mediator.Send(new DeletePanelMember.Command { Id = id }));
+            return HandleResult(await Mediator.Send(new DeletePanelMember.Command {PanelmemberId = id }));
         }
 
         [HttpPut("{id}")]
@@ -38,9 +38,9 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new EditPanelMember.Command { PanelMember = panelMember }));
         }
         [HttpPut("{id}/participate")]
-        public async Task<ActionResult> ParticipateInResearch(Guid id, PanelMember panelMember){
-            panelMember.Id = id.ToString();
-        return HandleResult(await Mediator.Send(new ParticipateInResearch.Command { ParticipantId = Guid.Parse(panelMember.Id) }));
-        }
-    }
+public async Task<ActionResult> ParticipateInResearch(Guid id)
+{
+    return HandleResult(await Mediator.Send(new ParticipateInResearch.Command { ParticipantId = id}));
+}
+}
 }

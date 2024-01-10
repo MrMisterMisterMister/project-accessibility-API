@@ -13,5 +13,6 @@ namespace Domain
         public string LastName { get; set; } = null!;
         public string? Zipcode { get; set; }
         public DateTime DateOfBirth { get; set; }
+        
     }
 }

@@ -14,7 +14,7 @@ namespace Domain
         public DateTime Date { get; set; }
         public bool isOnline { get; set; }
         public int Reward { get; set; }
-        public List<PanelMember> Participants { get; set; } = new List<PanelMember>();
+        public List<Participant> Participants { get; set; } = new List<Participant>(); 
         public Company Organizer { get; set; } = null!;
         public List<Category> Categories { get; set; } = null!; 
     }
