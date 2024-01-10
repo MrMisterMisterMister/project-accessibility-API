@@ -18,39 +18,46 @@ namespace Application.ResearchHandlers
             public string Title { get; set; } = null!;
         }
 
-       public class Handler : IRequestHandler<Query, Result<Research>>
-{
-    private readonly DataContext _dataContext;
-    private readonly ILogger<Handler> _logger;
-
-    public Handler(DataContext dataContext, ILogger<Handler> logger)
-    {
-        _dataContext = dataContext;
-        _logger = logger;
-    }
-
-    public async Task<Result<Research>> Handle(Query request, CancellationToken cancellationToken)
-    {
-        _logger.LogInformation("Bezig met onderzoek opzoeken op titel...");
-
-        try
+        public class Handler : IRequestHandler<Query, Result<Research>>
         {
-         var research = await _dataContext.Researches
-                .FirstOrDefaultAsync(r => r.Title == request.Title, cancellationToken);
+            private readonly DataContext _dataContext;
+            private readonly ILogger<Handler> _logger;
 
-            if (research == null){
-                        return Result<Research>.Failure("Onderzoek niet gevonden.");
+            public Handler(DataContext dataContext, ILogger<Handler> logger)
+            {
+                _dataContext = dataContext;
+                _logger = logger;
             }
 
-            _logger.LogInformation($"Onderzoek met titel '{request.Title}' is opgehaald.");
+            public async Task<Result<Research>> Handle(Query request, CancellationToken cancellationToken)
+            {
+                try
+                {
+                    _logger.LogInformation("Bezig met ophalen van onderzoek op titel...");
+
+                    if (string.IsNullOrWhiteSpace(request.Title))
+                    {
+                        _logger.LogWarning("Titel parameter is leeg of null.");
+                        return Result<Research>.Failure("Titel parameter is vereist.");
+                    }
+                    var research = await _dataContext.Researches
+                        .FirstOrDefaultAsync(r => r.Title == request.Title.Trim(), cancellationToken);
+
+                    if (research == null)
+                    {
+                        _logger.LogWarning($"Onderzoek met titel '{request.Title.Trim()}' niet gevonden.");
+                        return Result<Research>.Failure("Onderzoek niet gevonden.");
+                    }
+
+                    _logger.LogInformation($"Onderzoek met titel '{request.Title.Trim()}' succesvol opgehaald.");
                     return Result<Research>.Success(research);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Er is een fout opgetreden bij het ophalen van het onderzoek op titel: {ex.Message}");
+                    return Result<Research>.Failure("Er is een fout opgetreden bij het ophalen van het onderzoek op titel.");
+                }
+            }
         }
-        catch (Exception e)
-        {
-            _logger.LogError("Er is een fout opgetreden bij het opzoeken van het onderzoek op titel.", e.Message);
-                    return Result<Research>.Failure("Er is een fout opgetreden bij het opzoeken van het onderzoek op titel.");
-        }
-    }
-}
     }
 }
