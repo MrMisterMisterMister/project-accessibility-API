@@ -11,6 +11,12 @@ namespace API.Controllers
         public ResearchController(IMediator mediator){
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetResearchById(int id)
+        {
+            return HandleResult(await _mediator.Send(new GetResearchById.Query { ResearchId = id }));
+        }
+        
 
         [HttpPost]
         public async Task<IActionResult> CreateResearch([FromBody] CreateResearch.Command command){
