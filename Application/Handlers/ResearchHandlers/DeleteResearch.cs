@@ -36,7 +36,7 @@ namespace Application.ResearchHandlers{
                 if (!result){
                     return Result<Unit>.Failure("Fout opgetreden bij het verwijderen van het onderzoek.");
                 }
-
+                _logger.LogInformation($"Het onderzoek {research.Id} is succesvol verwijderd!");
                 return Result<Unit>.Success(Unit.Value);
             }
             catch (Exception e){

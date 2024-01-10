@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Application.ResearchHandlers{
     public class UpdateResearch{
         public class Command : IRequest<Result<Unit>>{
-            public Guid ResearchId { get; set; }
+            public int ResearchId { get; set; }
             public string NieuweTitel { get; set; } = null!;
         }
 

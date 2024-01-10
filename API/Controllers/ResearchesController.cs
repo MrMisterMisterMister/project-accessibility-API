@@ -18,7 +18,7 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateResearch(Guid id, [FromBody] UpdateResearch.Command command){
+        public async Task<IActionResult> UpdateResearch(int id, [FromBody] UpdateResearch.Command command){
             command.ResearchId = id;
             return HandleResult(await _mediator.Send(command));
         }

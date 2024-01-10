@@ -25,6 +25,7 @@ namespace Persistence
             modelBuilder.Entity<Research>().ToTable("Researches");
             modelBuilder.Entity<Category>().ToTable("Categories");
             modelBuilder.Entity<Participant>().ToTable("Participants");
+ 
         }
     }
 }

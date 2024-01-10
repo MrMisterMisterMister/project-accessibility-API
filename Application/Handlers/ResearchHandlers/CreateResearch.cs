@@ -9,48 +9,51 @@ using System.Threading.Tasks;
 
 namespace Application.ResearchHandlers
 {
-    public class CreateResearch
+   public class CreateResearch
+{
+    public class Command : IRequest<Result<Unit>>
     {
-        public class Command : IRequest<Result<Unit>>
+        public Research Research { get; set; } = null!;
+        public string OrganizerId { get; set; } 
+    }
+
+    public class Handler : IRequestHandler<Command, Result<Unit>>
+    {
+        private readonly DataContext _dataContext;
+        private readonly ILogger<Handler> _logger;
+
+        public Handler(DataContext dataContext, ILogger<Handler> logger)
         {
-            public Research Research { get; set; } = null!;
+            _dataContext = dataContext;
+            _logger = logger;
         }
 
-        // Moet nog wel ff ervoor zorgen dat alleen een bedrijf een onderzoek kan starten, als de rbac correct werkt implementeer ik dit.
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            private readonly DataContext _dataContext;
-            private readonly ILogger<Handler> _logger;
+            _logger.LogInformation("Bezig met onderzoek aanmaken...");
 
-            public Handler(DataContext dataContext, ILogger<Handler> logger)
+            try
             {
-                _dataContext = dataContext;
-                _logger = logger;
-            }
+                request.Research.Organizer.Id = request.OrganizerId;
+                _dataContext.Add(request.Research);
 
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
-            {
-                _logger.LogInformation("Bezig met onderzoek aanmaken...");
+                // resultaat is true als er changes zijn opgeslagen en false als er geen zijn opgeslagen.
+                bool resultaat = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
 
-                try{
-                    _dataContext.Add(request.Research);
-                    
-                    //resultaat is true als er changes zijn opgeslagen en false als er geen zijn opgeslagen.
-                    bool resultaat = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
-
-                    if (!resultaat) {
-                        return Result<Unit>.Failure("Fout opgetreden bij het maken van het onderzoek.");
-                    }
-
-                    _logger.LogInformation($"Onderzoek '{request.Research.Title}' is aangemaakt");
-                    return Result<Unit>.Success(Unit.Value);
-                }
-                catch (Exception e)
+                if (!resultaat)
                 {
-                    _logger.LogError(e, "Er is een fout opgetreden bij het aanmaken van het onderzoek.");
-                    return Result<Unit>.Failure("Er is een fout opgetreden bij het aanmaken van het onderzoek.");
+                    return Result<Unit>.Failure("Fout opgetreden bij het maken van het onderzoek.");
                 }
+
+                _logger.LogInformation($"Onderzoek '{request.Research.Title}' is aangemaakt");
+                return Result<Unit>.Success(Unit.Value);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Er is een fout opgetreden bij het aanmaken van het onderzoek.");
+                return Result<Unit>.Failure("Er is een fout opgetreden bij het aanmaken van het onderzoek.");
             }
         }
     }
+}
 }
