@@ -14,7 +14,7 @@ namespace Application.ResearchHandlers
     public class Command : IRequest<Result<Unit>>
     {
         public Research Research { get; set; } = null!;
-        public string OrganizerId { get; set; } 
+        public string OrganizerId { get; set; } = null!;
     }
 
     public class Handler : IRequestHandler<Command, Result<Unit>>

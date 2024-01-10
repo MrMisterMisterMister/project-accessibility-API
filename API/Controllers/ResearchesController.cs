@@ -16,8 +16,11 @@ namespace API.Controllers
         {
             return HandleResult(await _mediator.Send(new GetResearchById.Query { ResearchId = id }));
         }
-        
-
+ [HttpGet("ByTitle")]
+public async Task<IActionResult> GetResearchByTitle([FromQuery] string titel)
+{
+    return HandleResult(await _mediator.Send(new GetResearchByTitle.Query { Title = titel }));
+}
         [HttpPost]
         public async Task<IActionResult> CreateResearch([FromBody] CreateResearch.Command command){
             return HandleResult(await _mediator.Send(command));
