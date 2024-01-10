@@ -9,7 +9,9 @@ namespace Domain
         public string FirstName { get; set; } = null!;
         [Required]
         public string LastName { get; set; } = null!;
-        public string? Zipcode { get; set; }
         public DateTime DateOfBirth { get; set; }
+        public string? Address { get; set; }
+        public string? PostalCode { get; set; }
+        public string? City { get; set; }
     }
 }

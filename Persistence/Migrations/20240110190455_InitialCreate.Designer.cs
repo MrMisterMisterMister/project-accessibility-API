@@ -11,7 +11,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240108184902_InitialCreate")]
+    [Migration("20240110190455_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -256,6 +256,12 @@ namespace Persistence.Migrations
                 {
                     b.HasBaseType("Domain.User");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("City")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime(6)");
 
@@ -270,7 +276,7 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Zipcode")
+                    b.Property<string>("PostalCode")
                         .HasColumnType("longtext");
 
                     b.ToTable("PanelMembers", (string)null);
