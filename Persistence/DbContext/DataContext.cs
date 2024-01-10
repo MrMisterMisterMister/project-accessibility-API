@@ -26,6 +26,11 @@ namespace Persistence
             modelBuilder.Entity<Category>().ToTable("Categories");
             modelBuilder.Entity<Participant>().ToTable("Participants");
  
+ modelBuilder.Entity<Category>()
+                .HasOne(c => c.Research)
+                .WithMany(r => r.Categories)
+                .HasForeignKey(c => c.ResearchId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
