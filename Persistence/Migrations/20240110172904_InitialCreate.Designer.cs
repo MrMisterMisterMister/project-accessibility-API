@@ -11,7 +11,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240110163807_InitialCreate")]
+    [Migration("20240110172904_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -48,8 +48,8 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<Guid>("PanelMemberId")
-                        .HasColumnType("char(36)");
+                    b.Property<string>("PanelMemberId")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("ResearchId")
                         .HasColumnType("int");
@@ -58,6 +58,8 @@ namespace Persistence.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PanelMemberId");
 
                     b.HasIndex("ResearchId");
 
@@ -359,11 +361,19 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Participant", b =>
                 {
-                    b.HasOne("Domain.Research", null)
+                    b.HasOne("Domain.PanelMember", "PanelMember")
+                        .WithMany()
+                        .HasForeignKey("PanelMemberId");
+
+                    b.HasOne("Domain.Research", "Research")
                         .WithMany("Participants")
                         .HasForeignKey("ResearchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PanelMember");
+
+                    b.Navigation("Research");
                 });
 
             modelBuilder.Entity("Domain.Research", b =>

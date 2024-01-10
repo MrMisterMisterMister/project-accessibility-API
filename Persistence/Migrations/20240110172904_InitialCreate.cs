@@ -314,13 +314,19 @@ namespace Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ResearchId = table.Column<int>(type: "int", nullable: false),
-                    PanelMemberId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    PanelMemberId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Status = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Participants", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Participants_PanelMembers_PanelMemberId",
+                        column: x => x.PanelMemberId,
+                        principalTable: "PanelMembers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Participants_Researches_ResearchId",
                         column: x => x.ResearchId,
@@ -373,6 +379,11 @@ namespace Persistence.Migrations
                 column: "ResearchId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Participants_PanelMemberId",
+                table: "Participants",
+                column: "PanelMemberId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Participants_ResearchId",
                 table: "Participants",
                 column: "ResearchId");
@@ -405,13 +416,13 @@ namespace Persistence.Migrations
                 name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "PanelMembers");
-
-            migrationBuilder.DropTable(
                 name: "Participants");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "PanelMembers");
 
             migrationBuilder.DropTable(
                 name: "Researches");
