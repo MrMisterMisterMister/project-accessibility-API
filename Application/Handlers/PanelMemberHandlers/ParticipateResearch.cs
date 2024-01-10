@@ -15,8 +15,8 @@ namespace Application.ResearchHandlers
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Research Research { get; set; }
-            public PanelMember Participant { get; set; }
+            public required Research Research { get; set; }
+            public required PanelMember Participant { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
