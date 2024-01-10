@@ -25,6 +25,10 @@ namespace Persistence
             modelBuilder.Entity<Research>().ToTable("Researches");
             modelBuilder.Entity<Category>().ToTable("Categories");
             modelBuilder.Entity<Participant>().ToTable("Participants");
+
+            modelBuilder.Entity<Research>().HasMany(r => r.Participants).WithOne(p => p.Research).HasForeignKey(p => p.ResearchId);
+            modelBuilder.Entity<Participant>().HasOne(p => p.PanelMember).WithMany().HasForeignKey(p => p.PanelMemberId);
+            
         }
     }
 }

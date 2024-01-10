@@ -5,21 +5,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Domain
 {
     public class Participant
-    {
-        [Key]
-        [Column(Order = 0)]
-        [ForeignKey("Research")]
-        public int ResearchId { get; set; }
+{
+    [Key]
+    public int Id { get; set; }
 
-        [Key]
-        [Column(Order = 1)]
-        [Required]
-        [ForeignKey("PanelMember")]
-        public Guid PanelMemberId { get; set;}
+    [ForeignKey("Research")]
+    public int ResearchId { get; set; }
 
-        public string ?Status { get; set; }
+    [ForeignKey("PanelMember")]
+    public Guid PanelMemberId { get; set; }
 
-        public Research Research { get; set; } = null!;
-        public PanelMember PanelMember { get; set; } = null!;
-    }
+    public string? Status { get; set; }
+
+    public Research Research { get; set; } = null!;
+    public PanelMember PanelMember { get; set; } = null!;
+}
 }
