@@ -217,10 +217,14 @@ namespace Persistence.Migrations
                 {
                     b.HasBaseType("Domain.User");
 
-                    b.Property<string>("Adres")
+                    b.Property<string>("Address")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Contact")
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ContactPerson")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Country")
@@ -230,14 +234,16 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Location")
+                    b.Property<string>("Phone")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<string>("PostalCode")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Url")
+                    b.Property<string>("Province")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("WebsiteUrl")
                         .HasColumnType("longtext");
 
                     b.ToTable("Companies", (string)null);
@@ -246,6 +252,15 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.PanelMember", b =>
                 {
                     b.HasBaseType("Domain.User");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("City")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime(6)");
@@ -261,7 +276,7 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Zipcode")
+                    b.Property<string>("PostalCode")
                         .HasColumnType("longtext");
 
                     b.ToTable("PanelMembers", (string)null);
