@@ -8,7 +8,7 @@ namespace Application.PanelMemberHandlers
 {
     public class GetPanelMember
     {
-        public class Query : IRequest<Result<List<PanelMember>>> { }
+        public class Query : IRequest<Result<List<PanelMember>>> {}
 
         public class Handler : IRequestHandler<Query, Result<List<PanelMember>>>
         {
