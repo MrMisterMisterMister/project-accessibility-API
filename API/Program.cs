@@ -1,3 +1,4 @@
+using API.Chat.Hubs;
 using API.Extensions;
 using API.Middleware;
 using API.Services;
@@ -12,6 +13,7 @@ var services = builder.Services;
 var config = builder.Configuration;
 
 // Add services to the container.
+services.AddSignalR();
 services.AddEndpointsApiExplorer();
 services.AddControllers();
 
@@ -31,6 +33,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<ChatHub>("/Chat");
 
 // creates scope for services to setup local database and discards itself
 using var scope = app.Services.CreateScope();
