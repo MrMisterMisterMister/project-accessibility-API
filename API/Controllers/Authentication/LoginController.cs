@@ -81,7 +81,7 @@ namespace API.Controllers
             {
                 // User exists, generate a JWT token for them
                 var roles = await _userManager.GetRolesAsync(existingUser);
-                return new UserDTO { Token = _tokenService.CreateToken(existingUser, roles.ToList()) };
+                return new UserDTO { Token = _tokenService.CreateAndSetCookie(existingUser, roles.ToList()) };
             }
             else
             {
