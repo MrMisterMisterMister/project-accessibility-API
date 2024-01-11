@@ -4,13 +4,13 @@ using Domain;
 using API.Services;
 using API.DTOs;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 
-namespace API.Controllers{
+namespace API.Controllers
+{
+    // Allows access to the Login endpoints without authentication
     [AllowAnonymous]
- // Allows access to the Login endpoints without authentication
     public class LoginController : BaseApiController
     {
         private readonly TokenService _tokenService;
@@ -26,46 +26,47 @@ namespace API.Controllers{
 
         // Authenticates the user using provided credentials and generates a token cookie
         [HttpPost]
-       public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO)
-{
-    // Find user by email
-    var user = await _userManager.FindByEmailAsync(loginDTO.Email);
-
-    // Log user information (for debugging)
-    _logger.LogInformation($"User found: {user?.Email}");
-
-    // Return Unauthorized if user is not found
-    if (user == null) 
-    {
-        _logger.LogWarning("User not found.");
-        return Unauthorized(new
+        public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO)
         {
-            code = "UserNotFound",
-            description = "No user found with the provided email address."
-        });
-    }
+            // Find user by email
+            var user = await _userManager.FindByEmailAsync(loginDTO.Email);
 
-    // Check if password matches
-    var result = await _userManager.CheckPasswordAsync(user, loginDTO.Password);
+            // Log user information (for debugging)
+            _logger.LogInformation($"User found: {user?.Email}");
 
-    // Log authentication result (for debugging)
-    _logger.LogInformation($"Authentication result: {result}");
+            // Return Unauthorized if user is not found
+            if (user == null)
+            {
+                _logger.LogWarning("User not found.");
+                return Unauthorized(new
+                {
+                    code = "UserNotFound",
+                    description = "No user found with the provided email address."
+                });
+            }
 
-    // Return a JWT token cookie if credentials are valid
-    if (result)
-    {
-        var roles = await _userManager.GetRolesAsync(user);
-        return new UserDTO { Token = _tokenService.CreateAndSetCookie(user, roles.ToList()) };
-    }
+            // Check if password matches
+            var result = await _userManager.CheckPasswordAsync(user, loginDTO.Password);
 
-    // Return Unauthorized if the password is incorrect
-    _logger.LogWarning("Incorrect password.");
-    return Unauthorized(new
-    {
-        code = "IncorrectPassword",
-        description = "Incorrect password. Please check your password and try again."
-    });
-}
+            // Log authentication result (for debugging)
+            _logger.LogInformation($"Authentication result: {result}");
+
+            // Return a JWT token cookie if credentials are valid
+            if (result)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                return new UserDTO { Token = _tokenService.CreateAndSetCookie(user, roles.ToList()) };
+            }
+
+            _logger.LogWarning("Incorrect password.");
+
+            // Return Unauthorized if the password is incorrect
+            return Unauthorized(new
+            {
+                code = "IncorrectPassword",
+                description = "Incorrect password. Please check your password and try again."
+            });
+        }
 
         // For testing purposes: Retrieves user information including 
         // UserID, Email, Cookie, and JWT Token and roles

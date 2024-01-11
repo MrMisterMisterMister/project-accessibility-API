@@ -3,19 +3,15 @@ using Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Persistence;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Application.ResearchHandlers
+namespace Application.ParticipantsHandlers
 {
-    public class RemoveParticipant
+    public class DeleteParticipants
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public required Research Research { get; set; }
-            public required PanelMember Participant { get; set; }
+            public Research Research { get; set; } = null!;
+            public PanelMember Participant { get; set; } = null!;
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>

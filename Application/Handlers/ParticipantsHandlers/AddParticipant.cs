@@ -3,19 +3,15 @@ using Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Persistence;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Application.ResearchHandlers
+namespace Application.ParticipantsHandlers
 {
     public class AddParticipant
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public required Research Research { get; set; }
-            public required PanelMember Panelmember { get; set; }
+            public Research Research { get; set; } = null!;
+            public PanelMember Participant { get; set; } = null!;
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -41,7 +37,7 @@ namespace Application.ResearchHandlers
                         return Result<Unit>.Failure("Onderzoek bestaat niet.");
                     }
 
-                    var deelnemer = await _dataContext.PanelMembers.FindAsync(request.Panelmember);
+                    var deelnemer = await _dataContext.PanelMembers.FindAsync(request.Participant);
 
                     if (deelnemer == null)
                     {
@@ -49,20 +45,17 @@ namespace Application.ResearchHandlers
                     }
 
                     // Check of de deelnemer al voorkomt in het onderzoek om dubbele toevoegingen te voorkomen
-                if (onderzoek.Participants?.Any(dp => dp.PanelMember.Id == deelnemer.Id) == true){
-                     return Result<Unit>.Failure($"Deelnemer {deelnemer.UserName} komt al voor in het onderzoek");
-}
-
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                    onderzoek.Participants.Add(new Participant { PanelMember = deelnemer});
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                    if (onderzoek.Participants?.Any(dp => dp.PanelMember.Id == deelnemer.Id) == true)
+                    {
+                        return Result<Unit>.Failure($"Deelnemer {deelnemer.UserName} komt al voor in het onderzoek");
+                    }
 
                     // Resultaat is true als er changes zijn opgeslagen en false als er geen zijn opgeslagen.
                     bool resultaat = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
 
                     if (!resultaat)
                     {
-                        return Result<Unit>.Failure($"Probleem opgetreden bij het toevoegen van de deelnemer. Id: {request.Panelmember.Id}");
+                        return Result<Unit>.Failure($"Probleem opgetreden bij het toevoegen van de deelnemer. Id: {request.Participant.Id}");
                     }
 
                     _logger.LogInformation($"Succesvol deelnemer {deelnemer.UserName} toegevoegd aan onderzoek");
