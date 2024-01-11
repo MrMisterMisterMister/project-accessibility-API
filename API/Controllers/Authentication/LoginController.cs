@@ -101,6 +101,8 @@ namespace API.Controllers
                     // User creation successful, generate a JWT token for the new user
                     // Give them admin.. for now.... :O... don't let mommy "T" know
                     var newRoles = new List<string>() { nameof(RoleTypes.Admin) };
+                    await _userManager.AddToRolesAsync(panelMember, newRoles);
+
                     return new UserDTO { Token = _tokenService.CreateAndSetCookie(panelMember, newRoles.ToList()) };
                 }
 
