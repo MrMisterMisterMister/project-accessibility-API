@@ -1,37 +1,45 @@
+using Domain;
 using Application.ResearchHandlers;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class ResearchController : BaseApiController 
+    public class ResearchesController : BaseApiController
     {
-        private readonly IMediator _mediator;
-
-        public ResearchController(IMediator mediator){
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        // all researches
+        [HttpGet]
+        public async Task<IActionResult> GetResearches()
+        {
+            return HandleResult(await Mediator.Send(new GetResearch.Query()));
         }
+
+        // research by id
         [HttpGet("{id}")]
         public async Task<IActionResult> GetResearchById(int id)
         {
-            return HandleResult(await _mediator.Send(new GetResearchById.Query { ResearchId = id }));
+            return HandleResult(await Mediator.Send(new GetResearchById.Query { ResearchId = id }));
         }
 
+        // new research
         [HttpPost]
-        public async Task<IActionResult> CreateResearch([FromBody] CreateResearch.Command command){
-            return HandleResult(await _mediator.Send(command));
+        public async Task<IActionResult> CreateResearch(Research research)
+        {
+            return HandleResult(await Mediator.Send(new CreateResearch.Command { Research = research }));
         }
 
+        // edit research
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateResearch(int id, [FromBody] UpdateResearch.Command command){
-            command.ResearchId = id;
-            return HandleResult(await _mediator.Send(command));
+        public async Task<IActionResult> UpdateResearch(int id, Research research)
+        {
+            research.Id = id;
+            return HandleResult(await Mediator.Send(new EditResearch.Command { Research = research }));
         }
 
-        
+        // delete research
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteResearch(int id){
-        return HandleResult(await _mediator.Send(new DeleteResearch.Command {ResearchId  = id}));
+        public async Task<IActionResult> DeleteResearch(int id)
+        {
+            return HandleResult(await Mediator.Send(new DeleteResearch.Command { ResearchId = id }));
         }
     }
 }
