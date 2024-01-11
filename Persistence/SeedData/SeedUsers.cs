@@ -126,18 +126,24 @@ namespace Persistence
                         Guardian = new Random().Next(0, 100),
                         FirstName = "John",
                         LastName = "Doe",
-                        Zipcode = "1234AB",
                         DateOfBirth = DateTime.UtcNow.AddMonths(1),
+                        Address = "I live in your head",
+                        PostalCode = "9584BR",
+                        City = "Muckanaghederdauhaulia",
+                        Country = "Africa",
                     },
                     new PanelMember
                     {
                         Email = "panelmember2@email.com",
                         UserName = "panelmember2@email.com",
                         Guardian = new Random().Next(0, 100),
-                        FirstName = "jane",
+                        FirstName = "Jane",
                         LastName = "Doe",
-                        Zipcode = "1234Ac",
                         DateOfBirth = DateTime.UtcNow.AddMonths(2),
+                        Address = "Johanna Westerdijkplein 75",
+                        PostalCode = "2521EN",
+                        City = "Den Haag",
+                        Country = "The Netherlands",
                     },
                     new PanelMember
                     {
@@ -146,8 +152,11 @@ namespace Persistence
                         Guardian = new Random().Next(0, 100),
                         FirstName = "Paul",
                         LastName = "Doe",
-                        Zipcode = "1234AD",
                         DateOfBirth = DateTime.UtcNow.AddMonths(3),
+                        Address = "Eyjafjallajokull 54",
+                        PostalCode = "9184AZ",
+                        City = "Middle of Nowhere",
+                        Country = "Your Backyard",
                     },
                     new PanelMember
                     {
@@ -156,8 +165,11 @@ namespace Persistence
                         Guardian = new Random().Next(0, 100),
                         FirstName = "Bob",
                         LastName = "Ho",
-                        Zipcode = "1234AE",
                         DateOfBirth = DateTime.UtcNow.AddMonths(4),
+                        Address = "Trashbin street 85",
+                        PostalCode = "9194MA",
+                        City = "Bisolavska",
+                        Country = "Russia",
                     },
                     new PanelMember
                     {
@@ -166,8 +178,11 @@ namespace Persistence
                         Guardian = new Random().Next(0, 100),
                         FirstName = "Might",
                         LastName = "Guy",
-                        Zipcode = "1234AF",
                         DateOfBirth = DateTime.UtcNow.AddMonths(5),
+                        Address = "Route 20 and 21",
+                        PostalCode = "7777MM",
+                        City = "Cinnabar Island",
+                        Country = "Kanto",
                     }
                 };
 

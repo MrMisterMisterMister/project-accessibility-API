@@ -11,7 +11,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240110174615_InitialCreate")]
+    [Migration("20240111083059_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -32,7 +32,7 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("ResearchId")
+                    b.Property<int>("ResearchId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -79,6 +79,7 @@ namespace Persistence.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("OrganizerId")
+                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.Property<int>("Reward")
@@ -332,6 +333,15 @@ namespace Persistence.Migrations
                 {
                     b.HasBaseType("Domain.User");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("City")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime(6)");
 
@@ -346,7 +356,7 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Zipcode")
+                    b.Property<string>("PostalCode")
                         .HasColumnType("longtext");
 
                     b.ToTable("PanelMembers", (string)null);
@@ -354,9 +364,13 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Category", b =>
                 {
-                    b.HasOne("Domain.Research", null)
+                    b.HasOne("Domain.Research", "Research")
                         .WithMany("Categories")
-                        .HasForeignKey("ResearchId");
+                        .HasForeignKey("ResearchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Research");
                 });
 
             modelBuilder.Entity("Domain.Participant", b =>
@@ -380,7 +394,9 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.Company", "Organizer")
                         .WithMany()
-                        .HasForeignKey("OrganizerId");
+                        .HasForeignKey("OrganizerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Organizer");
                 });
