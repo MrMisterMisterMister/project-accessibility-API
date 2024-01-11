@@ -43,9 +43,8 @@ if (app.Environment.IsDevelopment())
         // Get DataContext service
         var databaseContext = serviceProvider.GetRequiredService<DataContext>();
 
-        // Drop and recreate the database
-        databaseContext.Database.EnsureDeleted();
-        databaseContext.Database.EnsureCreated();
+        // Drop database
+        // databaseContext.Database.EnsureDeleted();
 
         var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
