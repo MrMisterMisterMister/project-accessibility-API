@@ -2,6 +2,7 @@ using Application.Core;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Persistence;
+using Domain;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace Application.ResearchHandlers{
     public class UpdateResearch{
         public class Command : IRequest<Result<Unit>>{
-            public int ResearchId { get; set; }
+            public Research Research{ get; set; } = null!;
             public string NieuweTitel { get; set; } = null!;
         }
 
@@ -26,7 +27,7 @@ namespace Application.ResearchHandlers{
                 _logger.LogInformation("Bezig met onderzoek aanpassen...");
 
                 try{
-                    var research = await _dataContext.Researches.FindAsync(request.ResearchId);
+                    var research = await _dataContext.Researches.FindAsync(request.Research);
 
                     if (research == null){
                         return Result<Unit>.Failure("Onderzoek niet gevonden");
@@ -44,7 +45,7 @@ namespace Application.ResearchHandlers{
                         return Result<Unit>.Failure("Fout opgetreden bij het aanpassen van het onderzoek.");
                     }
 
-                    _logger.LogInformation($"Onderzoek '{request.ResearchId}' is aangepast met nieuwe naam '{request.NieuweTitel}'");
+                    _logger.LogInformation($"Onderzoek '{request.Research}' is aangepast met nieuwe naam '{request.NieuweTitel}'");
                     return Result<Unit>.Success(Unit.Value);
                 }
                 catch (Exception e)

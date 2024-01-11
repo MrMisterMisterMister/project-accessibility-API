@@ -32,7 +32,7 @@ namespace API.Controllers
         public async Task<IActionResult> UpdateResearch(int id, Research research)
         {
             research.Id = id;
-            return HandleResult(await Mediator.Send(new EditResearch.Command { Research = research }));
+            return HandleResult(await Mediator.Send(new UpdateResearch.Command { Research = research }));
         }
 
         // delete research

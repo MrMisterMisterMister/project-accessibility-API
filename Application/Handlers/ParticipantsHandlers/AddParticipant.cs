@@ -15,7 +15,7 @@ namespace Application.ResearchHandlers
         public class Command : IRequest<Result<Unit>>
         {
             public required Research Research { get; set; }
-            public required PanelMember Participant { get; set; }
+            public required PanelMember Panelmember { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -34,14 +34,14 @@ namespace Application.ResearchHandlers
                 _logger.LogInformation("Bezig met toevoegen van deelnemer...");
                 try
                 {
-                    var onderzoek = await _dataContext.Researches.FindAsync(request.Research.Id);
+                    var onderzoek = await _dataContext.Researches.FindAsync(request.Research);
 
                     if (onderzoek == null)
                     {
                         return Result<Unit>.Failure("Onderzoek bestaat niet.");
                     }
 
-                    var deelnemer = await _dataContext.PanelMembers.FindAsync(request.Participant.Id);
+                    var deelnemer = await _dataContext.PanelMembers.FindAsync(request.Panelmember);
 
                     if (deelnemer == null)
                     {
@@ -62,7 +62,7 @@ namespace Application.ResearchHandlers
 
                     if (!resultaat)
                     {
-                        return Result<Unit>.Failure($"Probleem opgetreden bij het toevoegen van de deelnemer. Id: {request.Participant.Id}");
+                        return Result<Unit>.Failure($"Probleem opgetreden bij het toevoegen van de deelnemer. Id: {request.Panelmember.Id}");
                     }
 
                     _logger.LogInformation($"Succesvol deelnemer {deelnemer.UserName} toegevoegd aan onderzoek");
