@@ -11,12 +11,30 @@ namespace Persistence
             {
                 var users = new List<User>
                 {
-                    new User{UserName = "admin@admin.com", Email = "admin@admin.com"},
-                    new User{UserName = "user@test.com", Email = "user@test.com"},
-                    new User{UserName = "clodsire@pokemon.com", Email = "clodsire@pokemon.com"},
-                    new User{UserName = "bidoof@pokemon.com", Email = "bidoof@pokemon.com"},
-                    new User{UserName = "terastal@pokemon.com", Email = "terastal@pokemon.com"},
-                    new User{UserName = "karel@pokemon.com", Email = "karel@pokemon.com"},
+                    new User {
+                        UserName = "admin@admin.com",
+                        Email = "admin@admin.com"
+                    },
+                    new User {
+                        UserName = "user@test.com",
+                        Email = "user@test.com"
+                    },
+                    new User {
+                        UserName = "clodsire@pokemon.com",
+                        Email = "clodsire@pokemon.com"
+                    },
+                    new User {
+                        UserName = "bidoof@pokemon.com",
+                        Email = "bidoof@pokemon.com"
+                    },
+                    new User {
+                        UserName = "terastal@pokemon.com",
+                        Email = "terastal@pokemon.com"
+                    },
+                    new User {
+                        UserName = "karel@pokemon.com",
+                        Email = "karel@pokemon.com"
+                    },
                 };
 
                 foreach (var user in users)

@@ -11,7 +11,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240111083059_InitialCreate")]
+    [Migration("20240111085816_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -22,31 +22,14 @@ namespace Persistence.Migrations
                 .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Domain.Category", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("ResearchId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ResearchId");
-
-                    b.ToTable("Categories", (string)null);
-                });
-
             modelBuilder.Entity("Domain.Participant", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("DateJoined")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("PanelMemberId")
                         .HasColumnType("varchar(255)");
@@ -72,25 +55,31 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("OrganizerId")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
-                    b.Property<int>("Reward")
-                        .HasColumnType("int");
+                    b.Property<double>("Reward")
+                        .HasColumnType("double");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("isOnline")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -362,17 +351,6 @@ namespace Persistence.Migrations
                     b.ToTable("PanelMembers", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Category", b =>
-                {
-                    b.HasOne("Domain.Research", "Research")
-                        .WithMany("Categories")
-                        .HasForeignKey("ResearchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Research");
-                });
-
             modelBuilder.Entity("Domain.Participant", b =>
                 {
                     b.HasOne("Domain.PanelMember", "PanelMember")
@@ -472,8 +450,6 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Research", b =>
                 {
-                    b.Navigation("Categories");
-
                     b.Navigation("Participants");
                 });
 #pragma warning restore 612, 618

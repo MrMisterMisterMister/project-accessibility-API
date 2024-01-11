@@ -1,24 +1,25 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain
 {
     public class Research
     {
-        [Required]
+        [Key]
         public int Id { get; set; }
         [Required]
         public string Title { get; set; } = null!;
-        public string? Description { get; set; }
+        [Required]
+        public string Description { get; set; } = null!;
+        [Required]
         public DateTime Date { get; set; }
-        public bool isOnline { get; set; }
-        public int Reward { get; set; }
-         [Required]
-        public string OrganizerId { get; set; } = null!;
+        [Required]
+        public string Type { get; set; } = null!; // crack but lazy
+        [Required]
+        public string Category { get; set; } = null!; // crack but lazy
+        [Required]
+        public double Reward { get; set; }
+        [Required]
         public Company Organizer { get; set; } = null!;
-
         public List<Participant> Participants { get; set; } = new List<Participant>();
-        public List<Category> Categories { get; set; } = null!;
-}
+    }
 }
