@@ -19,9 +19,7 @@ namespace Domain
         [Required]
         public double Reward { get; set; }
         [Required]
-        public bool IsOnGoing { get; set; } = false;
-        [Required]
         public Company Organizer { get; set; } = null!;
-        public ICollection<ResearchParticipant> Participants { get; set; } = new List<ResearchParticipant>();
+        public List<Participant> Participants { get; set; } = new List<Participant>();
     }
 }

@@ -33,7 +33,6 @@ namespace API.Extensions
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetUser.Handler).Assembly)); // Adds mediatr service
             services.AddAutoMapper(typeof(MappingProfiles).Assembly); // Adds automapper service
-            services.AddHttpContextAccessor(); // Adds httpcontextaccessor as a service.
 
             return services;
         }

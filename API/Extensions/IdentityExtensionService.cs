@@ -48,6 +48,8 @@ namespace API.Extensions
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
 
             // Registering TokenService as a scoped service within the application's service collection
+            // And adding the httpcontext as a service.
+            services.AddHttpContextAccessor();
             services.AddScoped<TokenService>();
 
             return services;

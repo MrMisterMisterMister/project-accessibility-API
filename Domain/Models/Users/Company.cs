@@ -16,7 +16,5 @@ namespace Domain
         public string? Country { get; set; } // DITTO
         public string? WebsiteUrl { get; set; } // DITTO
         public string? ContactPerson { get; set; } // DITTO
-        public ICollection<Research> Researches { get; set; } = new List<Research>();
-        
     }
 }
