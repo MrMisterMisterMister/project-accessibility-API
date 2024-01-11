@@ -14,5 +14,6 @@ namespace Domain
         public string? PostalCode { get; set; }
         public string? City { get; set; }
         public string? Country { get; set; }
+        public ICollection<ResearchParticipant> Researches { get; set; } = new List<ResearchParticipant>();
     }
 }
