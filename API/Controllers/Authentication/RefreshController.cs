@@ -82,9 +82,6 @@ namespace API.Controllers
             if (emailClaim == null || string.IsNullOrEmpty(emailClaim.Value))
                 return BadRequest("The email claim could not be found.");
 
-            Console.WriteLine("Hello " +emailClaim.Value);
-
-
             // Get the user from database
             User? user = await _userManager.FindByEmailAsync(emailClaim.Value);
 
