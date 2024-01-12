@@ -2,7 +2,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Persistence;
 
 namespace API.Services
 {
@@ -10,11 +12,13 @@ namespace API.Services
     {
         private readonly IConfiguration _config;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly DataContext _dataContext;
 
-        public TokenService(IConfiguration config, IHttpContextAccessor httpContextAccessor)
+        public TokenService(IConfiguration config, IHttpContextAccessor httpContextAccessor, DataContext dataContext)
         {
             _httpContextAccessor = httpContextAccessor;
             _config = config;
+            _dataContext = dataContext;
         }
 
         // Generates a JWT token based on the provided user details
@@ -56,7 +60,7 @@ namespace API.Services
         }
 
         // Creates a JWT token and sets it as a cookie in the HTTP response
-        public string CreateAndSetCookie(User user, List<string> roles)
+        public string CreateAndSetCookie(User user, List<string> roles, RefreshToken refreshToken)
         {
             // Create a JWT token
             var jwtToken = CreateToken(user, roles);
@@ -72,10 +76,58 @@ namespace API.Services
 
             var httpContext = _httpContextAccessor.HttpContext;
             if (httpContext != null)
+            {
                 // Set the cookie named 'userCookie' in the HTTP response
                 httpContext.Response.Cookies.Append("userCookie", jwtToken, cookieOptions);
+                httpContext.Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);
+            }
 
             return jwtToken; // Return the generated JWT token
+        }
+
+        // Generating refresh token
+        public RefreshToken GenerateRefreshToken()
+        {
+            return new RefreshToken()
+            {
+                Token = Convert.ToBase64String(Guid.NewGuid().ToByteArray()),
+                Expires = DateTime.UtcNow.Add(TimeSpan.FromDays(1)), // Should probably put this somewhere else
+                LastModified = DateTime.UtcNow
+            };
+        }
+
+        // Get refresh token with email address from user
+        public async Task<RefreshToken?> GetRefreshTokenFromUser(string email)
+        {
+            // Look up the token from user
+            User? userToken = await _dataContext.Users
+                .Include(x => x.RefreshToken)
+                .FirstOrDefaultAsync(x => x.Email == email);
+
+            // If there is a token with user
+            if (userToken != null)
+            {
+                return userToken.RefreshToken;
+            }
+
+            // null
+            return null;
+        }
+
+        // Get refresh token with the string
+        public async Task<RefreshToken?> GetRefreshTokenFromString(string token)
+        {
+            RefreshToken? refreshToken = await _dataContext.RefreshTokens
+                .FirstOrDefaultAsync(x => x.Token == token);
+
+            return refreshToken;
+        }
+
+        // Removing the refresh token from database
+        public async Task RemoveRefreshToken(RefreshToken refreshToken)
+        {
+            _dataContext.RefreshTokens.Remove(refreshToken);
+            await _dataContext.SaveChangesAsync();
         }
     }
 }

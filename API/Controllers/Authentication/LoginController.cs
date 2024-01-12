@@ -40,12 +40,40 @@ namespace API.Controllers
             // Check if password matches
             var result = await _userManager.CheckPasswordAsync(user, loginDTO.Password);
 
+            // Get old refresh token
+            RefreshToken? oldRefreshToken = await _tokenService.GetRefreshTokenFromUser(loginDTO.Email);
+
+            // Generate refresh token
+            RefreshToken? refreshToken = _tokenService.GenerateRefreshToken();
+
+            // Check if refresh token has been generated
+            if (refreshToken == null) return BadRequest(
+                new
+                {
+                    code = "FailedRefreshToken",
+                    description = "The refresh token could not be generated."
+                }
+            );
+
+            // Set the refresh for the user
+            user.RefreshToken = refreshToken;
+
+            // Update the user with refresh token
+            await _userManager.UpdateAsync(user);
+
+            // Remove old refresh token if any exist
+            if (oldRefreshToken != null)
+            {
+                await _tokenService.RemoveRefreshToken(oldRefreshToken);
+            }
+
             // Return a JWT token cookie if credentials are valid
             if (result)
             {
                 var roles = await _userManager.GetRolesAsync(user);
-                return new UserDTO { Token = _tokenService.CreateAndSetCookie(user, roles.ToList()) };
+                return new UserDTO { Token = _tokenService.CreateAndSetCookie(user, roles.ToList(), refreshToken) };
             }
+
             // Return Unauthorized if the password is incorrect
             return Unauthorized(
                 new
@@ -68,11 +96,30 @@ namespace API.Controllers
             // Check if the email already exists in the database
             var existingUser = await _userManager.FindByEmailAsync(loginGoogleDTO.Email);
 
+            // Get old refresh token
+            RefreshToken? oldRefreshToken = await _tokenService.GetRefreshTokenFromUser(loginGoogleDTO.Email);
+
+            // Generate refresh token
+            RefreshToken? refreshToken = _tokenService.GenerateRefreshToken();
+
+            // Check user exists
             if (existingUser != null)
             {
+                // Set the refresh for the user
+                existingUser.RefreshToken = refreshToken;
+
+                // Update the user with refresh token
+                await _userManager.UpdateAsync(existingUser);
+
+                // Remove old refresh token if any exist
+                if (oldRefreshToken != null)
+                {
+                    await _tokenService.RemoveRefreshToken(oldRefreshToken);
+                }
+
                 // User exists, generate a JWT token for them
                 var roles = await _userManager.GetRolesAsync(existingUser);
-                return new UserDTO { Token = _tokenService.CreateAndSetCookie(existingUser, roles.ToList()) };
+                return new UserDTO { Token = _tokenService.CreateAndSetCookie(existingUser, roles.ToList(), refreshToken) };
             }
             else
             {
@@ -90,11 +137,11 @@ namespace API.Controllers
                 if (result.Succeeded)
                 {
                     // User creation successful, generate a JWT token for the new user
-                    // Give them admin.. for now.... :O... don't let mommy "T" know
+                    // Give them admin.. for now.... :O... don't let mommy "T" know .. ⁀⊙﹏☉⁀ I saw it. (⊙_◎)
                     var newRoles = new List<string>() { nameof(RoleTypes.Admin) };
                     await _userManager.AddToRolesAsync(panelMember, newRoles);
 
-                    return new UserDTO { Token = _tokenService.CreateAndSetCookie(panelMember, newRoles.ToList()) };
+                    return new UserDTO { Token = _tokenService.CreateAndSetCookie(panelMember, newRoles.ToList(), refreshToken) };
                 }
 
                 // Return errors if user creation fails
@@ -137,11 +184,15 @@ namespace API.Controllers
         public IActionResult SetCookie()
         {
             // Create and set a token cookie for a test user
-            _tokenService.CreateAndSetCookie(new User
-            {
-                Email = "test@dad.com",
-                Id = Guid.NewGuid().ToString(),
-            }, new List<string> { "Admin" });
+            _tokenService.CreateAndSetCookie(
+                new User
+                {
+                    Email = "test@dad.com",
+                    Id = Guid.NewGuid().ToString(),
+                },
+                new List<string> { "Admin" },
+                _tokenService.GenerateRefreshToken()
+            );
 
             return Ok("Cookie Set!"); // Returns a success message when the cookie is set
         }
