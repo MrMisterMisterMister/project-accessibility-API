@@ -65,24 +65,32 @@ namespace API.Services
             // Create a JWT token
             var jwtToken = CreateToken(user, roles);
 
-            // Cookie options for the JWT token
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true, // Restricts cookie access to HTTP requests
-                Secure = true,   // Requires HTTPS to send the cookie
-                SameSite = SameSiteMode.None, // Allows cross-site requests
-                Expires = DateTime.UtcNow.AddMinutes(30) // Cookie expiration time
-            };
+            // Cookie options
+            var cookieOptionsToken = CreateCookieOptions(DateTime.UtcNow.AddMinutes(30)); // for now just standard 30
+            var cookieOptionsRefresh = CreateCookieOptions(refreshToken.Expires);
 
             var httpContext = _httpContextAccessor.HttpContext;
             if (httpContext != null)
             {
                 // Set the cookie named 'userCookie' in the HTTP response
-                httpContext.Response.Cookies.Append("userCookie", jwtToken, cookieOptions);
-                httpContext.Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);
+                httpContext.Response.Cookies.Append("userCookie", jwtToken, cookieOptionsToken);
+                httpContext.Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptionsRefresh);
             }
 
             return jwtToken; // Return the generated JWT token
+        }
+
+        // Create cookie options
+        public CookieOptions CreateCookieOptions(DateTime expireDate) 
+        {
+            // Cookie options for the JWT token
+            return new CookieOptions
+            {
+                HttpOnly = true, // Restricts cookie access to HTTP requests
+                Secure = true,   // Requires HTTPS to send the cookie
+                SameSite = SameSiteMode.None, // Allows cross-site requests
+                Expires = expireDate // Cookie expiration time
+            };
         }
 
         // Generating refresh token

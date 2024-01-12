@@ -1,10 +1,10 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using Domain;
-using API.Services;
-using API.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using API.Services;
+using Domain;
 using Persistence;
 
 namespace API.Controllers
@@ -75,7 +75,57 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> RefreshToken()
         {
-            return Ok();
+            // Get email from claim
+            var emailClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email);
+
+            // Check if email claim is found
+            if (emailClaim == null || string.IsNullOrEmpty(emailClaim.Value))
+                return BadRequest("The email claim could not be found.");
+
+            Console.WriteLine("Hello " +emailClaim.Value);
+
+
+            // Get the user from database
+            User? user = await _userManager.FindByEmailAsync(emailClaim.Value);
+
+            // Check again if user is found
+            if (user == null) return BadRequest("The user could not be found.");
+
+            // Email
+            if (user.Email == null)
+                return BadRequest("Email is not found.");
+
+            // Old refresh token
+            RefreshToken? oldRefreshToken = await _tokenService.GetRefreshTokenFromUser(user.Email);
+
+            // To check if there old refresh token is found
+            if (oldRefreshToken == null) return BadRequest("There is no refresh token.");
+
+            // Check if the refresh token is invalid
+            if (oldRefreshToken.IsRevoked || oldRefreshToken.Expires < DateTime.UtcNow)
+                return BadRequest("The refresh token is invalid.");
+
+            // Get a new refresh token
+            RefreshToken? newRefreshToken = _tokenService.GenerateRefreshToken();
+
+            // Check if refresh token has been generated
+            if (newRefreshToken == null) return BadRequest("The refresh token could not be generated.");
+
+            // Set the refresh for the user
+            user.RefreshToken = newRefreshToken;
+
+            // Update the refresh token in database
+            await _userManager.UpdateAsync(user);
+
+            // Remove the old refresh token from database
+            await _tokenService.RemoveRefreshToken(oldRefreshToken);
+
+            // Roles
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(
+                _tokenService.CreateAndSetCookie(user, roles.ToList(), newRefreshToken)
+            );
         }
     }
 }
