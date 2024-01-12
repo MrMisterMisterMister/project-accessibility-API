@@ -6,7 +6,6 @@ using API.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace API.Controllers
 {

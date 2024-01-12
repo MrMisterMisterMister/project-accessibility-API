@@ -6,7 +6,6 @@ using API.Services;
 using API.DTOs;
 using Microsoft.EntityFrameworkCore;
 using API.DTOs.RegisterDTOs;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace API.Controllers
 {
