@@ -121,7 +121,10 @@ namespace API.Controllers
             var roles = await _userManager.GetRolesAsync(user);
 
             return Ok(
-                _tokenService.CreateAndSetCookie(user, roles.ToList(), newRefreshToken)
+                new
+                {
+                    Token = _tokenService.CreateAndSetCookie(user, roles.ToList(), newRefreshToken)
+                }
             );
         }
     }
