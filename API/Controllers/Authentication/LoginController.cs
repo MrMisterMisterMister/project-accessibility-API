@@ -56,6 +56,52 @@ namespace API.Controllers
             );
         }
 
+        [HttpPost("google")]
+        public async Task<ActionResult<UserDTO>> GoogleSignUp(LoginGoogleDTO loginGoogleDTO)
+        {
+            // Check if login dto for google has all the fields
+            if (loginGoogleDTO == null || string.IsNullOrEmpty(loginGoogleDTO.Email) || string.IsNullOrEmpty(loginGoogleDTO.Name) || string.IsNullOrEmpty(loginGoogleDTO.FirstName) || string.IsNullOrEmpty(loginGoogleDTO.LastName))
+            {
+                return BadRequest("Invalid or missing information in the request.");
+            }
+
+            // Check if the email already exists in the database
+            var existingUser = await _userManager.FindByEmailAsync(loginGoogleDTO.Email);
+
+            if (existingUser != null)
+            {
+                // User exists, generate a JWT token for them
+                var roles = await _userManager.GetRolesAsync(existingUser);
+                return new UserDTO { Token = _tokenService.CreateAndSetCookie(existingUser, roles.ToList()) };
+            }
+            else
+            {
+                // If the email doesn't exist, create a new panelmember in the database
+                var panelMember = new PanelMember
+                {
+                    Email = loginGoogleDTO.Email,
+                    UserName = loginGoogleDTO.Email, // Just set email as username too
+                    FirstName = loginGoogleDTO.FirstName,
+                    LastName = loginGoogleDTO.LastName
+                };
+
+                var result = await _userManager.CreateAsync(panelMember);
+
+                if (result.Succeeded)
+                {
+                    // User creation successful, generate a JWT token for the new user
+                    // Give them admin.. for now.... :O... don't let mommy "T" know
+                    var newRoles = new List<string>() { nameof(RoleTypes.Admin) };
+                    await _userManager.AddToRolesAsync(panelMember, newRoles);
+
+                    return new UserDTO { Token = _tokenService.CreateAndSetCookie(panelMember, newRoles.ToList()) };
+                }
+
+                // Return errors if user creation fails
+                return BadRequest(result.Errors);
+            }
+        }
+
         // For testing purposes: Retrieves user information including 
         // UserID, Email, Cookie, and JWT Token and roles
         [HttpGet("userinfo")]
