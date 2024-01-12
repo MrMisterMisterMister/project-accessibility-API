@@ -58,24 +58,16 @@ namespace API.Controllers
         }
 
         [HttpPost("google")]
-        public async Task<ActionResult<UserDTO>> GoogleSignUp([FromBody] string googleJWTToken)
+        public async Task<ActionResult<UserDTO>> GoogleSignUp(LoginGoogleDTO loginGoogleDTO)
         {
-            // Decode the JWT token to extract user information
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var jwtToken = tokenHandler.ReadToken(googleJWTToken) as JwtSecurityToken;
-
-            // Extract user email from the decoded JWT token, needs to be rewritten to handle null references
-            var userEmail = jwtToken!.Claims.FirstOrDefault(c => c.Type == "email")!.Value;
-            var userFirstName = jwtToken.Claims.FirstOrDefault(c => c.Type == "given_name")!.Value;
-            var userLastName = jwtToken.Claims.FirstOrDefault(c => c.Type == "family_name")!.Value;
-
-            if (string.IsNullOrEmpty(userEmail) || string.IsNullOrEmpty(userFirstName) || string.IsNullOrEmpty(userLastName))
+            // Check if login dto for google has all the fields
+            if (loginGoogleDTO == null || string.IsNullOrEmpty(loginGoogleDTO.Email) || string.IsNullOrEmpty(loginGoogleDTO.Name) || string.IsNullOrEmpty(loginGoogleDTO.FirstName) || string.IsNullOrEmpty(loginGoogleDTO.LastName))
             {
-                return BadRequest("Invalid Google JWT token or missing required information.");
+                return BadRequest("Invalid or missing information in the request.");
             }
 
             // Check if the email already exists in the database
-            var existingUser = await _userManager.FindByEmailAsync(userEmail);
+            var existingUser = await _userManager.FindByEmailAsync(loginGoogleDTO.Email);
 
             if (existingUser != null)
             {
@@ -88,10 +80,10 @@ namespace API.Controllers
                 // If the email doesn't exist, create a new panelmember in the database
                 var panelMember = new PanelMember
                 {
-                    Email = userEmail,
-                    UserName = userEmail,
-                    FirstName = userFirstName,
-                    LastName = userLastName
+                    Email = loginGoogleDTO.Email,
+                    UserName = loginGoogleDTO.Email, // Just set email as username too
+                    FirstName = loginGoogleDTO.FirstName,
+                    LastName = loginGoogleDTO.LastName
                 };
 
                 var result = await _userManager.CreateAsync(panelMember);
