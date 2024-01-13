@@ -34,8 +34,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapHub<ChatHub>("/Chat");
-
 // creates scope for services to setup local database and discards itself
 using var scope = app.Services.CreateScope();
 var serviceProvider = scope.ServiceProvider;
@@ -59,5 +57,7 @@ if (app.Environment.IsDevelopment())
         logger.LogError(e, "An error occured during migration");
     }
 }
+
+app.MapHub<ChatHub>("/Chat");
 
 app.Run();

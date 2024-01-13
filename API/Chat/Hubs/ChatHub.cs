@@ -7,10 +7,16 @@ namespace API.Chat.Hubs
 {
     public class ChatHub : Hub
     {
+        //Dictionary for the Users and ConnectionId, that's the plan...
+
+
+        // Context.ConnectionId is zelf gegeven door SignalR wanneer een gebruiker connect met SignalR
         public async Task JoinRoom(UserConnection conn)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, conn.ChatRoom);
-            await Clients.Group(conn.ChatRoom).SendAsync("ReceiveMessage", conn.Username, $"{conn.Username} has joined {conn.ChatRoom}.");
+
+            // Calls the ReceiveMessage function in the frontend
+            await Clients.Group(conn.ChatRoom).SendAsync("ReceiveMessage", "System", $"{conn.Username} has joined {conn.ChatRoom}.");
         }
 
         public async Task SendMessageToRoom(string chatRoom, string username, string message)
