@@ -2,6 +2,7 @@ using Application.Core;
 using Domain;
 using MediatR;
 using Persistence;
+using Microsoft.Extensions.Logging;
 
 namespace Application.ResearchesHandlers
 {
@@ -16,25 +17,51 @@ namespace Application.ResearchesHandlers
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _dataContext;
+            private readonly ILogger<Handler> _logger;
 
-            public Handler(DataContext dataContext)
+
+            public Handler(DataContext dataContext, ILogger<Handler> logger)
             {
                 _dataContext = dataContext;
+                 _logger = logger;
+
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                // Add organizer
-                request.Research.Organizer = request.Organizer;
+                try
+                {
+                    if (request.Research == null)
+                    {
+                        return Result<Unit>.Failure("Ongeldig verzoek, het onderzoeksobject mag niet leeg zijn.");
+                    }
 
-                _dataContext.Add(request.Research);
+                    if (request.Research.Organizer == null)
+                    {
+                        return Result<Unit>.Failure("Ongeldig verzoek, de organisator mag niet leeg zijn.");
+                    }
 
-                // resultaat is true als er changes zijn opgeslagen en false als er geen zijn opgeslagen.
-                var result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
+                    if (request.Research.Organizer.Id == null && !string.IsNullOrEmpty(request.Organizer.Id))
+                    {
+                        request.Research.Organizer.Id = request.Organizer.Id;
+                    }
 
-                if (!result) return Result<Unit>.Failure("Failed to create research");    
-            
-                return Result<Unit>.Success(Unit.Value);
+                    _dataContext.Add(request.Research);
+
+                    var result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
+                    Console.WriteLine($"Onderzoek aanmaken voltooid: {result}");
+
+                    if (!result)
+                    {
+                        return Result<Unit>.Failure("Mislukt om onderzoek aan te maken");
+                    }
+                    _logger.LogInformation($"Succesvol onderzoek aangemaakt met titel: {request.Research.Title} en id: {request.Research.Id}");
+                    return Result<Unit>.Success(Unit.Value);
+                }
+                catch (Exception ex)
+                {
+                    return Result<Unit>.Failure($"Er is een fout opgetreden: {ex.Message}");
+                }
             }
         }
     }

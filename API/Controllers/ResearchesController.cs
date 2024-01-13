@@ -25,6 +25,7 @@ namespace API.Controllers
         public async Task<IActionResult> CreateResearch(Research research)
         {
             return HandleResult(await Mediator.Send(new CreateResearch.Command { Research = research }));
+            
         }
 
         // edit research
