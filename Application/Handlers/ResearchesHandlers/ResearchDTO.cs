@@ -18,8 +18,8 @@ namespace Application.Handlers.ResearchesHandlers
         public string Category { get; set; } = null!; // crack but lazy
         [Required]
         public double Reward { get; set; }
+        public string? OrganizerName { get; set; }
         [Required]
-        public string OrganizerName { get; set; } = null!;
         public string OrganizerId { get; set; } = null!;
         public ICollection<PanelMemberDTO> Participants { get; set; } = new List<PanelMemberDTO>();
     }

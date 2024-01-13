@@ -30,10 +30,11 @@ namespace API.Controllers
 
         // new research
         [HttpPost]
-public async Task<IActionResult> CreateResearch(createResearchDTO researchDto)
-{
-    return HandleResult(await Mediator.Send(new CreateResearch.Command { Research = researchDto }));
-}
+        public async Task<IActionResult> CreateResearch(ResearchDTO researchDto)
+        {
+            return HandleResult(await Mediator.Send(new CreateResearch.Command { Research = researchDto }));
+        }
+        
         // edit research
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateResearch(int id, Research research)

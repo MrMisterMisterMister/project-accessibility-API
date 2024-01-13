@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Dynamic;
 
 namespace Domain
 {
@@ -21,7 +20,7 @@ namespace Domain
         public double Reward { get; set; }
         [Required]
         public Company Organizer { get; set; } = null!;
-        public string OrganizerId{get;set;} = null!;
+        public string OrganizerId { get; set; } = null!;
         public ICollection<ResearchParticipant> Participants { get; set; } = new List<ResearchParticipant>();
     }
 }
