@@ -27,13 +27,13 @@ namespace Persistence.SeedData
                         Category = "Category 1",
                         Reward = 20.5,
                         Organizer = companies[0],
-                        Participants = panelMembers
-                        .OrderBy(_ => Guid.NewGuid()).Take(3).Select(pm => new Participant {
-                            PanelMember = pm,
-                            DateJoined = DateTime.Today,
-                            Status = "Active",
-                        })
-                        .ToList(),
+                        Participants = new List<ResearchParticipant>()
+                        {
+                            new ResearchParticipant() {
+                                PanelMember = panelMembers[new Random().Next(0, 5)],
+                                DateJoined = DateTime.UtcNow.AddYears(new Random().Next(0, 100))
+                            }
+                        }
                     },
                     new Research
                     {
@@ -44,13 +44,13 @@ namespace Persistence.SeedData
                         Category = "Category 2",
                         Reward = 10.20,
                         Organizer = companies[1],
-                        Participants = panelMembers
-                        .OrderBy(_ => Guid.NewGuid()).Take(1).Select(pm => new Participant {
-                            PanelMember = pm,
-                            DateJoined = DateTime.Today,
-                            Status = "Active",
-                        })
-                        .ToList(),
+                        Participants = new List<ResearchParticipant>()
+                        {
+                            new ResearchParticipant() {
+                                PanelMember = panelMembers[new Random().Next(0, 5)],
+                                DateJoined = DateTime.UtcNow.AddYears(new Random().Next(0, 100))
+                            }
+                        }
                     },
                     new Research
                     {
@@ -61,13 +61,13 @@ namespace Persistence.SeedData
                         Category = "Category 3",
                         Reward = 53.24,
                         Organizer = companies[2],
-                        Participants = panelMembers
-                        .OrderBy(_ => Guid.NewGuid()).Take(1).Select(pm => new Participant {
-                            PanelMember = pm,
-                            DateJoined = DateTime.Today,
-                            Status = "Active",
-                        })
-                        .ToList(),
+                        Participants = new List<ResearchParticipant>()
+                        {
+                            new ResearchParticipant() {
+                                PanelMember = panelMembers[new Random().Next(0, 5)],
+                                DateJoined = DateTime.UtcNow.AddYears(new Random().Next(0, 100))
+                            }
+                        }
                     },
                     new Research
                     {
@@ -78,13 +78,13 @@ namespace Persistence.SeedData
                         Category = "Category 4",
                         Reward = 44.44,
                         Organizer = companies[3],
-                        Participants = panelMembers
-                        .OrderBy(_ => Guid.NewGuid()).Take(2).Select(pm => new Participant {
-                            PanelMember = pm,
-                            DateJoined = DateTime.Today,
-                            Status = "Active",
-                        })
-                        .ToList(),
+                        Participants = new List<ResearchParticipant>()
+                        {
+                            new ResearchParticipant() {
+                                PanelMember = panelMembers[new Random().Next(0, 5)],
+                                DateJoined = DateTime.UtcNow.AddYears(new Random().Next(0, 100))
+                            }
+                        }
                     },
                     new Research
                     {
@@ -95,17 +95,17 @@ namespace Persistence.SeedData
                         Category = "Category 5",
                         Reward = 91.98,
                         Organizer = companies[4],
-                        Participants = panelMembers
-                        .OrderBy(_ => Guid.NewGuid()).Take(1).Select(pm => new Participant {
-                            PanelMember = pm,
-                            DateJoined = DateTime.Today,
-                            Status = "Active",
-                        })
-                        .ToList(),
+                        Participants = new List<ResearchParticipant>()
+                        {
+                            new ResearchParticipant() {
+                                PanelMember = panelMembers[new Random().Next(0, 5)],
+                                DateJoined = DateTime.UtcNow.AddYears(new Random().Next(0, 100))
+                            }
+                        }
                     },
                 };
 
-                context.Researches.AddRange(researches);
+                await context.Researches.AddRangeAsync(researches);
                 await context.SaveChangesAsync();
             }
         }

@@ -11,17 +11,27 @@ namespace Persistence
         public DbSet<Company> Companies { get; set; }
         public DbSet<PanelMember> PanelMembers { get; set; }
         public DbSet<Research> Researches { get; set; }
-        public DbSet<Participant> Participants { get; set; }
+        public DbSet<ResearchParticipant> Participants { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
             // Creates a separate table instead of combining the properties in use
-            modelBuilder.Entity<Company>().ToTable("Companies");
-            modelBuilder.Entity<PanelMember>().ToTable("PanelMembers");
-            modelBuilder.Entity<Research>().ToTable("Researches");
-            modelBuilder.Entity<Participant>().ToTable("Participants");
+            builder.Entity<Company>().ToTable("Companies");
+            builder.Entity<PanelMember>().ToTable("PanelMembers");
+
+            builder.Entity<ResearchParticipant>(x => x.HasKey(a => new { a.ResearchId, a.PanelMemberId }));
+
+            builder.Entity<ResearchParticipant>()
+                .HasOne(x => x.PanelMember)
+                .WithMany(p => p.Participations)
+                .HasForeignKey(ps => ps.PanelMemberId);
+
+            builder.Entity<ResearchParticipant>()
+                .HasOne(x => x.Research)
+                .WithMany(r => r.Participants)
+                .HasForeignKey(p => p.ResearchId);
         }
     }
 }

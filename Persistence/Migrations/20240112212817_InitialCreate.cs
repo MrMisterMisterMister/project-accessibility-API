@@ -301,10 +301,8 @@ namespace Persistence.Migrations
                 name: "Participants",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ResearchId = table.Column<int>(type: "int", nullable: false),
-                    PanelMemberId = table.Column<string>(type: "varchar(255)", nullable: true)
+                    PanelMemberId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DateJoined = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Status = table.Column<string>(type: "longtext", nullable: true)
@@ -312,12 +310,13 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Participants", x => x.Id);
+                    table.PrimaryKey("PK_Participants", x => new { x.ResearchId, x.PanelMemberId });
                     table.ForeignKey(
                         name: "FK_Participants_PanelMembers_PanelMemberId",
                         column: x => x.PanelMemberId,
                         principalTable: "PanelMembers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Participants_Researches_ResearchId",
                         column: x => x.ResearchId,
@@ -368,11 +367,6 @@ namespace Persistence.Migrations
                 name: "IX_Participants_PanelMemberId",
                 table: "Participants",
                 column: "PanelMemberId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Participants_ResearchId",
-                table: "Participants",
-                column: "ResearchId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Researches_OrganizerId",

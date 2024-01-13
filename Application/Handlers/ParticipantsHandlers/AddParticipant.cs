@@ -63,7 +63,7 @@ namespace Application.ParticipantsHandlers
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError("Fout opgetreden bij ophalen van onderzoek", e.Message);
+                    _logger.LogError(e, "Fout opgetreden bij ophalen van onderzoek");
                     return Result<Unit>.Failure("Fout opgetreden bij ophalen van onderzoek");
                 }
             }

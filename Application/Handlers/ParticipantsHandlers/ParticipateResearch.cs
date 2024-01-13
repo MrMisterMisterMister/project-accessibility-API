@@ -54,7 +54,7 @@ namespace Application.ParticipantsHandlers
                         return Result<Unit>.Failure("Deelnemer is al ingeschreven voor dit onderzoek.");
                     }
 
-                    research.Participants.Add(new Participant { PanelMember = request.Participant });
+                    research.Participants.Add(new ResearchParticipant { PanelMember = request.Participant });
 
                     var result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
 

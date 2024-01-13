@@ -1,5 +1,7 @@
 using Application.Core;
-using Domain;
+using Application.Handlers.ResearchesHandlers;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -8,20 +10,28 @@ namespace Application.ResearchesHandlers
 {
     public class GetResearch
     {
-        public class Query : IRequest<Result<List<Research>>> {}
+        public class Query : IRequest<Result<List<ResearchDTO>>> { }
 
-        public class Handler : IRequestHandler<Query, Result<List<Research>>>
+        public class Handler : IRequestHandler<Query, Result<List<ResearchDTO>>>
         {
             private readonly DataContext _dataContext;
+            private readonly IMapper _mapper;
 
-            public Handler(DataContext dataContext)
+            public Handler(DataContext dataContext, IMapper mapper)
             {
+                _mapper = mapper;
                 _dataContext = dataContext;
             }
 
-            public async Task<Result<List<Research>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<ResearchDTO>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return Result<List<Research>>.Success(await _dataContext.Researches.ToListAsync());
+                // using projection, eager loading is not needed
+                // could also manually use linq but automapper is pro
+                var researches = await _dataContext.Researches
+                    .ProjectTo<ResearchDTO>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
+
+                return Result<List<ResearchDTO>>.Success(researches);
             }
         }
     }

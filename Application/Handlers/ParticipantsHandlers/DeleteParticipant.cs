@@ -65,7 +65,7 @@ namespace Application.ParticipantsHandlers
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError("Er is een fout opgetreden bij het verwijderen van de deelnemer", e.Message);
+                    _logger.LogError(e, "Er is een fout opgetreden bij het verwijderen van de deelnemer");
                     return Result<Unit>.Failure("Er is een fout opgetreden tijdens het verwijderen van de deelnemer.");
                 }
             }
