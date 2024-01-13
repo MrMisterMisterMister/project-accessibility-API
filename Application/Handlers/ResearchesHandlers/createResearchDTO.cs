@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using System.Dynamic;
+using Application.Handlers.PanelMemberHandlers;
 
-namespace Domain
+namespace Application.Handlers.ResearchesHandlers
 {
-    public class Research
+    public class createResearchDTO
     {
-        [Key]
         public int Id { get; set; }
         [Required]
         public string Title { get; set; } = null!;
@@ -20,8 +19,7 @@ namespace Domain
         [Required]
         public double Reward { get; set; }
         [Required]
-        public Company Organizer { get; set; } = null!;
-        public string OrganizerId{get;set;} = null!;
-        public ICollection<ResearchParticipant> Participants { get; set; } = new List<ResearchParticipant>();
+        public string OrganizerId { get; set; } = null!;
+        public ICollection<PanelMemberDTO> Participants { get; set; } = new List<PanelMemberDTO>();
     }
 }
