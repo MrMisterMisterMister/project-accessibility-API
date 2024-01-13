@@ -13,10 +13,10 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new AddResearchParticipant.Command { ResearchId = researchId }));
         }
 
-        [HttpPost("removeParticipant")]
-        public async Task<IActionResult> RemoveParticipant(ParticipantDTO participantDTO)
+        [HttpDelete("removeParticipant")]
+        public async Task<IActionResult> RemoveParticipant(DeleteParticipantDTO participantDTO)
         {
-            return HandleResult(await Mediator.Send(new DeleteResearchParticipants.Command { Participant = participantDTO.PanelMember, Research = participantDTO.Research }));
+            return HandleResult(await Mediator.Send(new DeleteResearchParticipants.Command { Participant = participantDTO.participantid, Research = participantDTO.researchId }));
         }
 
         // what's even the difference here and with add participant..? A: Dunno?
