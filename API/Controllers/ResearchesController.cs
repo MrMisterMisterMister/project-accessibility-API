@@ -10,7 +10,14 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetResearches()
         {
-            return HandleResult(await Mediator.Send(new GetResearch.Query()));
+            return HandleResult(await Mediator.Send(new GetResearches.Query()));
+        }
+
+        // get researches by organizer id
+        [HttpGet("organizer/{id}")]
+        public async Task<IActionResult> GetResearchesByOrganizer(string id)
+        {
+            return HandleResult(await Mediator.Send(new GetResearchesByOrganizer.Query { OrganizerId = id }));
         }
 
         // research by id

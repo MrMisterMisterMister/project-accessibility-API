@@ -8,7 +8,7 @@ using Persistence;
 
 namespace Application.ResearchesHandlers
 {
-    public class GetResearch
+    public class GetResearches
     {
         public class Query : IRequest<Result<List<ResearchDTO>>> { }
 
