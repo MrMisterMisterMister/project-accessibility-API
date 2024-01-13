@@ -36,7 +36,6 @@ namespace Application.ResearchesHandlers
                     return Result<Unit>.Failure("Ongeldig verzoek, het onderzoeksobject mag niet leeg zijn.");
                 }
 
-                // Create a new Research entity with only the necessary properties
                 var researchEntity = new Research
                 {
                     Title = request.Research.Title,
