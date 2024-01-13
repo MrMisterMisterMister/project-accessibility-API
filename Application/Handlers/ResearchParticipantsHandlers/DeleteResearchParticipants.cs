@@ -6,7 +6,7 @@ using Persistence;
 
 namespace Application.ParticipantsHandlers
 {
-    public class DeleteParticipants
+    public class DeleteResearchParticipants
     {
         public class Command : IRequest<Result<Unit>>
         {

@@ -1,26 +1,28 @@
 using Application.Core;
-using Domain;
+using Application.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Persistence;
 
 namespace Application.ParticipantsHandlers
 {
-    public class AddParticipant
+    public class AddResearchParticipant
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Research Research { get; set; } = null!;
-            public PanelMember Participant { get; set; } = null!;
+            public int ResearchId { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _dataContext;
             private readonly ILogger<Handler> _logger;
+            private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext dataContext, ILogger<Handler> logger)
+            public Handler(DataContext dataContext, ILogger<Handler> logger, IUserAccessor userAccessor)
             {
+                _userAccessor = userAccessor;
                 _dataContext = dataContext;
                 _logger = logger;
             }
@@ -30,14 +32,22 @@ namespace Application.ParticipantsHandlers
                 _logger.LogInformation("Bezig met toevoegen van deelnemer...");
                 try
                 {
-                    var onderzoek = await _dataContext.Researches.FindAsync(request.Research);
+                    // eager load attendees
+                    var onderzoek = await _dataContext.Researches
+                        .Include(a => a.Organizer)
+                        .Include(a => a.Participants)
+                        .ThenInclude(u => u.PanelMemberId)
+                        .FirstOrDefaultAsync(x => x.Id == request.ResearchId);
+                    // can also use singleordefaultasync, difference is that returns
+                    // an exception and this returns null
 
                     if (onderzoek == null)
                     {
                         return Result<Unit>.Failure("Onderzoek bestaat niet.");
                     }
 
-                    var deelnemer = await _dataContext.PanelMembers.FindAsync(request.Participant);
+                    var deelnemer = await _dataContext.Users.FirstOrDefaultAsync(x =>
+                    x.Email == _userAccessor.GetEmail());
 
                     if (deelnemer == null)
                     {
@@ -55,7 +65,7 @@ namespace Application.ParticipantsHandlers
 
                     if (!resultaat)
                     {
-                        return Result<Unit>.Failure($"Probleem opgetreden bij het toevoegen van de deelnemer. Id: {request.Participant.Id}");
+                        return Result<Unit>.Failure($"Probleem opgetreden bij het toevoegen van de deelnemer. Id: {deelnemer.Id}");
                     }
 
                     _logger.LogInformation($"Succesvol deelnemer {deelnemer.UserName} toegevoegd aan onderzoek");
