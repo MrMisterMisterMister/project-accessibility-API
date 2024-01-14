@@ -27,7 +27,7 @@ namespace Application.ResearchesHandlers
 
                 _dataContext.Remove(research);
 
-                var result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
+                var result = await _dataContext.SaveChangesAsync() > 0;
 
                 if (!result) return Result<Unit>.Failure("Failed to delete the research");
 
