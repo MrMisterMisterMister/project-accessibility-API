@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Domain;
 using Microsoft.EntityFrameworkCore;
@@ -60,20 +61,28 @@ namespace API.Services
         }
 
         // Creates a JWT token and sets it as a cookie in the HTTP response
-        public string CreateAndSetCookie(User user, List<string> roles, RefreshToken refreshToken)
+        public async Task<string> CreateAndSetCookie(User user, List<string> roles)
         {
             // Create a JWT token
             var jwtToken = CreateToken(user, roles);
 
+            var refreshToken = GenerateRefreshToken();
+
+            user.RefreshTokens.Add(refreshToken);
+
+            // Save changes to the database
+            await _dataContext.SaveChangesAsync();
+
             // Cookie options
-            var cookieOptionsToken = CreateCookieOptions(DateTime.UtcNow.AddMinutes(30)); // for now just standard 30
-            var cookieOptionsRefresh = CreateCookieOptions(refreshToken.Expires);
+            var cookieOptionsJwt = CreateCookieOptions(DateTime.UtcNow.AddMinutes(30)); // same as jwt token
+            var cookieOptionsRefresh = CreateCookieOptions(DateTime.UtcNow.AddDays(7)); // same as refresh token
 
             var httpContext = _httpContextAccessor.HttpContext;
+
             if (httpContext != null)
             {
                 // Set the cookie named 'userCookie' in the HTTP response
-                httpContext.Response.Cookies.Append("userCookie", jwtToken, cookieOptionsToken);
+                httpContext.Response.Cookies.Append("userCookie", jwtToken, cookieOptionsJwt);
                 httpContext.Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptionsRefresh);
             }
 
@@ -81,12 +90,12 @@ namespace API.Services
         }
 
         // Create cookie options
-        public CookieOptions CreateCookieOptions(DateTime expireDate) 
+        public CookieOptions CreateCookieOptions(DateTime expireDate)
         {
             // Cookie options for the JWT token
             return new CookieOptions
             {
-                HttpOnly = true, // Restricts cookie access to HTTP requests
+                HttpOnly = true, // Restricts cookie access to HTTP requests and not JS
                 Secure = true,   // Requires HTTPS to send the cookie
                 SameSite = SameSiteMode.None, // Allows cross-site requests
                 Expires = expireDate // Cookie expiration time
@@ -96,33 +105,34 @@ namespace API.Services
         // Generating refresh token
         public RefreshToken GenerateRefreshToken()
         {
-            return new RefreshToken()
-            {
-                Token = Convert.ToBase64String(Guid.NewGuid().ToByteArray()),
-                Expires = DateTime.UtcNow.Add(TimeSpan.FromDays(1)), // Should probably put this somewhere else
-                LastModified = DateTime.UtcNow
-            };
+            var randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create(); // for security reasons
+            rng.GetBytes(randomNumber);
+            
+            return new RefreshToken { Token = Convert.ToBase64String(randomNumber) };
         }
 
-        // Get refresh token with email address from user
-        public async Task<RefreshToken?> GetRefreshTokenFromUser(string email)
+        // Unused method for now
+        public async Task<List<RefreshToken>> GetRefreshTokensFromUser(string email)
         {
-            // Look up the token from user
-            User? userToken = await _dataContext.Users
-                .Include(x => x.RefreshToken)
+            // Look up the tokens from the user
+            User? user = await _dataContext.Users
+                .Include(x => x.RefreshTokens)
                 .FirstOrDefaultAsync(x => x.Email == email);
 
-            // If there is a token with user
-            if (userToken != null)
+            // If there is a user with tokens
+            if (user != null)
             {
-                return userToken.RefreshToken;
+                // Return the collection of refresh tokens
+                return user.RefreshTokens.ToList();
             }
 
-            // null
-            return null;
+            // If no user found or no tokens associated, return an empty list
+            return new List<RefreshToken>();
         }
 
         // Get refresh token with the string
+        // Unused method for now
         public async Task<RefreshToken?> GetRefreshTokenFromString(string token)
         {
             RefreshToken? refreshToken = await _dataContext.RefreshTokens
@@ -132,6 +142,7 @@ namespace API.Services
         }
 
         // Removing the refresh token from database
+        // Unused method for now
         public async Task RemoveRefreshToken(RefreshToken refreshToken)
         {
             _dataContext.RefreshTokens.Remove(refreshToken);

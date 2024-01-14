@@ -28,19 +28,22 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("Expires")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<bool>("IsRevoked")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("LastModified")
+                    b.Property<DateTime?>("Revoked")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Token")
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -85,9 +88,6 @@ namespace Persistence.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int?>("RefreshTokenId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
 
@@ -106,8 +106,6 @@ namespace Persistence.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
-
-                    b.HasIndex("RefreshTokenId");
 
                     b.ToTable("AspNetUsers", (string)null);
 
@@ -311,13 +309,15 @@ namespace Persistence.Migrations
                     b.ToTable("PanelMembers", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.User", b =>
+            modelBuilder.Entity("Domain.RefreshToken", b =>
                 {
-                    b.HasOne("Domain.RefreshToken", "RefreshToken")
-                        .WithMany()
-                        .HasForeignKey("RefreshTokenId");
+                    b.HasOne("Domain.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("RefreshToken");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -387,6 +387,11 @@ namespace Persistence.Migrations
                         .HasForeignKey("Domain.PanelMember", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.User", b =>
+                {
+                    b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

@@ -17,9 +17,9 @@ namespace Persistence
             base.OnModelCreating(modelBuilder);
 
             // Creates a separate table instead of combining the properties in use
+            // when using inheritence
             modelBuilder.Entity<Company>().ToTable("Companies");
             modelBuilder.Entity<PanelMember>().ToTable("PanelMembers");
-            modelBuilder.Entity<RefreshToken>().ToTable("RefreshTokens");
         }
     }
 }

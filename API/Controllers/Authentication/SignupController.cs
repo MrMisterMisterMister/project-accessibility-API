@@ -46,20 +46,14 @@ namespace API.Controllers
             // Attempt to create the user in the database
             var result = await _userManager.CreateAsync(user, registerDTO.Password);
 
-            // Generate refresh token
-            RefreshToken? refreshToken = _tokenService.GenerateRefreshToken();
-
             // If the user creation is successful, return a JWT token as a cookie
             if (result.Succeeded)
             {
-                // Set the refresh for the user
-                user.RefreshToken = refreshToken;
-
                 // Update the user with refresh token
                 await _userManager.UpdateAsync(user);
 
                 var roles = await _userManager.GetRolesAsync(user);
-                return new UserDTO { Token = _tokenService.CreateAndSetCookie(user, roles.ToList(), refreshToken) };
+                return new UserDTO { Token = await _tokenService.CreateAndSetCookie(user, roles.ToList()) };
             }
 
             // Return error messages if user creation fails
@@ -96,16 +90,12 @@ namespace API.Controllers
 
             var result = await _userManager.CreateAsync(panelMember, registerPanelMemberDTO.Password);
 
-            RefreshToken? refreshToken = _tokenService.GenerateRefreshToken();
-
             if (result.Succeeded)
             {
-                
-                panelMember.RefreshToken = refreshToken;
                 await _userManager.UpdateAsync(panelMember);
 
                 var roles = await _userManager.GetRolesAsync(panelMember);
-                return new UserDTO { Token = _tokenService.CreateAndSetCookie(panelMember, roles.ToList(), refreshToken) };
+                return new UserDTO { Token = await _tokenService.CreateAndSetCookie(panelMember, roles.ToList()) };
             }
 
             return BadRequest(result.Errors);
@@ -153,15 +143,12 @@ namespace API.Controllers
 
             var result = await _userManager.CreateAsync(company, registerCompanyDTO.Password);
 
-            RefreshToken? refreshToken = _tokenService.GenerateRefreshToken();
-
             if (result.Succeeded)
             {
-                company.RefreshToken = refreshToken;
                 await _userManager.UpdateAsync(company);
 
                 var roles = await _userManager.GetRolesAsync(company);
-                return new UserDTO { Token = _tokenService.CreateAndSetCookie(company, roles.ToList(), refreshToken) };
+                return new UserDTO { Token = await _tokenService.CreateAndSetCookie(company, roles.ToList()) };
             }
 
             return BadRequest(result.Errors);
