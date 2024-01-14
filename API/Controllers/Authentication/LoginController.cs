@@ -44,8 +44,9 @@ namespace API.Controllers
             if (result)
             {
                 var roles = await _userManager.GetRolesAsync(user);
-                return new UserDTO { Token = _tokenService.CreateAndSetCookie(user, roles.ToList()) };
+                return new UserDTO { Token = await _tokenService.CreateAndSetCookie(user, roles.ToList()) };
             }
+
             // Return Unauthorized if the password is incorrect
             return Unauthorized(
                 new
@@ -68,11 +69,12 @@ namespace API.Controllers
             // Check if the email already exists in the database
             var existingUser = await _userManager.FindByEmailAsync(loginGoogleDTO.Email);
 
+            // Check user exists
             if (existingUser != null)
             {
                 // User exists, generate a JWT token for them
                 var roles = await _userManager.GetRolesAsync(existingUser);
-                return new UserDTO { Token = _tokenService.CreateAndSetCookie(existingUser, roles.ToList()) };
+                return new UserDTO { Token = await _tokenService.CreateAndSetCookie(existingUser, roles.ToList()) };
             }
             else
             {
@@ -90,11 +92,11 @@ namespace API.Controllers
                 if (result.Succeeded)
                 {
                     // User creation successful, generate a JWT token for the new user
-                    // Give them admin.. for now.... :O... don't let mommy "T" know
+                    // Give them admin.. for now.... :O... don't let mommy "T" know .. ⁀⊙﹏☉⁀ I saw it. (⊙_◎)
                     var newRoles = new List<string>() { nameof(RoleTypes.Admin) };
                     await _userManager.AddToRolesAsync(panelMember, newRoles);
 
-                    return new UserDTO { Token = _tokenService.CreateAndSetCookie(panelMember, newRoles.ToList()) };
+                    return new UserDTO { Token = await _tokenService.CreateAndSetCookie(panelMember, newRoles.ToList()) };
                 }
 
                 // Return errors if user creation fails
@@ -123,7 +125,7 @@ namespace API.Controllers
             var response = new
             {
                 UserId = user!.Id,
-                Email = user.Email,
+                user.Email,
                 Cookie = cookie,
                 JwtToken = jwtToken,
                 UserRoles = roles
@@ -134,14 +136,17 @@ namespace API.Controllers
 
         // Endpoint to set a test cookie (for demonstration or testing purposes)
         [HttpGet("set-cookie")]
-        public IActionResult SetCookie()
+        public async Task<IActionResult> SetCookie()
         {
             // Create and set a token cookie for a test user
-            _tokenService.CreateAndSetCookie(new User
-            {
-                Email = "test@dad.com",
-                Id = Guid.NewGuid().ToString(),
-            }, new List<string> { "Admin" });
+            await _tokenService.CreateAndSetCookie(
+                new User
+                {
+                    Email = "test@dad.com",
+                    Id = Guid.NewGuid().ToString(),
+                },
+                new List<string> { "Admin" }
+            );
 
             return Ok("Cookie Set!"); // Returns a success message when the cookie is set
         }
