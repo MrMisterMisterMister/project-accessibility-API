@@ -44,7 +44,9 @@ namespace API.Extensions
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = key,
                         ValidateIssuer = false, // MUST change when going into production
-                        ValidateAudience = false // MUST change when going into production
+                        ValidateAudience = false, // MUST change when going into production
+                        ValidateLifetime = true, // validates life time of a token (default window is every 5 minutes)
+                        ClockSkew = TimeSpan.Zero // sets default window to 0
                     };
                 })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);

@@ -12,6 +12,7 @@ namespace Persistence
         public DbSet<PanelMember> PanelMembers { get; set; }
         public DbSet<Research> Researches { get; set; }
         public DbSet<ResearchParticipant> ResearchParticipants { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -27,11 +28,14 @@ namespace Persistence
                 .HasOne(x => x.PanelMember)
                 .WithMany(p => p.Participations)
                 .HasForeignKey(ps => ps.PanelMemberId);
+            builder.Entity<PanelMember>().ToTable("PanelMembers");
 
             builder.Entity<ResearchParticipant>()
                 .HasOne(x => x.Research)
                 .WithMany(r => r.Participants)
                 .HasForeignKey(p => p.ResearchId);
+            // when using inheritence
+            builder.Entity<Company>().ToTable("Companies");
         }
     }
 }

@@ -49,8 +49,11 @@ namespace API.Controllers
             // If the user creation is successful, return a JWT token as a cookie
             if (result.Succeeded)
             {
+                // Update the user with refresh token
+                await _userManager.UpdateAsync(user);
+
                 var roles = await _userManager.GetRolesAsync(user);
-                return new UserDTO { Token = _tokenService.CreateAndSetCookie(user, roles.ToList()) };
+                return new UserDTO { Token = await _tokenService.CreateAndSetCookie(user, roles.ToList()) };
             }
 
             // Return error messages if user creation fails
@@ -89,8 +92,10 @@ namespace API.Controllers
 
             if (result.Succeeded)
             {
+                await _userManager.UpdateAsync(panelMember);
+
                 var roles = await _userManager.GetRolesAsync(panelMember);
-                return new UserDTO { Token = _tokenService.CreateAndSetCookie(panelMember, roles.ToList()) };
+                return new UserDTO { Token = await _tokenService.CreateAndSetCookie(panelMember, roles.ToList()) };
             }
 
             return BadRequest(result.Errors);
@@ -140,8 +145,10 @@ namespace API.Controllers
 
             if (result.Succeeded)
             {
+                await _userManager.UpdateAsync(company);
+
                 var roles = await _userManager.GetRolesAsync(company);
-                return new UserDTO { Token = _tokenService.CreateAndSetCookie(company, roles.ToList()) };
+                return new UserDTO { Token = await _tokenService.CreateAndSetCookie(company, roles.ToList()) };
             }
 
             return BadRequest(result.Errors);
