@@ -298,7 +298,7 @@ namespace Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Participants",
+                name: "ResearchParticipants",
                 columns: table => new
                 {
                     ResearchId = table.Column<int>(type: "int", nullable: false),
@@ -310,15 +310,15 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Participants", x => new { x.ResearchId, x.PanelMemberId });
+                    table.PrimaryKey("PK_ResearchParticipants", x => new { x.ResearchId, x.PanelMemberId });
                     table.ForeignKey(
-                        name: "FK_Participants_PanelMembers_PanelMemberId",
+                        name: "FK_ResearchParticipants_PanelMembers_PanelMemberId",
                         column: x => x.PanelMemberId,
                         principalTable: "PanelMembers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Participants_Researches_ResearchId",
+                        name: "FK_ResearchParticipants_Researches_ResearchId",
                         column: x => x.ResearchId,
                         principalTable: "Researches",
                         principalColumn: "Id",
@@ -364,8 +364,8 @@ namespace Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Participants_PanelMemberId",
-                table: "Participants",
+                name: "IX_ResearchParticipants_PanelMemberId",
+                table: "ResearchParticipants",
                 column: "PanelMemberId");
 
             migrationBuilder.CreateIndex(
@@ -393,7 +393,7 @@ namespace Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Participants");
+                name: "ResearchParticipants");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

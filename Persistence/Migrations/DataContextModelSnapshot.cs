@@ -76,7 +76,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("PanelMemberId");
 
-                    b.ToTable("Participants");
+                    b.ToTable("ResearchParticipants");
                 });
 
             modelBuilder.Entity("Domain.User", b =>

@@ -1,9 +1,11 @@
 using Application.CompanyHandlers;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize(Policy = "AdminPolicy")]
     public class CompaniesController : BaseApiController
     {
         [HttpGet]
@@ -21,7 +23,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCompany(Company company)
         {
-            return HandleResult(await Mediator.Send(new CreateCompany.Command {Company = company }));
+            return HandleResult(await Mediator.Send(new CreateCompany.Command { Company = company }));
         }
 
         [HttpDelete("{id}")]
@@ -34,7 +36,7 @@ namespace API.Controllers
         public async Task<ActionResult> EditCompanyGetCompany(Guid id, Company company)
         {
             company.Id = id.ToString();
-            return HandleResult(await Mediator.Send(new EditCompany.Command {Company = company }));
+            return HandleResult(await Mediator.Send(new EditCompany.Command { Company = company }));
         }
     }
 }

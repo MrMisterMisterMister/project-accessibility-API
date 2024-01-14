@@ -44,7 +44,7 @@ if (app.Environment.IsDevelopment())
         var databaseContext = serviceProvider.GetRequiredService<DataContext>();
 
         // Drop database
-        // databaseContext.Database.EnsureDeleted();
+        databaseContext.Database.EnsureDeleted();
 
         var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -53,14 +53,11 @@ if (app.Environment.IsDevelopment())
         // Executes dotnet ef update on the latest migrations
         await databaseContext.Database.MigrateAsync();
 
-        // Inserts seed data into the database
-        await Seed.SeedAll(databaseContext, userManager);
-
         // Seed roles
         await roleService.SeedRoles();
 
-        // Assign admin role to a user
-        await roleService.AssignRoleToUser("admin@admin.com", nameof(RoleTypes.Admin));
+        // Inserts seed data into the database
+        await Seed.SeedAll(databaseContext, userManager);
     }
     catch (Exception e)
     {

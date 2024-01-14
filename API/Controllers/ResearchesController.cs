@@ -2,9 +2,11 @@ using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Application.ResearchesHandlers;
 using Application.Handlers.ResearchesHandlers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
+    [Authorize(Policy = "AdminPolicy")] // for now
     public class ResearchesController : BaseApiController
     {
         // all researches
@@ -34,7 +36,7 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new CreateResearch.Command { Research = researchDto }));
         }
-        
+
         // edit research
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateResearch(int id, Research research)

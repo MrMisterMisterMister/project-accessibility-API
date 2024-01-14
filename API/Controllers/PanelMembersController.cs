@@ -1,9 +1,11 @@
 using Application.PanelMemberHandlers;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize(Policy = "AdminPolicy")]
     public class PanelMembersController : BaseApiController
     {
         [HttpGet]

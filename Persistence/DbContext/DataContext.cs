@@ -11,7 +11,7 @@ namespace Persistence
         public DbSet<Company> Companies { get; set; }
         public DbSet<PanelMember> PanelMembers { get; set; }
         public DbSet<Research> Researches { get; set; }
-        public DbSet<ResearchParticipant> Participants { get; set; }
+        public DbSet<ResearchParticipant> ResearchParticipants { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

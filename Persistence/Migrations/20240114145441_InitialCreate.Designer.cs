@@ -11,7 +11,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240112212817_InitialCreate")]
+    [Migration("20240114145441_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -79,7 +79,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("PanelMemberId");
 
-                    b.ToTable("Participants");
+                    b.ToTable("ResearchParticipants");
                 });
 
             modelBuilder.Entity("Domain.User", b =>

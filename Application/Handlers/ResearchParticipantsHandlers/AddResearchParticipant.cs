@@ -1,5 +1,6 @@
 using Application.Core;
 using Application.Interfaces;
+using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,7 @@ using Persistence;
 
 namespace Application.ParticipantsHandlers
 {
+    // Handler for a participant to join a research
     public class AddResearchParticipant
     {
         public class Command : IRequest<Result<Unit>>
@@ -29,53 +31,57 @@ namespace Application.ParticipantsHandlers
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                _logger.LogInformation("Bezig met toevoegen van deelnemer...");
-                try
+                _logger.LogInformation(
+                    $"Attempting to enroll participant in research with id '{request.ResearchId}");
+
+                // eager load participants
+                var research = await _dataContext.Researches
+                    .Include(r => r.Participants)
+                    .ThenInclude(p => p.PanelMember)
+                    // We need to include the panel members to access participant information
+                    // when checking if a participant is already enrolled in the research
+                    .FirstOrDefaultAsync(r => r.Id == request.ResearchId);
+
+                // Cancellation tokens are not currently used intentionally
+                // There are no plans to implement them at this time
+
+                if (research == null)
+                    return Result<Unit>.Failure("Research not found or does not exist.");
+
+                _logger.LogInformation($"Research with research Id '{request.ResearchId}' found!");
+
+                // getting the panelmember using email claims in the jwt token
+                var participant = await _dataContext.PanelMembers.FirstOrDefaultAsync(x =>
+                        x.Email == _userAccessor.GetEmail());
+
+                if (participant == null)
+                    return Result<Unit>.Failure("Participant not found.");
+
+                _logger.LogInformation($"Participant with Id '{participant.Id}' found!");
+
+                // Checking synchronously since we already have the research
+                // and participants loaded into memory
+                var IsParticipant = research.Participants.Any(p => p.PanelMember == participant);
+
+                if (IsParticipant)
+                    return Result<Unit>.Failure("Participant is already enrolled in this research.");
+
+                research.Participants.Add(new ResearchParticipant
                 {
-                    // eager load attendees
-                    var onderzoek = await _dataContext.Researches
-                        .Include(a => a.Organizer)
-                        .Include(a => a.Participants)
-                        .ThenInclude(u => u.PanelMemberId)
-                        .FirstOrDefaultAsync(x => x.Id == request.ResearchId);
-                    // can also use singleordefaultasync, difference is that returns
-                    // an exception and this returns null
+                    PanelMember = participant,
+                    Research = research,
+                    DateJoined = DateTime.UtcNow
+                });
 
-                    if (onderzoek == null)
-                    {
-                        return Result<Unit>.Failure("Onderzoek bestaat niet.");
-                    }
+                var result = await _dataContext.SaveChangesAsync() > 0;
 
-                    var deelnemer = await _dataContext.Users.FirstOrDefaultAsync(x =>
-                    x.Email == _userAccessor.GetEmail());
+                if (!result)
+                    return Result<Unit>.Failure("Error occurred while enrolling in the research.");
 
-                    if (deelnemer == null)
-                    {
-                        return Result<Unit>.Failure("Deelnemer bestaat niet.");
-                    }
+                _logger.LogInformation(
+                    $"Participant {participant.UserName} successfully enrolled in research '{research.Title}'.");
 
-                    // Check of de deelnemer al voorkomt in het onderzoek om dubbele toevoegingen te voorkomen
-                    if (onderzoek.Participants?.Any(dp => dp.PanelMember.Id == deelnemer.Id) == true)
-                    {
-                        return Result<Unit>.Failure($"Deelnemer {deelnemer.UserName} komt al voor in het onderzoek");
-                    }
-
-                    // Resultaat is true als er changes zijn opgeslagen en false als er geen zijn opgeslagen.
-                    bool resultaat = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
-
-                    if (!resultaat)
-                    {
-                        return Result<Unit>.Failure($"Probleem opgetreden bij het toevoegen van de deelnemer. Id: {deelnemer.Id}");
-                    }
-
-                    _logger.LogInformation($"Succesvol deelnemer {deelnemer.UserName} toegevoegd aan onderzoek");
-                    return Result<Unit>.Success(Unit.Value);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "Fout opgetreden bij ophalen van onderzoek");
-                    return Result<Unit>.Failure("Fout opgetreden bij ophalen van onderzoek");
-                }
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

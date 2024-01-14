@@ -16,20 +16,12 @@ namespace Persistence
                         Email = "admin@admin.com"
                     },
                     new User {
-                        UserName = "user@test.com",
-                        Email = "user@test.com"
-                    },
-                    new User {
                         UserName = "clodsire@pokemon.com",
                         Email = "clodsire@pokemon.com"
                     },
                     new User {
                         UserName = "bidoof@pokemon.com",
                         Email = "bidoof@pokemon.com"
-                    },
-                    new User {
-                        UserName = "terastal@pokemon.com",
-                        Email = "terastal@pokemon.com"
                     },
                     new User {
                         UserName = "karel@pokemon.com",
@@ -41,6 +33,10 @@ namespace Persistence
                 {
                     // Creates and saves user with the given password in datababase
                     await userManager.CreateAsync(user, "Pa$$w0rd");
+
+                    // Assign the user to the "Company" role
+                    // Roles need to be seeded first
+                    await userManager.AddToRoleAsync(user, nameof(RoleTypes.Admin));
                 }
             }
         }
@@ -127,6 +123,10 @@ namespace Persistence
                 {
                     // Creates and saves user with the given password in datababase
                     await userManager.CreateAsync(company, "Pa$$w0rd");
+
+                    // Assign the user to the "Company" role
+                    // Roles need to be seeded first
+                    await userManager.AddToRoleAsync(company, nameof(RoleTypes.Company));
                 }
             }
         }
@@ -208,6 +208,10 @@ namespace Persistence
                 {
                     // Creates and saves user with the given password in datababase
                     await userManager.CreateAsync(panelMember, "Pa$$w0rd");
+
+                    // Assign the user to the "PanelMember" role
+                    // Roles need to be seeded first
+                    await userManager.AddToRoleAsync(panelMember, nameof(RoleTypes.PanelMember));
                 }
             }
         }
