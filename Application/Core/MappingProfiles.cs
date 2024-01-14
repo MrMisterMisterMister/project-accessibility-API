@@ -1,5 +1,6 @@
 using Application.Handlers.PanelMemberHandlers;
 using Application.Handlers.ResearchesHandlers;
+using Application.Handlers.UserHandlers;
 using AutoMapper;
 using Domain;
 
@@ -11,6 +12,10 @@ namespace Application.Core
         {
             // With this we can map an object's properties to another object
             CreateMap<User, User>();
+            CreateMap<User, UserDTO>()
+                .ForMember(x => x.Type, o => o.MapFrom(src => src.GetType().ToString()))
+                .ForMember(x => x.HashedPassword, o => o.MapFrom(src => src.PasswordHash))
+                .ForMember(x => x.UserName, o => o.MapFrom(src => src.UserName));
             CreateMap<Company, Company>();
             CreateMap<PanelMember, PanelMember>();
             CreateMap<PanelMember, PanelMemberDTO>()
