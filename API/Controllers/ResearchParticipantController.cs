@@ -20,10 +20,10 @@ namespace API.Controllers
         }
 
         // what's even the difference here and with add participant..? A: Dunno?
-        [HttpPut("{id}/participate")]
+        [HttpPost("subscribeToResearch")]
         public async Task<ActionResult> ParticipateInResearch(ParticipantDTO participantDTO)
         {
-            return HandleResult(await Mediator.Send(new ParticipateInResearch.Command { Participant = participantDTO.PanelMember, Research = participantDTO.Research }));
+            return HandleResult(await Mediator.Send(new ParticipateInResearch.Command { Participant = participantDTO.PanelMemberId, Research = participantDTO.ResearchId, DateJoined = participantDTO.DateJoined}));
         }
     }
 }
