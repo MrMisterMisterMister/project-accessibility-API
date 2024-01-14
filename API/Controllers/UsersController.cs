@@ -72,7 +72,7 @@ namespace API.Controllers
                 user.UserName,
                 user.Email,
                 Cookie = cookie,
-                JwtToken = jwtToken,
+                Token = jwtToken,
                 UserRoles = roles
             };
 
