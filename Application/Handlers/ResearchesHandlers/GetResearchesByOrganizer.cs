@@ -29,7 +29,7 @@ namespace Application.ResearchesHandlers
             public async Task<Result<List<ResearchDTO>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var researches = await _dataContext.Researches
-                    .Where(x => x.Organizer.Id == request.OrganizerId.ToString())
+                    .Where(x => x.Organizer!.Id == request.OrganizerId.ToString())
                     .ProjectTo<ResearchDTO>(_mapper.ConfigurationProvider)
                     .ToListAsync();
 

@@ -3,6 +3,8 @@ using MediatR;
 using AutoMapper;
 using Persistence;
 using Domain;
+using Microsoft.EntityFrameworkCore;
+using Application.Interfaces;
 
 namespace Application.ResearchesHandlers
 {
@@ -17,18 +19,38 @@ namespace Application.ResearchesHandlers
         {
             private readonly DataContext _dataContext;
             private readonly IMapper _mapper;
+            private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext dataContext, IMapper mapper)
+            public Handler(DataContext dataContext, IMapper mapper, IUserAccessor userAccessor)
             {
                 _dataContext = dataContext;
                 _mapper = mapper;
+                _userAccessor = userAccessor;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var research = await _dataContext.Researches.FindAsync(request.Research.Id);
+                var research = await _dataContext.Researches
+                .Include(x => x.Organizer)
+                .Include(r => r.Participants)
+                    .ThenInclude(p => p.PanelMember)
+                .FirstOrDefaultAsync(x => x.Id == request.Research.Id);
 
-                if (research == null) return Result<Unit>.Failure("ResearchNotFound");
+                if (research == null)
+                    return Result<Unit>.Failure("ResearchNotFound");
+
+                var organizer = await _dataContext.Companies
+                    .FirstOrDefaultAsync(x => x.Email == _userAccessor.GetEmail());
+
+                if (organizer == null)
+                    return Result<Unit>.Failure("OrganizerNotFound");
+
+                if (organizer.Id != research.Organizer!.Id)
+                    return Result<Unit>.Failure("OrganizerNotTheSame");
+
+                // Set the Organizer and OrganizerId
+                request.Research.Organizer = organizer;
+                request.Research.OrganizerId = organizer.Id;
 
                 _mapper.Map(request.Research, research);
 

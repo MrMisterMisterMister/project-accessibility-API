@@ -39,7 +39,7 @@ namespace Application.ResearchesHandlers
                     Type = request.Research.Type,
                     Category = request.Research.Category,
                     Reward = request.Research.Reward,
-                    OrganizerId = request.Research.OrganizerId
+                    OrganizerId = request.Research.OrganizerId!
                 };
 
                 _dataContext.Add(researchEntity);

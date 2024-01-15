@@ -8,19 +8,13 @@ namespace Domain
         public int Id { get; set; }
         [Required]
         public string Title { get; set; } = null!;
-        [Required]
         public string Description { get; set; } = null!;
-        [Required]
         public DateTime Date { get; set; }
-        [Required]
         public string Type { get; set; } = null!; // crack but lazy
-        [Required]
         public string Category { get; set; } = null!; // crack but lazy
-        [Required]
         public double Reward { get; set; }
-        [Required]
-        public Company Organizer { get; set; } = null!;
-        public string OrganizerId { get; set; } = null!;
+        public Company? Organizer { get; set; }
+        public string? OrganizerId { get; set; }
         public ICollection<ResearchParticipant> Participants { get; set; } = new List<ResearchParticipant>();
     }
 }

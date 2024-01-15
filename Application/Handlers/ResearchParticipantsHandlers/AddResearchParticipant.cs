@@ -64,7 +64,7 @@ namespace Application.ParticipantsHandlers
                 var IsParticipant = research.Participants.Any(p => p.PanelMember == participant);
 
                 if (IsParticipant)
-                    return Result<Unit>.Failure("ParticipantAlreadyEnrolled.");
+                    return Result<Unit>.Failure("ParticipantAlreadyEnrolled");
 
                 research.Participants.Add(new ResearchParticipant
                 {
