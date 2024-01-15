@@ -92,6 +92,8 @@ namespace API.Controllers
 
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(panelMember, nameof(RoleTypes.PanelMember));
+
                 await _userManager.UpdateAsync(panelMember);
 
                 var roles = await _userManager.GetRolesAsync(panelMember);
@@ -145,6 +147,8 @@ namespace API.Controllers
 
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(company, nameof(RoleTypes.Company));
+
                 await _userManager.UpdateAsync(company);
 
                 var roles = await _userManager.GetRolesAsync(company);
