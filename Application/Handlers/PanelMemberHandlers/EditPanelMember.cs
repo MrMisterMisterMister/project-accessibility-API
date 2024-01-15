@@ -28,7 +28,15 @@ namespace Application.PanelMemberHandlers
             {
                 var panelMember = await _dataContext.PanelMembers.FindAsync(request.PanelMember.Id);
 
+                // TODO researches
+
                 if (panelMember == null) return Result<Unit>.Failure("Panel member not found");
+
+                request.PanelMember.UserName = panelMember.UserName;
+                request.PanelMember.NormalizedUserName = panelMember.NormalizedUserName;
+                request.PanelMember.Email = panelMember.Email;
+                request.PanelMember.NormalizedEmail = panelMember.NormalizedEmail;
+                request.PanelMember.PasswordHash = panelMember.PasswordHash;
 
                 _mapper.Map(request.PanelMember, panelMember);
 

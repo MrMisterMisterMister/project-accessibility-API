@@ -49,8 +49,11 @@ namespace API.Controllers
             // If the user creation is successful, return a JWT token as a cookie
             if (result.Succeeded)
             {
+                // Update the user with refresh token
+                await _userManager.UpdateAsync(user);
+
                 var roles = await _userManager.GetRolesAsync(user);
-                return new UserDTO { Token = _tokenService.CreateAndSetCookie(user, roles.ToList()) };
+                return new UserDTO { Token = await _tokenService.CreateAndSetCookie(user, roles.ToList()) };
             }
 
             // Return error messages if user creation fails
@@ -78,18 +81,21 @@ namespace API.Controllers
                 Guardian = registerPanelMemberDTO.Guardian,
                 FirstName = registerPanelMemberDTO.FirstName,
                 LastName = registerPanelMemberDTO.LastName,
-                Zipcode = registerPanelMemberDTO.Zipcode,
-                DateOfBirth = DateTime.TryParse(registerPanelMemberDTO.DateOfBirth,
-                    out DateTime parsedDate)
-                    ? parsedDate : DateTime.MinValue
+                DateOfBirth = DateTime.TryParse(registerPanelMemberDTO.DateOfBirth, out DateTime parsedDate) ? parsedDate : DateTime.MinValue,
+                Address = registerPanelMemberDTO.Address,
+                PostalCode = registerPanelMemberDTO.PostalCode,
+                City = registerPanelMemberDTO.City,
+                Country = registerPanelMemberDTO.Country
             };
 
             var result = await _userManager.CreateAsync(panelMember, registerPanelMemberDTO.Password);
 
             if (result.Succeeded)
             {
+                await _userManager.UpdateAsync(panelMember);
+
                 var roles = await _userManager.GetRolesAsync(panelMember);
-                return new UserDTO { Token = _tokenService.CreateAndSetCookie(panelMember, roles.ToList()) };
+                return new UserDTO { Token = await _tokenService.CreateAndSetCookie(panelMember, roles.ToList()) };
             }
 
             return BadRequest(result.Errors);
@@ -125,20 +131,24 @@ namespace API.Controllers
                 Email = registerCompanyDTO.Email,
                 UserName = registerCompanyDTO.Email,
                 Kvk = registerCompanyDTO.Kvk,
-                Name = registerCompanyDTO.Name,
-                Adres = registerCompanyDTO.Adres,
-                Location = registerCompanyDTO.Location,
+                CompanyName = registerCompanyDTO.CompanyName,
+                Phone = registerCompanyDTO.Phone,
+                Address = registerCompanyDTO.Address,
+                PostalCode = registerCompanyDTO.PostalCode,
+                Province = registerCompanyDTO.Province,
                 Country = registerCompanyDTO.Country,
-                Url = registerCompanyDTO.Url,
-                Contact = registerCompanyDTO.Contact
+                WebsiteUrl = registerCompanyDTO.WebsiteUrl,
+                ContactPerson = registerCompanyDTO.ContactPerson
             };
 
             var result = await _userManager.CreateAsync(company, registerCompanyDTO.Password);
 
             if (result.Succeeded)
             {
+                await _userManager.UpdateAsync(company);
+
                 var roles = await _userManager.GetRolesAsync(company);
-                return new UserDTO { Token = _tokenService.CreateAndSetCookie(company, roles.ToList()) };
+                return new UserDTO { Token = await _tokenService.CreateAndSetCookie(company, roles.ToList()) };
             }
 
             return BadRequest(result.Errors);

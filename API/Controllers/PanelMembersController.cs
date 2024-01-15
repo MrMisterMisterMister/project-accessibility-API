@@ -1,9 +1,11 @@
 using Application.PanelMemberHandlers;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class PanelMembersController : BaseApiController
     {
         [HttpGet]
@@ -27,7 +29,7 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
-            return HandleResult(await Mediator.Send(new DeletePanelMember.Command { Id = id }));
+            return HandleResult(await Mediator.Send(new DeletePanelMember.Command { PanelmemberId = id }));
         }
 
         [HttpPut("{id}")]

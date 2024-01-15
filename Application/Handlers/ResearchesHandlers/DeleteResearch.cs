@@ -2,34 +2,34 @@ using Application.Core;
 using MediatR;
 using Persistence;
 
-namespace Application.PanelMemberHandlers
+namespace Application.ResearchesHandlers
 {
-    public class DeletePanelMember
+    public class DeleteResearch
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Guid PanelmemberId { get; set; }
+            public int ResearchId { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _dataContext;
-
             public Handler(DataContext dataContext)
             {
                 _dataContext = dataContext;
             }
+
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var panelMember = await _dataContext.PanelMembers.FindAsync(request.PanelmemberId.ToString());
+                var research = await _dataContext.Researches.FindAsync(request.ResearchId);
 
-                if (panelMember == null) return Result<Unit>.Failure("Panel member not found");
+                if (research == null) return Result<Unit>.Failure("ResearchNotFound");
 
-                _dataContext.Remove(panelMember);
+                _dataContext.Remove(research);
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("Failed to delete the panel member");
+                if (!result) return Result<Unit>.Failure("ResearchFailedDelete");
 
                 return Result<Unit>.Success(Unit.Value);
             }

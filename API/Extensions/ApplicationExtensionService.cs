@@ -27,7 +27,8 @@ namespace API.Extensions
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials()
-                    .WithOrigins("https://clodsire.nl");
+                    .WithExposedHeaders("WWW-Authenticate")
+                    .WithOrigins("http://localhost:5001");
                 });
             });
 

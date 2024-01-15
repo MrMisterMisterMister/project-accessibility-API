@@ -30,6 +30,12 @@ namespace Application.CompanyHandlers
 
                 if (company == null) return Result<Unit>.Failure("Company not found");
 
+                request.Company.UserName = company.UserName;
+                request.Company.NormalizedUserName = company.NormalizedUserName;
+                request.Company.Email = company.Email;
+                request.Company.NormalizedEmail = company.NormalizedEmail;
+                request.Company.PasswordHash = company.PasswordHash;
+
                 _mapper.Map(request.Company, company);
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
