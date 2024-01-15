@@ -27,7 +27,7 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDisability(int id, Disability disability)
+        public async Task<IActionResult> EditDisability(int id, Disability disability)
         {
             disability.Id = id;
             return HandleResult(await Mediator.Send(new EditDisability.Command { Disability = disability }));
