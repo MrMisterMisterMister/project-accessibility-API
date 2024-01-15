@@ -1,5 +1,3 @@
-using Application.Handlers.PanelMemberHandlers;
-
 namespace Application.Handlers.ResearchesHandlers
 {
     public class DisabilityDTO

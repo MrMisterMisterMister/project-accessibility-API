@@ -32,9 +32,9 @@ namespace API.Controllers
 
         // new research
         [HttpPost]
-        public async Task<IActionResult> CreateResearch(ResearchDTO researchDto)
+        public async Task<IActionResult> CreateResearch(Research research)
         {
-            return HandleResult(await Mediator.Send(new CreateResearch.Command { Research = researchDto }));
+            return HandleResult(await Mediator.Send(new CreateResearch.Command { Research = research }));
         }
 
         // edit research

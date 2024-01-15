@@ -11,7 +11,7 @@ namespace Application.ResearchesHandlers
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public ResearchDTO Research { get; set; } = null!;
+            public Research Research { get; set; } = null!;
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -27,31 +27,15 @@ namespace Application.ResearchesHandlers
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                if (request.Research == null)
-                    return Result<Unit>.Failure("ResearchNotFound", "The research could not be found.");
-
-                // Create a new Research entity with only the necessary properties
-                var researchEntity = new Research
-                {
-                    Title = request.Research.Title,
-                    Description = request.Research.Description,
-                    Date = request.Research.Date,
-                    Type = request.Research.Type,
-                    Category = request.Research.Category,
-                    Reward = request.Research.Reward,
-                    OrganizerId = request.Research.OrganizerId!
-                };
-
-                _dataContext.Add(researchEntity);
+                _dataContext.Add(request.Research);
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
-                Console.WriteLine($"Research creation completed: {result}");
 
                 if (!result)
                     return Result<Unit>.Failure("ResearchFailedToBeCreated", "The research could not be created.");
 
                 _logger.LogInformation(
-                    $"Successfully created research with title: {request.Research.Title} and id: {researchEntity.Id}");
+                    $"Successfully created research with title: {request.Research.Title} and id: {request.Research.Id}");
 
                 return Result<Unit>.Success(Unit.Value);
             }
