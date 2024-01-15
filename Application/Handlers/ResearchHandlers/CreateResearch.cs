@@ -3,6 +3,8 @@ using Application.Core;
 using MediatR;
 using Persistence;
 using Microsoft.Extensions.Logging;
+using Application.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.ResearchHandlers
 {
@@ -17,15 +19,23 @@ namespace Application.ResearchHandlers
         {
             private readonly DataContext _dataContext;
             private readonly ILogger<Handler> _logger;
+            private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext dataContext, ILogger<Handler> logger)
+            public Handler(DataContext dataContext, ILogger<Handler> logger, IUserAccessor userAccessor)
             {
+                _userAccessor = userAccessor;
                 _dataContext = dataContext;
                 _logger = logger;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
+                // getting the company using email claims in the jwt token
+                var organizer = await _dataContext.Companies.FirstOrDefaultAsync(x =>
+                        x.Email == _userAccessor.GetEmail());
+
+                request.Research.Organizer = organizer;
+
                 _dataContext.Add(request.Research);
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
