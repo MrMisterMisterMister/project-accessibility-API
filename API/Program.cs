@@ -36,34 +36,31 @@ app.MapControllers();
 using var scope = app.Services.CreateScope();
 var serviceProvider = scope.ServiceProvider;
 
-if (app.Environment.IsDevelopment())
+try
 {
-    try
-    {
-        // Get DataContext service
-        var databaseContext = serviceProvider.GetRequiredService<DataContext>();
+    // Get DataContext service
+    var databaseContext = serviceProvider.GetRequiredService<DataContext>();
 
-        // Drop database
-        // databaseContext.Database.EnsureDeleted();
+    // Drop database
+    // databaseContext.Database.EnsureDeleted();
 
-        var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
-        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-        var roleService = new RoleService(userManager, roleManager);
+    var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var roleService = new RoleService(userManager, roleManager);
 
-        // Executes dotnet ef update on the latest migrations
-        await databaseContext.Database.MigrateAsync();
+    // Executes dotnet ef update on the latest migrations
+    await databaseContext.Database.MigrateAsync();
 
-        // Seed roles
-        await roleService.SeedRoles();
+    // Seed roles
+    await roleService.SeedRoles();
 
-        // Inserts seed data into the database
-        await Seed.SeedAll(databaseContext, userManager);
-    }
-    catch (Exception e)
-    {
-        var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(e, "An error occured during migration");
-    }
+    // Inserts seed data into the database
+    await Seed.SeedAll(databaseContext, userManager);
+}
+catch (Exception e)
+{
+    var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+    logger.LogError(e, "An error occured during migration");
 }
 
 app.Run();
