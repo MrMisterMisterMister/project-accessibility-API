@@ -23,13 +23,13 @@ namespace Application.PanelMemberHandlers
             {
                 var panelMember = await _dataContext.PanelMembers.FindAsync(request.PanelmemberId.ToString());
 
-                if (panelMember == null) return Result<Unit>.Failure("Panel member not found");
+                if (panelMember == null) return Result<Unit>.Failure("PanelMemberNotFound", "Panel member could not be found.");
 
                 _dataContext.Remove(panelMember);
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("Failed to delete the panel member");
+                if (!result) return Result<Unit>.Failure("PanelMemberFailedDelete", "Failed to delete the panel member.");
 
                 return Result<Unit>.Success(Unit.Value);
             }

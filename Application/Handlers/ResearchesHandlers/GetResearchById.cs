@@ -37,7 +37,7 @@ namespace Application.ResearchesHandlers
                     .ProjectTo<ResearchDTO>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(x => x.Id == request.ResearchId);
 
-                if (research == null) return Result<ResearchDTO>.Failure("ResearchNotFound");
+                if (research == null) return Result<ResearchDTO>.Failure("ResearchNotFound", "The research could not be found.");
 
                 return Result<ResearchDTO>.Success(research);
             }

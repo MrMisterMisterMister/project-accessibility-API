@@ -37,16 +37,16 @@ namespace Application.ResearchesHandlers
                 .FirstOrDefaultAsync(x => x.Id == request.Research.Id);
 
                 if (research == null)
-                    return Result<Unit>.Failure("ResearchNotFound");
+                    return Result<Unit>.Failure("ResearchNotFound", "The research could not be found.");
 
                 var organizer = await _dataContext.Companies
                     .FirstOrDefaultAsync(x => x.Email == _userAccessor.GetEmail());
 
                 if (organizer == null)
-                    return Result<Unit>.Failure("OrganizerNotFound");
+                    return Result<Unit>.Failure("OrganizerNotFound", "The organizer could not be found.");
 
                 if (organizer.Id != research.Organizer!.Id)
-                    return Result<Unit>.Failure("OrganizerNotTheSame");
+                    return Result<Unit>.Failure("OrganizerNotTheSame", "The organizer needs to be the same.");
 
                 // Set the Organizer and OrganizerId
                 request.Research.Organizer = organizer;
@@ -56,7 +56,7 @@ namespace Application.ResearchesHandlers
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("ResearchedFailedUpdate");
+                if (!result) return Result<Unit>.Failure("ResearchedFailedUpdate", "The research could not be updated.");
 
                 return Result<Unit>.Success(Unit.Value);
             }

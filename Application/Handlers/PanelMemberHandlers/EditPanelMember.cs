@@ -30,7 +30,7 @@ namespace Application.PanelMemberHandlers
 
                 // TODO researches
 
-                if (panelMember == null) return Result<Unit>.Failure("Panel member not found");
+                if (panelMember == null) return Result<Unit>.Failure("PanelMemberNotFound", "Panel member could not be found.");
 
                 request.PanelMember.UserName = panelMember.UserName;
                 request.PanelMember.NormalizedUserName = panelMember.NormalizedUserName;
@@ -42,7 +42,7 @@ namespace Application.PanelMemberHandlers
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("Failed to update panel member");
+                if (!result) return Result<Unit>.Failure("PanelMemberFailedUpdate", "Failed to update panel member.");
 
                 return Result<Unit>.Success(Unit.Value);
             }

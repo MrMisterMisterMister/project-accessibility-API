@@ -28,7 +28,7 @@ namespace Application.ResearchesHandlers
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 if (request.Research == null)
-                    return Result<Unit>.Failure("ResearchNotFound");
+                    return Result<Unit>.Failure("ResearchNotFound", "The research could not be found.");
 
                 // Create a new Research entity with only the necessary properties
                 var researchEntity = new Research
@@ -48,11 +48,11 @@ namespace Application.ResearchesHandlers
                 Console.WriteLine($"Research creation completed: {result}");
 
                 if (!result)
-                    return Result<Unit>.Failure("ResearchFailedToBeCreated");
+                    return Result<Unit>.Failure("ResearchFailedToBeCreated", "The research could not be created.");
 
                 _logger.LogInformation(
                     $"Successfully created research with title: {request.Research.Title} and id: {researchEntity.Id}");
-                
+
                 return Result<Unit>.Success(Unit.Value);
             }
         }

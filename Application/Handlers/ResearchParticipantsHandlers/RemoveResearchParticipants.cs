@@ -38,10 +38,10 @@ namespace Application.ParticipantsHandlers
                     .FirstOrDefaultAsync(r => r.Id == request.ResearchId);
 
                 if (research == null)
-                    return Result<Unit>.Failure("ResearchNotFound");
+                    return Result<Unit>.Failure("ResearchNotFound", "The research could not be found.");
 
                 if (research.Participants == null)
-                    return Result<Unit>.Failure("ResearchParticipantsIsEmpty.");
+                    return Result<Unit>.Failure("ResearchParticipantsIsEmpty", "There are no participants enrolled in this research.");
 
                 _logger.LogInformation(
                     $"Number of participants in research with Id {request.ResearchId} is {research.Participants.Count}");
@@ -54,7 +54,7 @@ namespace Application.ParticipantsHandlers
                     .FirstOrDefault(x => x.PanelMember.Email == participant?.Email);
 
                 if (participation == null)
-                    return Result<Unit>.Failure("ParticipantIsNotInResearch");
+                    return Result<Unit>.Failure("ParticipantIsNotInResearch", "The participant is not in this research.");
 
                 // If the participant is found in the research, remove them
                 research.Participants.Remove(participation);
