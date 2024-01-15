@@ -23,13 +23,13 @@ namespace Application.ResearchesHandlers
             {
                 var research = await _dataContext.Researches.FindAsync(request.ResearchId);
 
-                if (research == null) return Result<Unit>.Failure("Research not found");
+                if (research == null) return Result<Unit>.Failure("ResearchNotFound");
 
                 _dataContext.Remove(research);
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("Failed to delete the research");
+                if (!result) return Result<Unit>.Failure("ResearchFailedDelete");
 
                 return Result<Unit>.Success(Unit.Value);
             }

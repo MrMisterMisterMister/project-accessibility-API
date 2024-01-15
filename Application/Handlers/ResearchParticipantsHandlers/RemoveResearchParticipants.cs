@@ -54,8 +54,7 @@ namespace Application.ParticipantsHandlers
                     .FirstOrDefault(x => x.PanelMember.Email == participant?.Email);
 
                 if (participation == null)
-                    return Result<Unit>.Failure(
-                        $"ParticipantIsNotInResearch");
+                    return Result<Unit>.Failure("ParticipantIsNotInResearch");
 
                 // If the participant is found in the research, remove them
                 research.Participants.Remove(participation);
@@ -65,7 +64,7 @@ namespace Application.ParticipantsHandlers
                 if (!result)
                 {
                     _logger.LogError("Problem occurred while removing the selected participant. Save to the database failed.");
-                    return Result<Unit>.Failure("Problem occurred while removing the selected participant.");
+                    return Result<Unit>.Failure("defaultMessage");
                 }
 
                 _logger.LogInformation($"Successfully removed participant with {participant!.Email} from research {research.Title}.");

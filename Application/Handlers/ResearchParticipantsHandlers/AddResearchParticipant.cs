@@ -76,7 +76,7 @@ namespace Application.ParticipantsHandlers
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
                 if (!result)
-                    return Result<Unit>.Failure("Error occurred while enrolling in the research.");
+                    return Result<Unit>.Failure("defaultMessage");
 
                 _logger.LogInformation(
                     $"Participant {participant.UserName} successfully enrolled in research '{research.Title}'.");

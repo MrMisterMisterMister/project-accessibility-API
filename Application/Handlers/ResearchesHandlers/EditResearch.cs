@@ -28,13 +28,13 @@ namespace Application.ResearchesHandlers
             {
                 var research = await _dataContext.Researches.FindAsync(request.Research.Id);
 
-                if (research == null) return Result<Unit>.Failure("Research not found");
+                if (research == null) return Result<Unit>.Failure("ResearchNotFound");
 
                 _mapper.Map(request.Research, research);
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("Failed to update research");
+                if (!result) return Result<Unit>.Failure("ResearchedFailedUpdate");
 
                 return Result<Unit>.Success(Unit.Value);
             }
