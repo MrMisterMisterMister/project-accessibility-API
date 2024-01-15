@@ -9,6 +9,5 @@ namespace Domain.Models.Chat{
         public string Title {get;set;} = null!;
         [InverseProperty("Chat")]
         public List<Message>?Messages {get;set;}
-        public List<User>?Recipients {get;set;}
     }
 }

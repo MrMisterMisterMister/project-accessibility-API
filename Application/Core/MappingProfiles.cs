@@ -1,5 +1,7 @@
 using AutoMapper;
 using Domain;
+using Domain.Models.Chat;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Application.Core
 {
@@ -12,6 +14,8 @@ namespace Application.Core
             CreateMap<User, User>();
             CreateMap<Company, Company>();
             CreateMap<PanelMember, PanelMember>();
+            CreateMap<Chat, Chat>();
+            CreateMap<Message, Message>();
         }
     }
 }
