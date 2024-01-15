@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize(Policy = "AdminPolicy")]
+    [Authorize]
     public class CompaniesController : BaseApiController
     {
         [HttpGet]
@@ -27,7 +27,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DelettCompanyGetCompany(Guid id)
+        public async Task<IActionResult> DeleteCompanyGetCompany(Guid id)
         {
             return HandleResult(await Mediator.Send(new DeleteCompany.Command { Id = id }));
         }
