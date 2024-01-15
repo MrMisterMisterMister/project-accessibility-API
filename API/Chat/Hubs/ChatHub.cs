@@ -9,13 +9,13 @@ namespace API.Chat.Hubs
     public class ChatHub : Hub
     {
         //Dictionary for the Users and ConnectionId, that's the plan...
-        private static readonly ConcurrentDictionary<string, string> UsersConnections = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> UserConnections = new ConcurrentDictionary<string, string>();
 
         public async Task SendMessageToUser(string targetUserEmail, string message)
         {
-            if (UsersConnections.TryGetValue(targetUserEmail, out string? connectionId))
+            if (UserConnections.TryGetValue(targetUserEmail, out string? connectionId))
             {
-                await Clients.Client(connectionId).SendAsync("ReceivePrivateMessage", Context.UserIdentifier, message);
+                await Clients.Client(connectionId).SendAsync("ReceivePrivateMessage", connectionId, message);
             }
             else
             {
@@ -25,7 +25,25 @@ namespace API.Chat.Hubs
 
         public void RegisterUser(string userEmail)
         {
-            UsersConnections.TryAdd(userEmail, Context.ConnectionId);
+            try
+            {
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    throw new ArgumentException("User email cannot be null or empty.");
+                }
+
+                UserConnections[userEmail] = Context.ConnectionId;
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception
+                // You might want to log the exception or take other appropriate actions
+                // For example:
+                Console.WriteLine($"An error occurred in RegisterUser: {ex.Message}");
+                // Depending on your application's needs, you might also want to rethrow the exception
+                // throw;
+            }
         }
+
     }
 }
