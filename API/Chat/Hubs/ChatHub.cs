@@ -11,19 +11,6 @@ namespace API.Chat.Hubs
         //Dictionary for the Users and ConnectionId, that's the plan...
         private static readonly ConcurrentDictionary<string, string> UsersConnections = new ConcurrentDictionary<string, string>();
 
-        public override Task OnConnectedAsync()
-        {
-            // Optionally, you can track connected users here
-            return base.OnConnectedAsync();
-        }
-
-        public override Task OnDisconnectedAsync(Exception? exception)
-        {
-            // Optionally, handle disconnection and remove user from the dictionary
-            UsersConnections.TryRemove(Context.UserIdentifier, out _);
-            return base.OnDisconnectedAsync(exception);
-        }
-
         public async Task SendMessageToUser(string targetUserEmail, string message)
         {
             if (UsersConnections.TryGetValue(targetUserEmail, out string? connectionId))
