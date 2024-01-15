@@ -46,7 +46,7 @@ namespace Application.ParticipantsHandlers
                 // There are no plans to implement them at this time
 
                 if (research == null)
-                    return Result<Unit>.Failure("Research not found or does not exist.");
+                    return Result<Unit>.Failure("ResearchNotFound.");
 
                 _logger.LogInformation($"Research with research Id '{request.ResearchId}' found!");
 
@@ -55,7 +55,7 @@ namespace Application.ParticipantsHandlers
                         x.Email == _userAccessor.GetEmail());
 
                 if (participant == null)
-                    return Result<Unit>.Failure("Participant not found.");
+                    return Result<Unit>.Failure("ParticipantNotFound.");
 
                 _logger.LogInformation($"Participant with Id '{participant.Id}' found!");
 
@@ -64,7 +64,7 @@ namespace Application.ParticipantsHandlers
                 var IsParticipant = research.Participants.Any(p => p.PanelMember == participant);
 
                 if (IsParticipant)
-                    return Result<Unit>.Failure("Participant is already enrolled in this research.");
+                    return Result<Unit>.Failure("ParticipantAlreadyEnrolled.");
 
                 research.Participants.Add(new ResearchParticipant
                 {

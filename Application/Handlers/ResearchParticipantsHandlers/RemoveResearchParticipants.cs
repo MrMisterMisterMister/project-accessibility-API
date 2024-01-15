@@ -38,10 +38,10 @@ namespace Application.ParticipantsHandlers
                     .FirstOrDefaultAsync(r => r.Id == request.ResearchId);
 
                 if (research == null)
-                    return Result<Unit>.Failure("Research not found");
+                    return Result<Unit>.Failure("ResearchNotFound");
 
                 if (research.Participants == null)
-                    return Result<Unit>.Failure("Research does not have any participants.");
+                    return Result<Unit>.Failure("ResearchParticipantsIsEmpty.");
 
                 _logger.LogInformation(
                     $"Number of participants in research with Id {request.ResearchId} is {research.Participants.Count}");
@@ -55,7 +55,7 @@ namespace Application.ParticipantsHandlers
 
                 if (participation == null)
                     return Result<Unit>.Failure(
-                        $"Participant to be removed is not enrolled in this research.");
+                        $"ParticipantIsNotInResearch");
 
                 // If the participant is found in the research, remove them
                 research.Participants.Remove(participation);
