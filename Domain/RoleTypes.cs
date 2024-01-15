@@ -2,6 +2,8 @@ namespace Domain
 {
     public enum RoleTypes
     {
-        Admin
+        Admin,
+        PanelMember,
+        Company
     }
 }

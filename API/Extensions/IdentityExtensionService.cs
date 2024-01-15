@@ -1,6 +1,8 @@
 using System.Text;
 using API.Services;
+using Application.Interfaces;
 using Domain;
+using Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -49,10 +51,12 @@ namespace API.Extensions
                 })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            // Registering TokenService as a scoped service within the application's service collection
+            // Registering TokenService and UserAccessor
+            // as a scoped service within the application's service collection
             // And adding the httpcontext as a service.
             services.AddHttpContextAccessor();
             services.AddScoped<TokenService>();
+            services.AddScoped<IUserAccessor, UserAccessor>(); // this will make it available to be injected in application handlers
 
             return services;
         }

@@ -10,6 +10,7 @@ namespace Persistence.SeedData
             await SeedUserBase.SeedUsers(userManager);
             await SeedUserBase.SeedCompanies(userManager);
             await SeedUserBase.SeedPanelMembers(userManager);
+            await ResearchBase.SeedResearches(dataContext);
         }
     }
 }

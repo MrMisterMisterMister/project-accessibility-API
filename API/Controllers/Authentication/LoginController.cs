@@ -9,16 +9,19 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace API.Controllers
 {
-    [AllowAnonymous] // Allows access to the Login endpoints without authentication
+    // Allows access to the Login endpoints without authentication
+    [AllowAnonymous]
     public class LoginController : BaseApiController
     {
         private readonly TokenService _tokenService;
         private readonly UserManager<User> _userManager;
+        private readonly ILogger<LoginController> _logger;
 
-        public LoginController(TokenService tokenService, UserManager<User> userManager)
+        public LoginController(TokenService tokenService, UserManager<User> userManager, ILogger<LoginController> logger)
         {
             _userManager = userManager;
             _tokenService = tokenService;
+            _logger = logger;
         }
 
         // Authenticates the user using provided credentials and generates a token cookie
@@ -28,17 +31,25 @@ namespace API.Controllers
             // Find user by email
             var user = await _userManager.FindByEmailAsync(loginDTO.Email);
 
+            // Log user information (for debugging)
+            _logger.LogInformation($"User found: {user?.Email}");
+
             // Return Unauthorized if user is not found
-            if (user == null) return Unauthorized(
-                new
+            if (user == null)
+            {
+                _logger.LogWarning("User not found.");
+                return Unauthorized(new
                 {
                     code = "UserNotFound",
                     description = "No user found with the provided email address."
-                }
-            );
+                });
+            }
 
             // Check if password matches
             var result = await _userManager.CheckPasswordAsync(user, loginDTO.Password);
+
+            // Log authentication result (for debugging)
+            _logger.LogInformation($"Authentication result: {result}");
 
             // Return a JWT token cookie if credentials are valid
             if (result)
@@ -47,14 +58,14 @@ namespace API.Controllers
                 return new UserDTO { Token = await _tokenService.CreateAndSetCookie(user, roles.ToList()) };
             }
 
+            _logger.LogWarning("Incorrect password.");
+
             // Return Unauthorized if the password is incorrect
-            return Unauthorized(
-                new
-                {
-                    code = "IncorrectPassword",
-                    description = "Incorrect password. Please check your password and try again."
-                }
-            );
+            return Unauthorized(new
+            {
+                code = "IncorrectPassword",
+                description = "Incorrect password. Please check your password and try again."
+            });
         }
 
         [HttpPost("google")]
