@@ -3,6 +3,7 @@ using Application.Handlers.ResearchesHandlers;
 using Application.Handlers.UserHandlers;
 using AutoMapper;
 using Domain;
+using Domain.Models.Disabilities;
 
 namespace Application.Core
 {
@@ -24,6 +25,9 @@ namespace Application.Core
             CreateMap<Research, ResearchDTO>()
                 .ForMember(x => x.OrganizerId, o => o.MapFrom(src => src.Organizer!.Id))
                 .ForMember(x => x.OrganizerName, o => o.MapFrom(src => src.Organizer!.CompanyName));
+            CreateMap<Disability, Disability>();
+            CreateMap<Disability, DisabilityDTO>()
+                .ForMember(x => x.ExpertId, o => o.MapFrom(src => src.Experts.Select(e => e.PanelMemberId)));
             CreateMap<ResearchParticipant, PanelMemberDTO>()
                 .ForMember(x => x.Id, o => o.MapFrom(src => src.PanelMember.Id))
                 .ForMember(x => x.Guardian, o => o.MapFrom(src => src.PanelMember.Guardian))
