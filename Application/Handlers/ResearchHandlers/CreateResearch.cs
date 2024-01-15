@@ -34,7 +34,11 @@ namespace Application.ResearchHandlers
                 var organizer = await _dataContext.Companies.FirstOrDefaultAsync(x =>
                         x.Email == _userAccessor.GetEmail());
 
+                if (organizer == null)
+                    return Result<Unit>.Failure("OrganizerNotFound", $"The organizer could not be found.");
+
                 request.Research.Organizer = organizer;
+                request.Research.OrganizerId = organizer!.Id;
 
                 _dataContext.Add(request.Research);
 
