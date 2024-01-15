@@ -1,8 +1,7 @@
 using Domain;
 using Microsoft.AspNetCore.Mvc;
-using Application.ResearchesHandlers;
-using Application.Handlers.ResearchesHandlers;
 using Microsoft.AspNetCore.Authorization;
+using Application.ResearchHandlers;
 
 namespace API.Controllers
 {

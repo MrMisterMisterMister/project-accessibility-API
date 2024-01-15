@@ -1,14 +1,15 @@
 using Application.Core;
+using Domain.Models.Disabilities;
 using MediatR;
 using Persistence;
 
-namespace Application.ResearchesHandlers
+namespace Application.DisabilityHandlers
 {
-    public class DeleteDisability
+    public class CreateDisability
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public int DisabilityId { get; set; }
+            public Disability Disability { get; set; } = null!;
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -21,15 +22,11 @@ namespace Application.ResearchesHandlers
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var disability = await _dataContext.Disabilities.FindAsync(request.DisabilityId);
-
-                if (disability == null) return Result<Unit>.Failure("DisabilityNotFound", "The disability could not be found.");
-
-                _dataContext.Remove(disability);
+                _dataContext.Add(request.Disability);
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("DisabilityFailedDelete", "The disability could not be deleted.");
+                if (!result) return Result<Unit>.Failure("DisabilityFailedCreate", "Failed to create disability.");
 
                 return Result<Unit>.Success(Unit.Value);
             }

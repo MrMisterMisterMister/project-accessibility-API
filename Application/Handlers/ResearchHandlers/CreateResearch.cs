@@ -3,9 +3,8 @@ using Application.Core;
 using MediatR;
 using Persistence;
 using Microsoft.Extensions.Logging;
-using Application.Handlers.ResearchesHandlers;
 
-namespace Application.ResearchesHandlers
+namespace Application.ResearchHandlers
 {
     public class CreateResearch
     {

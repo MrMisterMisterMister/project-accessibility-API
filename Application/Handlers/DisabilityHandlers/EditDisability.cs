@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Application.Interfaces;
 using Domain.Models.Disabilities;
 
-namespace Application.ResearchesHandlers
+namespace Application.DisabilityHandlers
 {
     public class EditDisability
     {

@@ -1,5 +1,6 @@
+using Application.DisabilityHandlers;
 using Application.Handlers.PanelMemberHandlers;
-using Application.Handlers.ResearchesHandlers;
+using Application.Handlers.ResearchHandlers;
 using Application.Handlers.UserHandlers;
 using AutoMapper;
 using Domain;

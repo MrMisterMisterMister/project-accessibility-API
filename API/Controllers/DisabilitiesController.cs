@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Application.ResearchesHandlers;
 using Microsoft.AspNetCore.Authorization;
-using Application.CompanyHandlers;
 using Domain.Models.Disabilities;
+using Application.DisabilityHandlers;
 
 namespace API.Controllers
 {

@@ -2,13 +2,13 @@ using Application.Core;
 using MediatR;
 using Persistence;
 
-namespace Application.ResearchesHandlers
+namespace Application.DisabilityHandlers
 {
-    public class DeleteResearch
+    public class DeleteDisability
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public int ResearchId { get; set; }
+            public int DisabilityId { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -21,15 +21,15 @@ namespace Application.ResearchesHandlers
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var research = await _dataContext.Researches.FindAsync(request.ResearchId);
+                var disability = await _dataContext.Disabilities.FindAsync(request.DisabilityId);
 
-                if (research == null) return Result<Unit>.Failure("ResearchNotFound", "The research could not be found.");
+                if (disability == null) return Result<Unit>.Failure("DisabilityNotFound", "The disability could not be found.");
 
-                _dataContext.Remove(research);
+                _dataContext.Remove(disability);
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("ResearchFailedDelete", "The research could not be deleted.");
+                if (!result) return Result<Unit>.Failure("DisabilityFailedDelete", "The disability could not be deleted.");
 
                 return Result<Unit>.Success(Unit.Value);
             }

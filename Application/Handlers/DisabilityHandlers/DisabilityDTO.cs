@@ -1,4 +1,4 @@
-namespace Application.Handlers.ResearchesHandlers
+namespace Application.DisabilityHandlers
 {
     public class DisabilityDTO
     {

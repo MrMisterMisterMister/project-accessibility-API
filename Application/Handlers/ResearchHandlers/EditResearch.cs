@@ -6,7 +6,7 @@ using Domain;
 using Microsoft.EntityFrameworkCore;
 using Application.Interfaces;
 
-namespace Application.ResearchesHandlers
+namespace Application.ResearchHandlers
 {
     public class EditResearch
     {

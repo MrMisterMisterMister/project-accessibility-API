@@ -1,13 +1,12 @@
 using Application.Core;
-using Application.Handlers.ResearchesHandlers;
+using Application.Handlers.ResearchHandlers;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.ResearchesHandlers
+namespace Application.ResearchHandlers
 {
     public class GetResearchById
     {

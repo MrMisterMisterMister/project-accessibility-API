@@ -1,12 +1,11 @@
 using Application.Core;
-using Application.Handlers.ResearchesHandlers;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.ResearchesHandlers
+namespace Application.DisabilityHandlers
 {
     public class GetDisabilities
     {
