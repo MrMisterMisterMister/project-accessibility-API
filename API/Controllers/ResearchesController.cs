@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
-    [Authorize(Policy = "AdminPolicy")] // for now
+    [Authorize] // for now
     public class ResearchesController : BaseApiController
     {
         // all researches

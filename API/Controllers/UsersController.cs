@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize(Policy = "AdminPolicy")]
+    [Authorize]
     public class UsersController : BaseApiController
     {
         // Will add more specific comments later
