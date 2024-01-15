@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Domain.Models.Disabilities;
 
 namespace Domain
 {
@@ -14,6 +15,7 @@ namespace Domain
         public string? PostalCode { get; set; }
         public string? City { get; set; }
         public string? Country { get; set; }
+        public ICollection<ExpertDisability> Disabilities { get; set; } = new List<ExpertDisability>();
         public ICollection<ResearchParticipant> Participations { get; set; } = new List<ResearchParticipant>();
     }
 }
