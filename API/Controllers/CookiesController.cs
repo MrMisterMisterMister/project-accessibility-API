@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize(Policy = "AdminPolicy")]
+    [AllowAnonymous]
     public class CookiesController : BaseApiController
     {
         private readonly IHttpContextAccessor _httpContextAccessor;

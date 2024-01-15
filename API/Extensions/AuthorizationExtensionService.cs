@@ -32,6 +32,12 @@ namespace API.Extensions
                 {
                     policy.RequireRole(nameof(RoleTypes.PanelMember));
                 });
+
+                // Add "PanelMember" policy
+                opt.AddPolicy("CompanyPolicy", policy =>
+                {
+                    policy.RequireRole(nameof(RoleTypes.PanelMember));
+                });
             });
 
             return services;
