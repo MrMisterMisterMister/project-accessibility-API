@@ -1,4 +1,4 @@
-﻿namespace API.Chat.Models
+﻿namespace API.Chat
 {
     public class UserConnection
     {

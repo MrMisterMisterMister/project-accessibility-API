@@ -2,8 +2,11 @@ using System.Security.Claims;
 using Application.UserHandlers;
 using Domain;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
 
 namespace API.Controllers
 {
@@ -76,5 +79,71 @@ namespace API.Controllers
 
             return Ok(response); // Returns the constructed response as OK
         }
+
+        // Search for users by name or email
+        [AllowAnonymous]
+        [HttpGet("search/{query}")]
+        public async Task<IActionResult> SearchUsers(string query, [FromServices] UserManager<User> userManager, [FromServices] DataContext context)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                return BadRequest("Search query cannot be empty.");
+            }
+
+            // Initial search in the Users table
+            var users = await userManager.Users
+                                         .Where(u => u.Email.Contains(query) || u.UserName.Contains(query))
+                                         .ToListAsync();
+
+            var results = new List<object>();
+
+            foreach (var user in users)
+            {
+                // Determine if the user is a PanelMember
+                var panelMember = await context.PanelMembers.FindAsync(user.Id);
+                if (panelMember != null)
+                {
+                    results.Add(new
+                    {
+                        Type = "PanelMember",
+                        user.Id,
+                        Name = $"{panelMember.FirstName} {panelMember.LastName}",
+                        user.Email
+                    });
+                    continue;
+                }
+
+                // Determine if the user is a Company
+                var company = await context.Companies.FindAsync(user.Id);
+                if (company != null)
+                {
+                    results.Add(new
+                    {
+                        Type = "Company",
+                        user.Id,
+                        Name = company.CompanyName,
+                        user.Email
+                    });
+                    continue;
+                }
+
+                // Default to user if not a PanelMember or Company
+                results.Add(new
+                {
+                    Type = "User",
+                    user.Id,
+                    Name = user.UserName,
+                    user.Email
+                });
+            }
+
+            if (!results.Any())
+            {
+                return NotFound("No users found.");
+            }
+
+            return Ok(results);
+        }
+
     }
 }

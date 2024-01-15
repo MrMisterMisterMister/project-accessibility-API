@@ -1,5 +1,6 @@
-﻿using API.Chat.Models;
+﻿using API.Chat;
 using Microsoft.AspNetCore.SignalR;
+using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -8,19 +9,36 @@ namespace API.Chat.Hubs
     public class ChatHub : Hub
     {
         //Dictionary for the Users and ConnectionId, that's the plan...
+        private static readonly ConcurrentDictionary<string, string> UsersConnections = new ConcurrentDictionary<string, string>();
 
-        // Context.ConnectionId is zelf gegeven door SignalR wanneer een gebruiker connect met SignalR
-        public async Task JoinRoom(UserConnection conn)
+        public override Task OnConnectedAsync()
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, conn.ChatRoom);
-
-            // Calls the ReceiveMessage function in the frontend
-            await Clients.Group(conn.ChatRoom).SendAsync("ReceiveMessage", "System", $"{conn.Username} has joined {conn.ChatRoom}.");
+            // Optionally, you can track connected users here
+            return base.OnConnectedAsync();
         }
-        
-        public async Task SendMessageToRoom(string chatRoom, string username, string message)
+
+        public override Task OnDisconnectedAsync(Exception? exception)
         {
-            await Clients.Group(chatRoom).SendAsync("ReceiveMessage", username, message);
+            // Optionally, handle disconnection and remove user from the dictionary
+            UsersConnections.TryRemove(Context.UserIdentifier, out _);
+            return base.OnDisconnectedAsync(exception);
+        }
+
+        public async Task SendMessageToUser(string targetUserEmail, string message)
+        {
+            if (UsersConnections.TryGetValue(targetUserEmail, out string? connectionId))
+            {
+                await Clients.Client(connectionId).SendAsync("ReceivePrivateMessage", Context.UserIdentifier, message);
+            }
+            else
+            {
+                // Handle the case where the user is not found or not connected
+            }
+        }
+
+        public void RegisterUser(string userEmail)
+        {
+            UsersConnections.TryAdd(userEmail, Context.ConnectionId);
         }
     }
 }
