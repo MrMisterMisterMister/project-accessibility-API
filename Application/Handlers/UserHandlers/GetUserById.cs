@@ -1,22 +1,19 @@
 using Application.Core;
-using Application.Handlers.UserHandlers;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Domain;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.UserHandlers
 {
     public class GetUserById
     {
-        public class Query : IRequest<Result<UserDTO>>
+        public class Query : IRequest<Result<User>>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<UserDTO>>
+        public class Handler : IRequestHandler<Query, Result<User>>
         {
             private readonly DataContext _dataContext;
             private readonly IMapper _mapper;
@@ -26,15 +23,17 @@ namespace Application.UserHandlers
                 _dataContext = dataContext;
             }
 
-            public async Task<Result<UserDTO>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<User>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var user = await _dataContext.Users
-                    .ProjectTo<UserDTO>(_mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync(x => x.Id == request.Id.ToString());
+                // var user = await _dataContext.Users
+                //     .ProjectTo<UserDTO>(_mapper.ConfigurationProvider)
+                //     .FirstOrDefaultAsync(x => x.Id == request.Id.ToString());
 
-                if (user == null) return Result<UserDTO>.Failure("User not found");
+                var user = await _dataContext.Users.FindAsync(request.Id);
 
-                return Result<UserDTO>.Success(user);
+                if (user == null) return Result<User>.Failure("User not found");
+
+                return Result<User>.Success(user);
             }
         }
     }

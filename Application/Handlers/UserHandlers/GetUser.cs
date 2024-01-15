@@ -1,7 +1,6 @@
 using Application.Core;
-using Application.Handlers.UserHandlers;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -10,9 +9,9 @@ namespace Application.UserHandlers
 {
     public class GetUser
     {
-        public class Query : IRequest<Result<List<UserDTO>>> { }
+        public class Query : IRequest<Result<List<User>>> { }
 
-        public class Handler : IRequestHandler<Query, Result<List<UserDTO>>>
+        public class Handler : IRequestHandler<Query, Result<List<User>>>
         {
             private readonly DataContext _dataContext;
             private readonly IMapper _mapper;
@@ -22,13 +21,13 @@ namespace Application.UserHandlers
                 _dataContext = dataContext;
             }
 
-            public async Task<Result<List<UserDTO>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<User>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var users = await _dataContext.Users
-                    .ProjectTo<UserDTO>(_mapper.ConfigurationProvider)
-                    .ToListAsync();
+                // var users = await _dataContext.Users
+                //     .ProjectTo<UserDTO>(_mapper.ConfigurationProvider)
+                //     .ToListAsync();
 
-                return Result<List<UserDTO>>.Success(users);
+                return Result<List<User>>.Success(await _dataContext.Users.ToListAsync());
             }
         }
     }
