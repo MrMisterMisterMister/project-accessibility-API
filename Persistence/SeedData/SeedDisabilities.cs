@@ -21,7 +21,7 @@ namespace Persistence.SeedData
                         Name = "Clodsire's Desease",
                         Description = "Clodsire's Disease is a unique condition that goes beyond conventional " +
                         "understanding. Those diagnosed experience overwhelming adoration and love for Clodsire, " +
-                        "creating an unbreakable bond. Symptoms include perpetual warmth, admiration, and uncontrollable" +
+                        "creating an unbreakable bond. Symptoms include perpetual warmth, admiration, and uncontrollable " +
                         "smiling at the thought of Clodsire. There's no physical harm; instead, it fosters deep, " +
                         "unconditional love.Treatment isn't pursued, embracing it as a positive aspect of emotional " +
                         "well - being. Supportive communities celebrate and share experiences, recognizing Clodsire's " +
