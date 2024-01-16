@@ -2,7 +2,7 @@ using Application.Core;
 using MediatR;
 using Persistence;
 
-namespace Application.ResearchesHandlers
+namespace Application.ResearchHandlers
 {
     public class DeleteResearch
     {
@@ -23,13 +23,13 @@ namespace Application.ResearchesHandlers
             {
                 var research = await _dataContext.Researches.FindAsync(request.ResearchId);
 
-                if (research == null) return Result<Unit>.Failure("ResearchNotFound");
+                if (research == null) return Result<Unit>.Failure("ResearchNotFound", "The research could not be found.");
 
                 _dataContext.Remove(research);
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("ResearchFailedDelete");
+                if (!result) return Result<Unit>.Failure("ResearchFailedDelete", "The research could not be deleted.");
 
                 return Result<Unit>.Success(Unit.Value);
             }

@@ -21,19 +21,19 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(PanelMember panelMember)
+        public async Task<IActionResult> CreatePanelMember(PanelMember panelMember)
         {
             return HandleResult(await Mediator.Send(new CreatePanelMember.Command { PanelMember = panelMember }));
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(Guid id)
+        public async Task<IActionResult> DeletePanelMember(Guid id)
         {
-            return HandleResult(await Mediator.Send(new DeletePanelMember.Command { PanelmemberId = id }));
+            return HandleResult(await Mediator.Send(new DeletePanelMember.Command { PanelMemberId = id }));
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> EditUser(Guid id, PanelMember panelMember)
+        public async Task<ActionResult> EditPanelMember(Guid id, PanelMember panelMember)
         {
             panelMember.Id = id.ToString();
             return HandleResult(await Mediator.Send(new EditPanelMember.Command { PanelMember = panelMember }));

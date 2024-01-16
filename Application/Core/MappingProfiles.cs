@@ -1,8 +1,10 @@
+using Application.DisabilityHandlers;
 using Application.Handlers.PanelMemberHandlers;
-using Application.Handlers.ResearchesHandlers;
+using Application.Handlers.ResearchHandlers;
 using Application.Handlers.UserHandlers;
 using AutoMapper;
 using Domain;
+using Domain.Models.Disabilities;
 
 namespace Application.Core
 {
@@ -19,11 +21,15 @@ namespace Application.Core
             CreateMap<Company, Company>();
             CreateMap<PanelMember, PanelMember>();
             CreateMap<PanelMember, PanelMemberDTO>()
-                .ForMember(x => x.ParticipationsId, o => o.MapFrom(src => src.Participations.Select(p => p.ResearchId)));
+                .ForMember(x => x.ParticipationsId, o => o.MapFrom(src => src.Participations.Select(p => p.ResearchId)))
+                .ForMember(x => x.DisabilitiesId, o => o.MapFrom(src => src.Disabilities.Select(d => d.DisabilityId)));
             CreateMap<Research, Research>();
             CreateMap<Research, ResearchDTO>()
                 .ForMember(x => x.OrganizerId, o => o.MapFrom(src => src.Organizer!.Id))
                 .ForMember(x => x.OrganizerName, o => o.MapFrom(src => src.Organizer!.CompanyName));
+            CreateMap<Disability, Disability>();
+            CreateMap<Disability, DisabilityDTO>()
+                .ForMember(x => x.PanelMemberId, o => o.MapFrom(src => src.PanelMembers.Select(e => e.PanelMemberId)));
             CreateMap<ResearchParticipant, PanelMemberDTO>()
                 .ForMember(x => x.Id, o => o.MapFrom(src => src.PanelMember.Id))
                 .ForMember(x => x.Guardian, o => o.MapFrom(src => src.PanelMember.Guardian))

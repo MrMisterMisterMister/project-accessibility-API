@@ -1,7 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using Application.Handlers.PanelMemberHandlers;
 
-namespace Application.Handlers.ResearchesHandlers
+namespace Application.Handlers.ResearchHandlers
 {
     public class ResearchDTO
     {

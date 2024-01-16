@@ -1,8 +1,7 @@
 using Domain;
 using Microsoft.AspNetCore.Mvc;
-using Application.ResearchesHandlers;
-using Application.Handlers.ResearchesHandlers;
 using Microsoft.AspNetCore.Authorization;
+using Application.ResearchHandlers;
 
 namespace API.Controllers
 {
@@ -32,14 +31,14 @@ namespace API.Controllers
 
         // new research
         [HttpPost]
-        public async Task<IActionResult> CreateResearch(ResearchDTO researchDto)
+        public async Task<IActionResult> CreateResearch(Research research)
         {
-            return HandleResult(await Mediator.Send(new CreateResearch.Command { Research = researchDto }));
+            return HandleResult(await Mediator.Send(new CreateResearch.Command { Research = research }));
         }
 
         // edit research
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateResearch(int id, Research research)
+        public async Task<IActionResult> EditResearch(int id, Research research)
         {
             research.Id = id;
             return HandleResult(await Mediator.Send(new EditResearch.Command { Research = research }));
