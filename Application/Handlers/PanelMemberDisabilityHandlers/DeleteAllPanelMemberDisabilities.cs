@@ -47,8 +47,7 @@ namespace Application.Handlers.PanelMemberDisabilityHandlers
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
                 // If the update was not successful, return a failure result with a default message
-                if (!result)
-                    return Result<Unit>.Failure("defaultMessage");
+                if (!result) return Result<Unit>.Failure("defaultMessage");
 
                 // Return a success result indicating that the disability was successfully deleted from the panelMember
                 return Result<Unit>.Success(Unit.Value);
