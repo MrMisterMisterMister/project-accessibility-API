@@ -1,13 +1,12 @@
 using Application.Core;
 using Application.Interfaces;
-using Domain.Models.Disabilities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Handlers.ExpertDisabilityHandlers
 {
-    public class RemoveExpertDisability
+    public class DeleteExpertDisability
     {
         public class Command : IRequest<Result<Unit>>
         {
