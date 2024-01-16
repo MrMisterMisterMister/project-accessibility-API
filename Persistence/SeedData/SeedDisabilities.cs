@@ -40,7 +40,7 @@ namespace Persistence.SeedData
                         }
                     },
                     new Disability {
-                        Name = "Deaf",
+                        Name = "Deafness",
                         Description = "This person cannot hear.",
                         Experts = new List<ExpertDisability>()
                         {
@@ -51,7 +51,7 @@ namespace Persistence.SeedData
                         }
                     },
                     new Disability {
-                        Name = "Mute",
+                        Name = "Muteness",
                         Description = "This person cannot speak.",
                         Experts = new List<ExpertDisability>()
                         {
