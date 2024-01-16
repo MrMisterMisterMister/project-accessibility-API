@@ -18,5 +18,11 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new DeletePanelMemberDisability.Command { DisabilityId = disabilityId }));
         }
+
+        [HttpDelete("remove-all-panelmember-disabilities")]
+        public async Task<IActionResult> RemoveAllDisabilitiesFromPanelMember()
+        {
+            return HandleResult(await Mediator.Send(new DeleteAllPanelMemberDisabilities.Command() ));
+        }
     }
 }
