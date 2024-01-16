@@ -29,7 +29,7 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePanelMember(Guid id)
         {
-            return HandleResult(await Mediator.Send(new DeletePanelMember.Command { PanelmemberId = id }));
+            return HandleResult(await Mediator.Send(new DeletePanelMember.Command { PanelMemberId = id }));
         }
 
         [HttpPut("{id}")]

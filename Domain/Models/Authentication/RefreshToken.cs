@@ -4,9 +4,6 @@ namespace Domain
 {
     public class RefreshToken
     {
-        [Key] 
-        // this isn't actually needed since a property with Id and if there
-        // is only one will autimatically be seen as the PK by EF Core
         public int Id { get; set; }
         [Required]
         public User User { get; set; } = null!;

@@ -8,7 +8,7 @@ namespace Application.PanelMemberHandlers
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Guid PanelmemberId { get; set; }
+            public Guid PanelMemberId { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -21,7 +21,7 @@ namespace Application.PanelMemberHandlers
             }
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var panelMember = await _dataContext.PanelMembers.FindAsync(request.PanelmemberId.ToString());
+                var panelMember = await _dataContext.PanelMembers.FindAsync(request.PanelMemberId.ToString());
 
                 if (panelMember == null) return Result<Unit>.Failure("PanelMemberNotFound", "Panel member could not be found.");
 
