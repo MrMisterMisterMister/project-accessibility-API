@@ -22,6 +22,7 @@ services.AddIdentityServices(config);
 services.AddAuthorizationServices(config);
 
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline. HTTPS will be handled by NGINX

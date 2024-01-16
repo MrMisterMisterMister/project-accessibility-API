@@ -14,10 +14,10 @@ namespace Domain.Models.ChatModels
 
         [Required]
         public string Content { get; set; } = null!;
-
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
-        public bool IsRead { get; set; } = false;
+        public bool IsRead { get; set; }
 
         [ForeignKey("ChatId")]
         public int ChatId { get; set; }
