@@ -32,6 +32,9 @@ namespace Application.ChatHandlers{
                 {
                     return Result<Unit>.Failure("Chat already exists between these users");
                 }
+                if(request.User1.Equals(request.User2)){
+                return Result<Unit>.Failure("Chat cant contain same id users.");
+                }
                 var newChat = new Chat{
                     User1Id = request.User1,
                     User2Id = request.User2,

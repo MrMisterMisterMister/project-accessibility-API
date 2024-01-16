@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Application.Core;
 using Domain.Models.ChatModels;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.MessageHandlers{
@@ -23,7 +24,6 @@ namespace Application.MessageHandlers{
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken){
                 var chat = await _dataContext.Chats.FindAsync(request.ChatId);
-
                 if (chat == null){
                     return Result<Unit>.Failure("Chat not found");
                 }
@@ -31,22 +31,26 @@ namespace Application.MessageHandlers{
                 var message = new Message{
                     Content = request.Content,
                     SenderId = request.SenderId,
-                    Timestamp = DateTime.UtcNow 
                 };
+                _dataContext.Messages.Add(message);
 
                 chat.Messages ??= new List<Message>();
-
                 chat.Messages.Add(message);
 
-                var result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;
-
-                if (result){
+                try{
+                    await _dataContext.SaveChangesAsync(cancellationToken);
                     return Result<Unit>.Success(Unit.Value);
+
+                }catch(DbUpdateConcurrencyException){
+                    await _dataContext.Entry(message).ReloadAsync();
+                    return Result<Unit>.Failure("Concurrency conflict.");
+                    
+                }catch(Exception ex){
+                return Result<Unit>.Failure($"Error sending message: {ex.Message}");
+
                 }
-                else{
-                    return Result<Unit>.Failure("Failed to send message");
                 }
             }
+            
         }
     }
-}

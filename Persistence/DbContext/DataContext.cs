@@ -39,11 +39,15 @@ namespace Persistence
                 .HasForeignKey(c => c.User2Id)
                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
 
-            // Configure the one-to-many relationship between Chat and Message
             modelBuilder.Entity<Message>()
+            .Property(m => m.IsRead)
+            .HasDefaultValue(false);
+                        // Configure the one-to-many relationship between Chat and Message
+            modelBuilder.Entity<Message>()
+   
                 .HasOne(m => m.Chat)
                 .WithMany(c => c.Messages)
                 .HasForeignKey(m => m.ChatId);
-        }
+      }
     }
 }
