@@ -33,7 +33,7 @@ namespace Application.ResearchHandlers
                 var research = await _dataContext.Researches
                 .Include(x => x.Organizer)
                 .Include(r => r.Participants)
-                    .ThenInclude(p => p.PanelMember)
+                .ThenInclude(p => p.PanelMember)
                 .FirstOrDefaultAsync(x => x.Id == request.Research.Id);
 
                 if (research == null)

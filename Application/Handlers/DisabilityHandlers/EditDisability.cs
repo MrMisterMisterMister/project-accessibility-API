@@ -29,13 +29,16 @@ namespace Application.DisabilityHandlers
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                // TODO might need to include experts as well
-                // just in case there's a bug where the list is emptied
                 var disability = await _dataContext.Disabilities
-                .FirstOrDefaultAsync(x => x.Id == request.Disability.Id);
+                    .Include(x => x.Experts)
+                    .ThenInclude(x => x.PanelMember)
+                    .FirstOrDefaultAsync(x => x.Id == request.Disability.Id);
 
                 if (disability == null)
                     return Result<Unit>.Failure("DisabilityNotFound", "The disability could not be found.");
+
+                foreach (var expert in disability.Experts)
+                    request.Disability.Experts.Add(expert);
 
                 _mapper.Map(request.Disability, disability);
 
