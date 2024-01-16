@@ -13,7 +13,7 @@ namespace Domain.Models.ChatModels
         public virtual User? Sender { get; set; }
 
         [Required]
-        public string? Content { get; set; }
+        public string Content { get; set; } = null!;
 
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 

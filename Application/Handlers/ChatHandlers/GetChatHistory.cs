@@ -56,12 +56,12 @@ namespace Application.ChatHandlers
 
         public class ChatHistoryDto
         {
-            public List<MessageDto> Messages { get; set; }
+            public List<MessageDto> ?Messages { get; set; }
         }
 
         public class MessageDto
         {
-            public string Content { get; set; }
+            public required string Content { get; set; }
             public DateTime Timestamp { get; set; }
         }
     }
