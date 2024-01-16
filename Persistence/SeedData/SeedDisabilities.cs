@@ -20,7 +20,7 @@ namespace Persistence.SeedData
                     new Disability {
                         Name = "Clodsire's Desease",
                         Description = @"Clodsire's Disease is a unique condition that goes beyond conventional 
-                        understanding.Those diagnosed experience overwhelming adoration and love for Clodsire, 
+                        understanding. Those diagnosed experience overwhelming adoration and love for Clodsire, 
                         creating an unbreakable bond. Symptoms include perpetual warmth, admiration, and uncontrollable 
                         smiling at the thought of Clodsire. There's no physical harm; instead, it fosters deep, 
                         unconditional love.Treatment isn't pursued, embracing it as a positive aspect of emotional 
@@ -83,11 +83,11 @@ namespace Persistence.SeedData
                     new Disability
                     {
                         Name = "Parkinson's Disease",
-                        Description = @"This person with Parkinson's disease may experience symptoms like tremors
-                                    stiffness, and difficulty with movement due to a loss of dopamine-producing cells
-                                    in the brain. Additionally, cognitive issues and mood changes can occur.
-                                    Although there is no cure, treatments are aimed at alleviating symptoms and
-                                    improving overall well-being. Regular medical monitoring and support are crucial
+                        Description = @"This person with Parkinson's disease may experience symptoms like tremors 
+                                    stiffness, and difficulty with movement due to a loss of dopamine-producing cells 
+                                    in the brain. Additionally, cognitive issues and mood changes can occur. 
+                                    Although there is no cure, treatments are aimed at alleviating symptoms and 
+                                    improving overall well-being. Regular medical monitoring and support are crucial 
                                     for managing the challenges associated with Parkinson's disease.",
                         Experts = new List<ExpertDisability>
                         {
