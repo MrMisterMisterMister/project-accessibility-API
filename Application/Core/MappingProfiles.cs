@@ -22,7 +22,8 @@ namespace Application.Core
             CreateMap<PanelMember, PanelMember>();
             CreateMap<PanelMember, PanelMemberDTO>()
                 .ForMember(x => x.ParticipationsId, o => o.MapFrom(src => src.Participations.Select(p => p.ResearchId)))
-                .ForMember(x => x.DisabilitiesId, o => o.MapFrom(src => src.Disabilities.Select(d => d.DisabilityId)));
+                .ForMember(x => x.DisabilitiesId, o => o.MapFrom(src => src.Disabilities.Select(d => d.DisabilityId)))
+                .ForMember(x => x.DisabilitiesName, o => o.MapFrom(src => src.Disabilities.Select(d => d.Disability.Name)));
             CreateMap<Research, Research>();
             CreateMap<Research, ResearchDTO>()
                 .ForMember(x => x.OrganizerId, o => o.MapFrom(src => src.Organizer!.Id))
