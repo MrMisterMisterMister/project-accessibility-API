@@ -18,6 +18,14 @@ namespace Persistence.SeedData
                 var disabilites = new List<Disability>
                 {
                     new Disability {
+                        Name = "Clodsire's Desease",
+                        Description = "Clodsire my beloved <3",
+                        Experts = panelMembers.Select(panelMember => new ExpertDisability
+                        {
+                            PanelMember = panelMember
+                        }).ToList()
+                    },
+                    new Disability {
                         Name = "John Cena",
                         Description = "U Can't C Me!",
                         Experts = new List<ExpertDisability>()
