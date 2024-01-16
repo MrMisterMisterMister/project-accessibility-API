@@ -11,7 +11,7 @@ namespace Domain
         public string Token { get; set; } = null!;
         public DateTime? Revoked { get; set; } // Timestamp when revoked
         public DateTime Expires { get; set; } = DateTime.UtcNow.AddDays(7);
-        public bool isExpired => DateTime.UtcNow >= Expires;
-        public bool isActive => Revoked == null && !isExpired;
+        public bool IsExpired => DateTime.UtcNow >= Expires;
+        public bool IsActive => Revoked == null && !IsExpired;
     }
 }
