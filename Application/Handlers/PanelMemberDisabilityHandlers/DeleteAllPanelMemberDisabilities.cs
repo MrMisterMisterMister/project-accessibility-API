@@ -37,6 +37,9 @@ namespace Application.Handlers.PanelMemberDisabilityHandlers
                 if (panelMember == null)
                     return Result<Unit>.Failure("PanelMemberNotFound", "The panel member could not be found.");
 
+                // If there are no disabilities found, return success
+                if (!panelMember.Disabilities.Any()) return Result<Unit>.Success(Unit.Value);
+
                 // Remove the disabilities from the panelMember's list of disabilities
                 panelMember.Disabilities.Clear();
 
