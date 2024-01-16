@@ -36,7 +36,7 @@ namespace API.Controllers
             var oldToken = user.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken);
 
             // user can't refresh with an invalid token due to security reasons
-            if (oldToken != null && !oldToken.isActive) return Unauthorized();
+            if (oldToken != null && !oldToken.IsActive) return Unauthorized();
 
             if (oldToken != null) oldToken.Revoked = DateTime.Now;
 
