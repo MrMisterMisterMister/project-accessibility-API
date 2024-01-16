@@ -19,14 +19,14 @@ namespace Persistence.SeedData
                 {
                     new Disability {
                         Name = "Clodsire's Desease",
-                        Description = @"Clodsire's Disease is a unique condition that goes beyond conventional 
-                        understanding. Those diagnosed experience overwhelming adoration and love for Clodsire, 
-                        creating an unbreakable bond. Symptoms include perpetual warmth, admiration, and uncontrollable 
-                        smiling at the thought of Clodsire. There's no physical harm; instead, it fosters deep, 
-                        unconditional love.Treatment isn't pursued, embracing it as a positive aspect of emotional 
-                        well - being. Supportive communities celebrate and share experiences, recognizing Clodsire's 
-                        profound impact. In summary, Clodsire's Disease brings unparalleled love and joy, celebrated 
-                        as a unique aspect of the human experience. Clodsire my beloved <3",
+                        Description = "Clodsire's Disease is a unique condition that goes beyond conventional " +
+                        "understanding. Those diagnosed experience overwhelming adoration and love for Clodsire, " +
+                        "creating an unbreakable bond. Symptoms include perpetual warmth, admiration, and uncontrollable" +
+                        "smiling at the thought of Clodsire. There's no physical harm; instead, it fosters deep, " +
+                        "unconditional love.Treatment isn't pursued, embracing it as a positive aspect of emotional " +
+                        "well - being. Supportive communities celebrate and share experiences, recognizing Clodsire's " +
+                        "profound impact. In summary, Clodsire's Disease brings unparalleled love and joy, celebrated " +
+                        "as a unique aspect of the human experience. Clodsire my beloved <3",
                         PanelMembers = panelMembers.Select(panelMember => new PanelMemberDisability
                         {
                             PanelMember = panelMember
@@ -83,12 +83,12 @@ namespace Persistence.SeedData
                     new Disability
                     {
                         Name = "Parkinson's Disease",
-                        Description = @"This person with Parkinson's disease may experience symptoms like tremors 
-                                    stiffness, and difficulty with movement due to a loss of dopamine-producing cells 
-                                    in the brain. Additionally, cognitive issues and mood changes can occur. 
-                                    Although there is no cure, treatments are aimed at alleviating symptoms and 
-                                    improving overall well-being. Regular medical monitoring and support are crucial 
-                                    for managing the challenges associated with Parkinson's disease.",
+                        Description = "This person with Parkinson's disease may experience symptoms like tremors " +
+                                    "stiffness, and difficulty with movement due to a loss of dopamine-producing cells " +
+                                    "in the brain. Additionally, cognitive issues and mood changes can occur. " +
+                                    "Although there is no cure, treatments are aimed at alleviating symptoms and " +
+                                    "improving overall well-being. Regular medical monitoring and support are crucial " +
+                                    "for managing the challenges associated with Parkinson's disease.",
                         PanelMembers = new List<PanelMemberDisability>
                         {
                             new PanelMemberDisability
