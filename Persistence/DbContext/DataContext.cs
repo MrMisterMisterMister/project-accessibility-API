@@ -14,7 +14,7 @@ namespace Persistence
         public DbSet<Research> Researches { get; set; }
         public DbSet<Disability> Disabilities { get; set; }
         public DbSet<ResearchParticipant> ResearchParticipants { get; set; }
-        public DbSet<ExpertDisability> ExpertDisabilities { get; set; }
+        public DbSet<PanelMemberDisability> PanelMemberDisabilities { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -38,16 +38,16 @@ namespace Persistence
                 .WithMany(r => r.Participants)
                 .HasForeignKey(p => p.ResearchId);
 
-            builder.Entity<ExpertDisability>(x => x.HasKey(a => new { a.DisabilityId, a.PanelMemberId }));
+            builder.Entity<PanelMemberDisability>(x => x.HasKey(a => new { a.DisabilityId, a.PanelMemberId }));
 
-            builder.Entity<ExpertDisability>()
+            builder.Entity<PanelMemberDisability>()
                 .HasOne(x => x.PanelMember)
                 .WithMany(p => p.Disabilities)
                 .HasForeignKey(d => d.PanelMemberId);
 
-            builder.Entity<ExpertDisability>()
+            builder.Entity<PanelMemberDisability>()
                 .HasOne(x => x.Disability)
-                .WithMany(r => r.Experts)
+                .WithMany(r => r.PanelMembers)
                 .HasForeignKey(e => e.DisabilityId);
         }
     }

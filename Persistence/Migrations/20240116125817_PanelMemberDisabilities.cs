@@ -29,7 +29,7 @@ namespace Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "ExpertDisabilities",
+                name: "PanelMemberDisabilities",
                 columns: table => new
                 {
                     DisabilityId = table.Column<int>(type: "int", nullable: false),
@@ -38,15 +38,15 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExpertDisabilities", x => new { x.DisabilityId, x.PanelMemberId });
+                    table.PrimaryKey("PK_PanelMemberDisabilities", x => new { x.DisabilityId, x.PanelMemberId });
                     table.ForeignKey(
-                        name: "FK_ExpertDisabilities_Disabilities_DisabilityId",
+                        name: "FK_PanelMemberDisabilities_Disabilities_DisabilityId",
                         column: x => x.DisabilityId,
                         principalTable: "Disabilities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ExpertDisabilities_PanelMembers_PanelMemberId",
+                        name: "FK_PanelMemberDisabilities_PanelMembers_PanelMemberId",
                         column: x => x.PanelMemberId,
                         principalTable: "PanelMembers",
                         principalColumn: "Id",
@@ -55,8 +55,8 @@ namespace Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExpertDisabilities_PanelMemberId",
-                table: "ExpertDisabilities",
+                name: "IX_PanelMemberDisabilities_PanelMemberId",
+                table: "PanelMemberDisabilities",
                 column: "PanelMemberId");
         }
 
@@ -64,7 +64,7 @@ namespace Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ExpertDisabilities");
+                name: "PanelMemberDisabilities");
 
             migrationBuilder.DropTable(
                 name: "Disabilities");

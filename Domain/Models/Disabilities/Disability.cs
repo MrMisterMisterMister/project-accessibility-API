@@ -5,6 +5,6 @@ namespace Domain.Models.Disabilities
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public ICollection<ExpertDisability> Experts { get; set; } = new List<ExpertDisability>();
+        public ICollection<PanelMemberDisability> PanelMembers { get; set; } = new List<PanelMemberDisability>();
     }
 }

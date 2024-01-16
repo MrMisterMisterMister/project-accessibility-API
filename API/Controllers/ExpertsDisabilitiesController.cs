@@ -1,22 +1,22 @@
-using Application.Handlers.ExpertDisabilityHandlers;
+using Application.Handlers.PanelMemberDisabilityHandlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [Authorize]
-    public class ExpertDisabilitiesController : BaseApiController
+    public class PanelMemberDisabilitiesController : BaseApiController
     {
         [HttpPost("add-disability/{disabilityId}")]
-        public async Task<IActionResult> AddDisabilityToExpert(int disabilityId)
+        public async Task<IActionResult> AddDisabilityToPanelMember(int disabilityId)
         {
-            return HandleResult(await Mediator.Send(new AddExpertDisability.Command { DisabilityId = disabilityId }));
+            return HandleResult(await Mediator.Send(new AddPanelMemberDisability.Command { DisabilityId = disabilityId }));
         }
 
         [HttpDelete("remove-disability/{disabilityId}")]
-        public async Task<IActionResult> RemoveDisabilityFromExpert(int disabilityId)
+        public async Task<IActionResult> RemoveDisabilityFromPanelMember(int disabilityId)
         {
-            return HandleResult(await Mediator.Send(new DeleteExpertDisability.Command { DisabilityId = disabilityId }));
+            return HandleResult(await Mediator.Send(new DeletePanelMemberDisability.Command { DisabilityId = disabilityId }));
         }
     }
 }

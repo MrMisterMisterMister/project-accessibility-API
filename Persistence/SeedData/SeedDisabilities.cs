@@ -27,7 +27,7 @@ namespace Persistence.SeedData
                         well - being. Supportive communities celebrate and share experiences, recognizing Clodsire's 
                         profound impact. In summary, Clodsire's Disease brings unparalleled love and joy, celebrated 
                         as a unique aspect of the human experience. Clodsire my beloved <3",
-                        Experts = panelMembers.Select(panelMember => new ExpertDisability
+                        PanelMembers = panelMembers.Select(panelMember => new PanelMemberDisability
                         {
                             PanelMember = panelMember
                         }).ToList()
@@ -36,9 +36,9 @@ namespace Persistence.SeedData
                     {
                         Name = "John Cena",
                         Description = "U Can't C Me!",
-                        Experts = new List<ExpertDisability>()
+                        PanelMembers = new List<PanelMemberDisability>()
                         {
-                            new ExpertDisability()
+                            new PanelMemberDisability()
                             {
                                 PanelMember = panelMembers[new Random().Next(0, 5)]
                             }
@@ -48,9 +48,9 @@ namespace Persistence.SeedData
                     {
                         Name = "Blindness",
                         Description = "This person cannot see.",
-                        Experts = new List<ExpertDisability>()
+                        PanelMembers = new List<PanelMemberDisability>()
                         {
-                            new ExpertDisability()
+                            new PanelMemberDisability()
                             {
                                 PanelMember = panelMembers[new Random().Next(0, 5)]
                             }
@@ -60,9 +60,9 @@ namespace Persistence.SeedData
                     {
                         Name = "Deafness",
                         Description = "This person cannot hear.",
-                        Experts = new List<ExpertDisability>()
+                        PanelMembers = new List<PanelMemberDisability>()
                         {
-                            new ExpertDisability()
+                            new PanelMemberDisability()
                             {
                                 PanelMember = panelMembers[new Random().Next(0, 5)]
                             }
@@ -72,9 +72,9 @@ namespace Persistence.SeedData
                     {
                         Name = "Muteness",
                         Description = "This person cannot speak.",
-                        Experts = new List<ExpertDisability>()
+                        PanelMembers = new List<PanelMemberDisability>()
                         {
-                            new ExpertDisability()
+                            new PanelMemberDisability()
                             {
                                 PanelMember = panelMembers[new Random().Next(0, 5)]
                             }
@@ -89,9 +89,9 @@ namespace Persistence.SeedData
                                     Although there is no cure, treatments are aimed at alleviating symptoms and 
                                     improving overall well-being. Regular medical monitoring and support are crucial 
                                     for managing the challenges associated with Parkinson's disease.",
-                        Experts = new List<ExpertDisability>
+                        PanelMembers = new List<PanelMemberDisability>
                         {
-                            new ExpertDisability
+                            new PanelMemberDisability
                             {
                                 PanelMember = panelMembers[new Random().Next(0, 5)]
                             }

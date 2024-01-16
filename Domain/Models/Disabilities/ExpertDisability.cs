@@ -1,6 +1,6 @@
 namespace Domain.Models.Disabilities
 {
-    public class ExpertDisability
+    public class PanelMemberDisability
     {
         public int DisabilityId { get; set; }
         public Disability Disability { get; set; } = null!;

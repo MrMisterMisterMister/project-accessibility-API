@@ -11,7 +11,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240116112059_PanelMemberDisabilities")]
+    [Migration("20240116125817_PanelMemberDisabilities")]
     partial class PanelMemberDisabilities
     {
         /// <inheritdoc />
@@ -39,7 +39,7 @@ namespace Persistence.Migrations
                     b.ToTable("Disabilities");
                 });
 
-            modelBuilder.Entity("Domain.Models.Disabilities.ExpertDisability", b =>
+            modelBuilder.Entity("Domain.Models.Disabilities.PanelMemberDisability", b =>
                 {
                     b.Property<int>("DisabilityId")
                         .HasColumnType("int");
@@ -51,7 +51,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("PanelMemberId");
 
-                    b.ToTable("ExpertDisabilities");
+                    b.ToTable("PanelMemberDisabilities");
                 });
 
             modelBuilder.Entity("Domain.RefreshToken", b =>
@@ -403,10 +403,10 @@ namespace Persistence.Migrations
                     b.ToTable("PanelMembers", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Models.Disabilities.ExpertDisability", b =>
+            modelBuilder.Entity("Domain.Models.Disabilities.PanelMemberDisability", b =>
                 {
                     b.HasOne("Domain.Models.Disabilities.Disability", "Disability")
-                        .WithMany("Experts")
+                        .WithMany("PanelMembers")
                         .HasForeignKey("DisabilityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -532,7 +532,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Models.Disabilities.Disability", b =>
                 {
-                    b.Navigation("Experts");
+                    b.Navigation("PanelMembers");
                 });
 
             modelBuilder.Entity("Domain.Research", b =>

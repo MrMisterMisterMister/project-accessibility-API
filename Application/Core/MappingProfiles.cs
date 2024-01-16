@@ -29,7 +29,7 @@ namespace Application.Core
                 .ForMember(x => x.OrganizerName, o => o.MapFrom(src => src.Organizer!.CompanyName));
             CreateMap<Disability, Disability>();
             CreateMap<Disability, DisabilityDTO>()
-                .ForMember(x => x.ExpertId, o => o.MapFrom(src => src.Experts.Select(e => e.PanelMemberId)));
+                .ForMember(x => x.PanelMemberId, o => o.MapFrom(src => src.PanelMembers.Select(e => e.PanelMemberId)));
             CreateMap<ResearchParticipant, PanelMemberDTO>()
                 .ForMember(x => x.Id, o => o.MapFrom(src => src.PanelMember.Id))
                 .ForMember(x => x.Guardian, o => o.MapFrom(src => src.PanelMember.Guardian))

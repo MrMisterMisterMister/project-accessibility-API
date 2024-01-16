@@ -37,7 +37,7 @@ namespace Application.DisabilityHandlers
                 // Retrieve the disability from the database based on its ID
                 // using eagerloading
                 var disability = await _dataContext.Disabilities
-                    .Include(x => x.Experts)
+                    .Include(x => x.PanelMembers)
                     .ThenInclude(x => x.PanelMember)
                     .FirstOrDefaultAsync(x => x.Id == request.Disability.Id);
 
@@ -45,9 +45,9 @@ namespace Application.DisabilityHandlers
                 if (disability == null)
                     return Result<Unit>.Failure("DisabilityNotFound", "The disability could not be found.");
 
-                // Copy the existing experts associated with the disability to the request disability
-                foreach (var expert in disability.Experts)
-                    request.Disability.Experts.Add(expert);
+                // Copy the existing panelMembers associated with the disability to the request disability
+                foreach (var panelMember in disability.PanelMembers)
+                    request.Disability.PanelMembers.Add(panelMember);
 
                 // Map the properties of the request disability to the existing disability using AutoMapper
                 _mapper.Map(request.Disability, disability);
