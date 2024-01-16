@@ -38,13 +38,13 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Models.Disabilities.ExpertDisability", b =>
                 {
-                    b.Property<int>("Disabilityid")
+                    b.Property<int>("DisabilityId")
                         .HasColumnType("int");
 
                     b.Property<string>("PanelMemberId")
                         .HasColumnType("varchar(255)");
 
-                    b.HasKey("Disabilityid", "PanelMemberId");
+                    b.HasKey("DisabilityId", "PanelMemberId");
 
                     b.HasIndex("PanelMemberId");
 
@@ -404,7 +404,7 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.Models.Disabilities.Disability", "Disability")
                         .WithMany("Experts")
-                        .HasForeignKey("Disabilityid")
+                        .HasForeignKey("DisabilityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

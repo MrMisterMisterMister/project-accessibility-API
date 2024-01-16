@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [Authorize]
-    public class ExpertsDisabilitiesController : BaseApiController
+    public class ExpertDisabilitiesController : BaseApiController
     {
         [HttpPost("add-disability/{disabilityId}")]
         public async Task<IActionResult> AddDisabilityToExpert(int disabilityId)

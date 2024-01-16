@@ -38,7 +38,7 @@ namespace Persistence
                 .WithMany(r => r.Participants)
                 .HasForeignKey(p => p.ResearchId);
 
-            builder.Entity<ExpertDisability>(x => x.HasKey(a => new { a.Disabilityid, a.PanelMemberId }));
+            builder.Entity<ExpertDisability>(x => x.HasKey(a => new { a.DisabilityId, a.PanelMemberId }));
 
             builder.Entity<ExpertDisability>()
                 .HasOne(x => x.PanelMember)
@@ -48,7 +48,7 @@ namespace Persistence
             builder.Entity<ExpertDisability>()
                 .HasOne(x => x.Disability)
                 .WithMany(r => r.Experts)
-                .HasForeignKey(e => e.Disabilityid);
+                .HasForeignKey(e => e.DisabilityId);
         }
     }
 }

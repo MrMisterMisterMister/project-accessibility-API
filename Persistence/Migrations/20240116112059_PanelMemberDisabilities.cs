@@ -32,16 +32,16 @@ namespace Persistence.Migrations
                 name: "ExpertDisabilities",
                 columns: table => new
                 {
-                    Disabilityid = table.Column<int>(type: "int", nullable: false),
+                    DisabilityId = table.Column<int>(type: "int", nullable: false),
                     PanelMemberId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExpertDisabilities", x => new { x.Disabilityid, x.PanelMemberId });
+                    table.PrimaryKey("PK_ExpertDisabilities", x => new { x.DisabilityId, x.PanelMemberId });
                     table.ForeignKey(
-                        name: "FK_ExpertDisabilities_Disabilities_Disabilityid",
-                        column: x => x.Disabilityid,
+                        name: "FK_ExpertDisabilities_Disabilities_DisabilityId",
+                        column: x => x.DisabilityId,
                         principalTable: "Disabilities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);

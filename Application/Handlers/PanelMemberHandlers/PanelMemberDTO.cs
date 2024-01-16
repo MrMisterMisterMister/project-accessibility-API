@@ -16,6 +16,7 @@ namespace Application.Handlers.PanelMemberHandlers
         public string? PostalCode { get; set; }
         public string? City { get; set; }
         public string? Country { get; set; }
+        public ICollection<int> DisabilitiesId { get; set; } = new List<int>();
         public ICollection<int> ParticipationsId { get; set; } = new List<int>();
     }
 }

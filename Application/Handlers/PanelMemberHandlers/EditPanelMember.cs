@@ -28,8 +28,6 @@ namespace Application.PanelMemberHandlers
             {
                 var panelMember = await _dataContext.PanelMembers.FindAsync(request.PanelMember.Id);
 
-                // TODO researches
-
                 if (panelMember == null) return Result<Unit>.Failure("PanelMemberNotFound", "Panel member could not be found.");
 
                 request.PanelMember.UserName = panelMember.UserName;
@@ -37,6 +35,16 @@ namespace Application.PanelMemberHandlers
                 request.PanelMember.Email = panelMember.Email;
                 request.PanelMember.NormalizedEmail = panelMember.NormalizedEmail;
                 request.PanelMember.PasswordHash = panelMember.PasswordHash;
+
+                foreach (var research in panelMember.Participations)
+                {
+                    request.PanelMember.Participations.Add(research);
+                }
+
+                foreach (var disability in panelMember.Disabilities)
+                {
+                    request.PanelMember.Disabilities.Add(disability);
+                }
 
                 _mapper.Map(request.PanelMember, panelMember);
 
