@@ -1,6 +1,6 @@
 using AutoMapper;
 using Domain;
-using Domain.Models.Chat;
+using Domain.Models.ChatModels;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Application.Core

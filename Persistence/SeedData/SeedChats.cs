@@ -1,5 +1,5 @@
 using Domain;
-using Domain.Models.Chat;
+using Domain.Models.ChatModels;
 using Microsoft.EntityFrameworkCore;
 namespace Persistence.SeedData{
     public class SeedChats{
@@ -13,9 +13,10 @@ namespace Persistence.SeedData{
             var chats = new List<Chat>{
                 new Chat{
                     Title = "Chat 1",
+                    User1Id = panelmembers[1].Id,
+                    User2Id = panelmembers[2].Id,
                     Messages = new List<Message>(){
                         new Message{
-                            ReceiverId = panelmembers[0].Id,
                             SenderId = panelmembers[1].Id,
                             Content = "Hallo, dit is een test bericht",
                             Timestamp = DateTime.UtcNow,
@@ -26,9 +27,10 @@ namespace Persistence.SeedData{
             },
             new Chat{
              Title = "Chat 2",
+             User1Id = panelmembers[1].Id,
+             User2Id = panelmembers[2].Id,
                     Messages = new List<Message>(){
                         new Message{
-                            ReceiverId = panelmembers[2].Id,
                             SenderId = panelmembers[3].Id,
                             Content = "Dit is nog een test bericht.",
                             Timestamp = DateTime.UtcNow,
@@ -38,9 +40,10 @@ namespace Persistence.SeedData{
             },
                new Chat{
                        Title = "Chat 3",
+                       User1Id = panelmembers[1].Id,
+                       User2Id = panelmembers[2].Id,
                        Messages = new List<Message>(){
                         new Message{
-                            ReceiverId = panelmembers[3].Id,
                             SenderId = panelmembers[1].Id,
                             Content = "Dit is alweer een test bericht.",
                             Timestamp = DateTime.UtcNow,

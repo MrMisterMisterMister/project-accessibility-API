@@ -1,6 +1,6 @@
 using System.Net.Mail;
 using Domain;
-using Domain.Models.Chat;
+using Domain.Models.ChatModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -25,6 +25,25 @@ namespace Persistence
             modelBuilder.Entity<PanelMember>().ToTable("PanelMembers");
             modelBuilder.Entity<Message>().ToTable("Messages");
             modelBuilder.Entity<Chat>().ToTable("Chats");
+
+            // Configure the one-to-one relationships in Chat
+            modelBuilder.Entity<Chat>()
+                .HasOne(c => c.User1)
+                .WithMany() // Assuming User class has no navigation property back to Chat
+                .HasForeignKey(c => c.User1Id)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
+
+            modelBuilder.Entity<Chat>()
+                .HasOne(c => c.User2)
+                .WithMany() // Same as above
+                .HasForeignKey(c => c.User2Id)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
+
+            // Configure the one-to-many relationship between Chat and Message
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Chat)
+                .WithMany(c => c.Messages)
+                .HasForeignKey(m => m.ChatId);
         }
     }
 }

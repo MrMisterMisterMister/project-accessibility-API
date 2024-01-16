@@ -1,4 +1,4 @@
-using API.Chat.Hubs;
+using API.ChatFunctionality.Hubs;
 using API.Extensions;
 using API.Middleware;
 using API.Services;
