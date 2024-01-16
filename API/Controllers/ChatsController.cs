@@ -10,6 +10,7 @@ using System.Security.Claims;
 
 namespace API.Controllers
 {
+    [AllowAnonymous]
     public class ChatsController : BaseApiController
     {
 

@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240115100311_ChatTable")]
-    partial class ChatTable
+    [Migration("20240116105632_newChatMigration")]
+    partial class newChatMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,22 +22,33 @@ namespace Persistence.Migrations
                 .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Domain.Models.Chat.Chat", b =>
+            modelBuilder.Entity("Domain.Models.ChatModels.Chat", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("id");
+                    b.Property<string>("User1Id")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("User2Id")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("User1Id");
+
+                    b.HasIndex("User2Id");
 
                     b.ToTable("Chats", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Models.Chat.Message", b =>
+            modelBuilder.Entity("Domain.Models.ChatModels.Message", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,10 +64,6 @@ namespace Persistence.Migrations
                     b.Property<bool>("IsRead")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("ReceiverId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("SenderId")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
@@ -67,8 +74,6 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ChatId");
-
-                    b.HasIndex("ReceiverId");
 
                     b.HasIndex("SenderId");
 
@@ -338,17 +343,30 @@ namespace Persistence.Migrations
                     b.ToTable("PanelMembers", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Models.Chat.Message", b =>
+            modelBuilder.Entity("Domain.Models.ChatModels.Chat", b =>
                 {
-                    b.HasOne("Domain.Models.Chat.Chat", "chat")
-                        .WithMany("Messages")
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Domain.User", "User1")
+                        .WithMany()
+                        .HasForeignKey("User1Id")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.User", "Receiver")
+                    b.HasOne("Domain.User", "User2")
                         .WithMany()
-                        .HasForeignKey("ReceiverId")
+                        .HasForeignKey("User2Id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User1");
+
+                    b.Navigation("User2");
+                });
+
+            modelBuilder.Entity("Domain.Models.ChatModels.Message", b =>
+                {
+                    b.HasOne("Domain.Models.ChatModels.Chat", "Chat")
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -358,11 +376,9 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Receiver");
+                    b.Navigation("Chat");
 
                     b.Navigation("Sender");
-
-                    b.Navigation("chat");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -434,7 +450,7 @@ namespace Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Models.Chat.Chat", b =>
+            modelBuilder.Entity("Domain.Models.ChatModels.Chat", b =>
                 {
                     b.Navigation("Messages");
                 });
