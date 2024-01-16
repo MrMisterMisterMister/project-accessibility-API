@@ -13,8 +13,8 @@ namespace Application.ChatHandlers
     {
         public class Query : IRequest<Result<ChatHistoryDto>>
         {
-            public Guid User1Id { get; set; }
-            public Guid User2Id { get; set; }
+            public required string User1Id { get; set; }
+            public required string User2Id { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result<ChatHistoryDto>>

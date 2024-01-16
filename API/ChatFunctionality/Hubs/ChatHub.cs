@@ -42,7 +42,7 @@ namespace API.ChatFunctionality.Hubs
             _context.Messages.Add(msg);
             await _context.SaveChangesAsync();
 
-            if (UserConnections.TryGetValue(receiverEmail, out string connectionId))
+            if (UserConnections.TryGetValue(receiverEmail, out string? connectionId))
             {
                 await Clients.Client(connectionId).SendAsync("ReceiveMessage", senderEmail, message);
             }
