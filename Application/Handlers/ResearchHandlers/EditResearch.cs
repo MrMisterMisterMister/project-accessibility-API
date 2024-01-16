@@ -48,9 +48,11 @@ namespace Application.ResearchHandlers
                 if (organizer.Id != research.Organizer!.Id)
                     return Result<Unit>.Failure("OrganizerNotTheSame", "The organizer needs to be the same.");
 
-                // Set the Organizer and OrganizerId
                 request.Research.Organizer = organizer;
                 request.Research.OrganizerId = organizer.Id;
+
+                foreach (var participant in research.Participants)
+                    request.Research.Participants.Add(participant);
 
                 _mapper.Map(request.Research, research);
 
