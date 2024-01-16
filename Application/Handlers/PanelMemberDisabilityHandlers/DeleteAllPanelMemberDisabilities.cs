@@ -30,8 +30,6 @@ namespace Application.Handlers.PanelMemberDisabilityHandlers
                 var panelMember = await _dataContext.PanelMembers
                     .Include(x => x.Disabilities)
                     .ThenInclude(d => d.Disability)
-                    .Include(x => x.Participations)
-                    .ThenInclude(p => p.Research)
                     .FirstOrDefaultAsync(x => x.Email == _userAccessor.GetEmail()
                 );
 
