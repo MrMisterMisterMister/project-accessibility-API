@@ -14,7 +14,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("remove-disability/{disabilityId}")]
-        public async Task<IActionResult> RemoveDisabilityFromExpert (int disabilityId)
+        public async Task<IActionResult> RemoveDisabilityFromExpert(int disabilityId)
         {
             return HandleResult(await Mediator.Send(new DeleteExpertDisability.Command { DisabilityId = disabilityId }));
         }

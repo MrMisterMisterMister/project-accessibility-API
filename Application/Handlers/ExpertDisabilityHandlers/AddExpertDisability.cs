@@ -44,7 +44,7 @@ namespace Application.Handlers.ExpertDisabilityHandlers
                 var hasDisability = disability.Experts.FirstOrDefault(x => x.PanelMember == expert);
 
                 if (hasDisability != null)
-                    return Result<Unit>.Failure("ExpertHasDisability", "The expert alreaedy has this disability.");
+                    return Result<Unit>.Failure("ExpertHasDisability", "The expert already has this disability.");
 
                 disability.Experts.Add(new ExpertDisability
                 {
