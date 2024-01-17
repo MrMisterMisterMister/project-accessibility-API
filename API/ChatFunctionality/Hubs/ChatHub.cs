@@ -36,23 +36,49 @@ namespace API.ChatFunctionality.Hubs
 
             await base.OnDisconnectedAsync(exception);
         }
-        public async Task SendMessageToUser(User sender, User receiver, string message)
+      public async Task SendMessageToUser(string senderId, string receiverId, string message)
         {
             try
             {
-                var chat = await _context.FindOrCreateChat(sender.Id, receiver.Id, sender.Email, receiver.Email);
-                await _context.AddMessage(sender.Id, message, chat.Id);
+                var user1 = await _context.Users.FindAsync(senderId);
+                var user2 = await _context.Users.FindAsync(receiverId);
 
-                if (UserConnections.TryGetValue(receiver.Id, out string? connectionId))
+                if (user1 == null || user2 == null)
                 {
-                    await Clients.Client(connectionId).SendAsync("ReceiveMessage", sender, receiver, message, chat.Id);
+                    throw new ArgumentException("Invalid sender or receiver id.");
                 }
-                await Clients.Caller.SendAsync("ReceiveMessage", sender, receiver, message, chat.Id);
+
+                var existingChat = _context.Chats
+                    .FirstOrDefault(chat =>
+                        (chat.User1Id == senderId && chat.User2Id == receiverId) ||
+                        (chat.User1Id == receiverId && chat.User2Id == senderId));
+
+                if (existingChat != null)
+                {
+                throw new InvalidOperationException("Chat already exist.");
+
+                }
+
+                if (senderId.Equals(receiverId))
+                {
+                    throw new InvalidOperationException("Chat can't contain the ID of the same users.");
+                }
+
+                var newChat = new Chat
+                {
+                    User1Id = senderId,
+                    User2Id = receiverId,
+                    User1Email = user1.Email,
+                    User2Email = user2.Email
+                };
+
+                _context.Chats.Add(newChat);
+                await _context.SaveChangesAsync();
+                await Clients.Caller.SendAsync("ReceiveMessage", user1, user2, message, newChat.Id);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
-                // Send error details to the client if necessary
             }
         }
 
@@ -62,14 +88,13 @@ namespace API.ChatFunctionality.Hubs
             {
                 if (string.IsNullOrEmpty(idOfTheRegisteringUser))
                 {
-                    throw new ArgumentException("User email cannot be null or empty.");
+                    throw new ArgumentException("User ID cannot be null or empty.");
                 }
 
                 UserConnections[idOfTheRegisteringUser] = Context.ConnectionId;
             }
             catch (Exception ex)
             {
-                // Handle the exception
                 Console.WriteLine($"An error occurred in RegisterUser: {ex.Message}");
             }
         }
