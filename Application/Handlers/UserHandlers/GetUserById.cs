@@ -25,10 +25,6 @@ namespace Application.UserHandlers
 
             public async Task<Result<User>> Handle(Query request, CancellationToken cancellationToken)
             {
-                // var user = await _dataContext.Users
-                //     .ProjectTo<UserDTO>(_mapper.ConfigurationProvider)
-                //     .FirstOrDefaultAsync(x => x.Id == request.Id.ToString());
-
                 var user = await _dataContext.Users.FindAsync(request.Id.ToString());
 
                 if (user == null) return Result<User>.Failure("User not found");
