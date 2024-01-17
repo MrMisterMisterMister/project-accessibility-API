@@ -1,13 +1,12 @@
 using Application.Core;
-using Application.Handlers.ResearchesHandlers;
+using Application.Handlers.ResearchHandlers;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.ResearchesHandlers
+namespace Application.ResearchHandlers
 {
     public class GetResearchById
     {
@@ -37,7 +36,7 @@ namespace Application.ResearchesHandlers
                     .ProjectTo<ResearchDTO>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(x => x.Id == request.ResearchId);
 
-                if (research == null) return Result<ResearchDTO>.Failure("ResearchNotFound");
+                if (research == null) return Result<ResearchDTO>.Failure("ResearchNotFound", "The research could not be found.");
 
                 return Result<ResearchDTO>.Success(research);
             }

@@ -37,7 +37,7 @@ namespace Application.PanelMemberHandlers
                     .ProjectTo<PanelMemberDTO>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(x => x.Id == request.Id.ToString());
 
-                if (panelMember == null) return Result<PanelMemberDTO>.Failure("Panel member not found");
+                if (panelMember == null) return Result<PanelMemberDTO>.Failure("PanelMemberNotFound", "Panel member could not be found.");
 
                 return Result<PanelMemberDTO>.Success(panelMember);
 

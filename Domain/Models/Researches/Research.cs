@@ -4,7 +4,6 @@ namespace Domain
 {
     public class Research
     {
-        [Key]
         public int Id { get; set; }
         [Required]
         public string Title { get; set; } = null!;

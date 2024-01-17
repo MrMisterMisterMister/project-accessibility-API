@@ -25,14 +25,7 @@ namespace API.Controllers
             if (result.IsSuccess && result.Value != null) return Ok(result.Value); // Returns OK with the value if successful and value exists
             if (result.IsSuccess && result.Value == null) return NotFound(); // Returns Not Found if the result is successful but value is null
 
-            return BadRequest(new {Code = result.Error } ) ; // Returns a Bad Request with the error if there's an error in the result
-        }
-
-        // Endpoint for testing purposes to throw an exception
-        [HttpGet("exception-test")]
-        public IActionResult ThrowException()
-        {
-            throw new Exception("This is a test exception");
+            return BadRequest(new { Code = result.ErrorCode, Message = result.ErrorMessage }); // Returns a Bad Request with the error if there's an error in the result
         }
     }
 }
