@@ -24,6 +24,26 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline. HTTPS will be handled by NGINX
 app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseXContentTypeOptions();
+app.UseReferrerPolicy(opt => opt.NoReferrer());
+app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
+app.UseXfo(opt => opt.Deny());
+app.UseCsp(opt => opt
+    .BlockAllMixedContent()
+    .StyleSources(s => s.Self())
+    .FontSources(s => s.Self())
+    .FormActions(s => s.Self())
+    .FrameAncestors(s => s.Self())
+    .ScriptSources(s => s.Self())
+); // main defense against crossscripting attacks, white sources approved content
+
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
+    await next.Invoke();
+});
+
 app.UseForwardedHeaders();
 app.UseCors("CorsPolicy");
 
