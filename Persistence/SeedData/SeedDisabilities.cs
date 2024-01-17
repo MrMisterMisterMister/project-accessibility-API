@@ -46,8 +46,10 @@ namespace Persistence.SeedData
                     },
                     new Disability
                     {
-                        Name = "Blindness",
-                        Description = "This person cannot see.",
+                        Name = "Visual impairment",
+                        Description = "This may include conditions like low vision or blindness, where " +
+                            "individuals may have difficulty seeing or may rely on alternative methods for " +
+                            "accessing information.",
                         PanelMembers = new List<PanelMemberDisability>()
                         {
                             new PanelMemberDisability()
@@ -58,8 +60,9 @@ namespace Persistence.SeedData
                     },
                     new Disability
                     {
-                        Name = "Deafness",
-                        Description = "This person cannot hear.",
+                        Name = "Hearing impairment",
+                        Description = "This refers to difficulty hearing or deafness, where individuals " +
+                            "may use sign language, lip-reading, or hearing aids to communicate.",
                         PanelMembers = new List<PanelMemberDisability>()
                         {
                             new PanelMemberDisability()
@@ -70,8 +73,49 @@ namespace Persistence.SeedData
                     },
                     new Disability
                     {
-                        Name = "Muteness",
-                        Description = "This person cannot speak.",
+                        Name = "Mobility impairment",
+                        Description = "Individuals with mobility impairments may experience difficulties " +
+                            "with physical movement, such as walking or using fine motor skills.",
+                        PanelMembers = new List<PanelMemberDisability>()
+                        {
+                            new PanelMemberDisability()
+                            {
+                                PanelMember = panelMembers[new Random().Next(0, 5)]
+                            }
+                        }
+                    },
+                    new Disability
+                    {
+                        Name = "Cognitive impairment",
+                        Description = "This includes difficulties with thinking, learning, or memory. " +
+                            "Conditions like dyslexia or cognitive disorders may fall into this category.",
+                        PanelMembers = new List<PanelMemberDisability>()
+                        {
+                            new PanelMemberDisability()
+                            {
+                                PanelMember = panelMembers[new Random().Next(0, 5)]
+                            }
+                        }
+                    },
+                    new Disability
+                    {
+                        Name = "Autism",
+                        Description = "Neurodevelopmental condition with distinct social communication styles and sensory " +
+                            "sensitivities. Embracing neurodiversity is crucial for support.",
+                        PanelMembers = new List<PanelMemberDisability>()
+                        {
+                            new PanelMemberDisability()
+                            {
+                                PanelMember = panelMembers[new Random().Next(0, 5)]
+                            }
+                        }
+                    },
+                    new Disability
+                    {
+                        Name = "ADHD",
+                        Description = "Attention-Deficit/Hyperactivity Disorder characterized by inattention, " +
+                            "hyperactivity, and impulsivity. Strategies include structured routines and personalized " +
+                            "learning approaches.",
                         PanelMembers = new List<PanelMemberDisability>()
                         {
                             new PanelMemberDisability()
