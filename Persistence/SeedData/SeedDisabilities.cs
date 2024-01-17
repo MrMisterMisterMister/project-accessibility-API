@@ -18,7 +18,7 @@ namespace Persistence.SeedData
                 var disabilites = new List<Disability>
                 {
                     new Disability {
-                        Name = "Clodsire's Desease",
+                        Name = "Clodsire's Disease",
                         Description = "Clodsire's Disease is a unique condition that goes beyond conventional " +
                         "understanding. Those diagnosed experience overwhelming adoration and love for Clodsire, " +
                         "creating an unbreakable bond. Symptoms include perpetual warmth, admiration, and uncontrollable " +
