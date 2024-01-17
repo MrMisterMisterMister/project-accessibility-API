@@ -23,12 +23,14 @@ namespace API.Extensions
 
             // Enable Content Security Policy (CSP) to protect the site from various types of attacks, allowing only approved content
             app.UseCsp(opt => opt
-                .BlockAllMixedContent()         // Block mixed content to enhance security
-                .StyleSources(s => s.Self())    // Allow styles from the same originss
-                .FontSources(s => s.Self())     // Allow fonts from the same origin
-                .FormActions(s => s.Self())     // Allow form actions from the same origin
-                .FrameAncestors(s => s.Self())  // Allow frames only from the same origin
-                .ScriptSources(s => s.Self())   // Allow scripts from the same origin
+                .BlockAllMixedContent()
+                .StyleSources(s => s.Self())
+                .FormActions(s => s.Self())
+                .FrameAncestors(s => s.Self())
+                .ScriptSources(s => s.Self().CustomSources("https://apis.google.com"))
+                .StyleSources(s => s.Self().CustomSources("https://apis.google.com"))
+                .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com"))
+                .ImageSources(s => s.Self().CustomSources("https://www.google.com", "https://*.googleusercontent.com"))
             );
 
             app.Use(async (context, next) =>
