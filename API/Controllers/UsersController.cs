@@ -80,7 +80,7 @@ namespace API.Controllers
             return Ok(response); // Returns the constructed response as OK
         }
 
-        // Search for users by name or email
+        // Search for users by email, by name not implemented yet
         [AllowAnonymous]
         [HttpGet("search/{query}")]
         public async Task<IActionResult> SearchUsers(string query, [FromServices] UserManager<User> userManager, [FromServices] DataContext context)
@@ -143,6 +143,58 @@ namespace API.Controllers
             }
 
             return Ok(results);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("byEmail/{email}")]
+        public async Task<IActionResult> GetUserByEmail(string email, [FromServices] UserManager<User> userManager, [FromServices] DataContext context)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return BadRequest("Email cannot be empty.");
+            }
+
+            // Find user by email
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            // Check if the user is a PanelMember
+            var panelMember = await context.PanelMembers.FindAsync(user.Id);
+            if (panelMember != null)
+            {
+                return Ok(new
+                {
+                    Type = "PanelMember",
+                    user.Id,
+                    Name = $"{panelMember.FirstName} {panelMember.LastName}",
+                    user.Email
+                });
+            }
+
+            // Check if the user is a Company
+            var company = await context.Companies.FindAsync(user.Id);
+            if (company != null)
+            {
+                return Ok(new
+                {
+                    Type = "Company",
+                    user.Id,
+                    Name = company.CompanyName,
+                    user.Email
+                });
+            }
+
+            // Default to user if not a PanelMember or Company
+            return Ok(new
+            {
+                Type = "User",
+                user.Id,
+                Name = user.UserName,
+                user.Email
+            });
         }
 
     }
