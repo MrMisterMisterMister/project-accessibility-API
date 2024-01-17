@@ -50,19 +50,19 @@ namespace Persistence
                 .HasForeignKey(m => m.ChatId);
         }
 
-        public async Task<Chat> FindOrCreateChat(string user1Email, string user2Email)
+        public async Task<Chat> FindOrCreateChat(string user1Id, string user2Id, string user1IdEmail, string user2IdEmail)
         {
             // Logic to find or create a chat session between two users
             // This should check if a chat already exists between these two users
             // If not, create a new chat session and return it
             var chat = await Chats
                             .FirstOrDefaultAsync(c =>
-                                (c.User1Id == user1Email && c.User2Id == user2Email) ||
-                                (c.User1Id == user2Email && c.User2Id == user1Email));
+                                (c.User1Id == user1Id && c.User2Id == user2Id) ||
+                                (c.User1Id == user2Id && c.User2Id == user1Id));
 
             if (chat == null)
             {
-                chat = new Chat { User1Id = user1Email, User2Id = user2Email };
+                chat = new Chat { User1Id = user1Id, User2Id = user2Id, User1Email = user1IdEmail, User2Email = user2IdEmail };
                 Chats.Add(chat);
                 await SaveChangesAsync();
             }

@@ -21,6 +21,7 @@ namespace Application.Handlers.ChatHandlers
         {
             // Define properties here, for example:
             public int ChatId { get; set; }
+            public string ChatName { get; set; }
             public string OtherUserId { get; set; }
         }
 
@@ -40,6 +41,7 @@ namespace Application.Handlers.ChatHandlers
                     .Select(c => new UserChatDto
                     {
                         ChatId = c.Id,
+                        ChatName = c.User1Id == request.UserId ? c.User2Email : c.User1Email,
                         OtherUserId = c.User1Id == request.UserId ? c.User2Id : c.User1Id
                     })
                     .ToListAsync(cancellationToken);

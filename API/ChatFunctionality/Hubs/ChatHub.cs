@@ -36,18 +36,18 @@ namespace API.ChatFunctionality.Hubs
 
             await base.OnDisconnectedAsync(exception);
         }
-        public async Task SendMessageToUser(string senderEmail, string senderId, string receiverEmail, string receiverId, string message, User sender)
+        public async Task SendMessageToUser(User sender, User receiver, string message)
         {
             try
             {
-                var chat = await _context.FindOrCreateChat(senderId, receiverId);
-                await _context.AddMessage(senderId, message, chat.Id);
+                var chat = await _context.FindOrCreateChat(sender.Id, receiver.Id, sender.Email, receiver.Email);
+                await _context.AddMessage(sender.Id, message, chat.Id);
 
-                if (UserConnections.TryGetValue(receiverEmail, out string? connectionId))
+                if (UserConnections.TryGetValue(receiver.Id, out string? connectionId))
                 {
-                    await Clients.Client(connectionId).SendAsync("ReceiveMessage", sender, message);
+                    await Clients.Client(connectionId).SendAsync("ReceiveMessage", sender, receiver, message, chat.Id);
                 }
-                await Clients.Caller.SendAsync("ReceiveMessage", sender, message);
+                await Clients.Caller.SendAsync("ReceiveMessage", sender, receiver, message, chat.Id);
             }
             catch (Exception ex)
             {
@@ -56,25 +56,21 @@ namespace API.ChatFunctionality.Hubs
             }
         }
 
-        public void RegisterUser(string userEmail)
+        public void RegisterUser(string idOfTheRegisteringUser)
         {
             try
             {
-                if (string.IsNullOrEmpty(userEmail))
+                if (string.IsNullOrEmpty(idOfTheRegisteringUser))
                 {
                     throw new ArgumentException("User email cannot be null or empty.");
                 }
 
-                UserConnections[userEmail] = Context.ConnectionId;
+                UserConnections[idOfTheRegisteringUser] = Context.ConnectionId;
             }
             catch (Exception ex)
             {
                 // Handle the exception
-                // You might want to log the exception or take other appropriate actions
-                // For example:
                 Console.WriteLine($"An error occurred in RegisterUser: {ex.Message}");
-                // Depending on your application's needs, you might also want to rethrow the exception
-                // throw;
             }
         }
     }
