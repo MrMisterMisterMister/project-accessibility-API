@@ -58,7 +58,7 @@ namespace Application.ResearchHandlers
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("ResearchedFailedUpdate", "The research could not be updated.");
+                if (!result) return Result<Unit>.Failure("ResearchFailedUpdate", "The research could not be updated.");
 
                 return Result<Unit>.Success(Unit.Value);
             }

@@ -27,12 +27,5 @@ namespace API.Controllers
 
             return BadRequest(new { Code = result.ErrorCode, Message = result.ErrorMessage }); // Returns a Bad Request with the error if there's an error in the result
         }
-
-        // Endpoint for testing purposes to throw an exception
-        [HttpGet("exception-test")]
-        public IActionResult ThrowException()
-        {
-            throw new Exception("This is a test exception");
-        }
     }
 }
