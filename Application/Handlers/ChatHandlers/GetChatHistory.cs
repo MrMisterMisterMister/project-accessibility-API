@@ -47,7 +47,13 @@ namespace Application.ChatHandlers
 
                 var chatHistory = new ChatHistoryDto
                 {
-                    Messages = messages.Select(m => new MessageDto { Content = m.Content, Timestamp = m.Timestamp }).ToList()
+                    Messages = messages.Select(
+                        m => new MessageDto { 
+                            SenderId = m.SenderId,
+                            Content = m.Content, 
+                            Timestamp = m.Timestamp 
+                        })
+                    .ToList()
                 };
 
                 return Result<ChatHistoryDto>.Success(chatHistory);
@@ -61,6 +67,7 @@ namespace Application.ChatHandlers
 
         public class MessageDto
         {
+            public string SenderId { get; set; }
             public required string Content { get; set; }
             public DateTime Timestamp { get; set; }
         }
