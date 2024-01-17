@@ -43,6 +43,7 @@ namespace Application.ChatHandlers
                 // Fetch messages for the found chat session
                 var messages = await _context.Messages
                     .Where(m => m.ChatId == chat.Id)
+                    .OrderBy(m => m.Timestamp)
                     .ToListAsync(cancellationToken);
 
                 var chatHistory = new ChatHistoryDto
