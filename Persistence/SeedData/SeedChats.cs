@@ -12,6 +12,7 @@ namespace Persistence.SeedData{
             if(!dataContext.Chats.Any()){
             var chats = new List<Chat>{
                 new Chat{
+                    Title = "Chat 1",
                     User1Id = panelmembers[1].Id,
                     User2Id = panelmembers[2].Id,
                     Messages = new List<Message>(){
@@ -25,6 +26,7 @@ namespace Persistence.SeedData{
                     }
             },
             new Chat{
+             Title = "Chat 2",
              User1Id = panelmembers[1].Id,
              User2Id = panelmembers[2].Id,
                     Messages = new List<Message>(){
@@ -37,6 +39,7 @@ namespace Persistence.SeedData{
                     }
             },
                new Chat{
+                       Title = "Chat 3",
                        User1Id = panelmembers[1].Id,
                        User2Id = panelmembers[2].Id,
                        Messages = new List<Message>(){

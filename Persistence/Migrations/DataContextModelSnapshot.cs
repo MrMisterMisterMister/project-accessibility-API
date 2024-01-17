@@ -25,6 +25,9 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("Title")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("User1Email")
                         .HasColumnType("longtext");
 

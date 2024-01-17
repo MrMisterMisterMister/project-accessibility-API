@@ -5,6 +5,9 @@ namespace Domain.Models.ChatModels{
     public class Chat{
         [Key]
         public int Id { get; set; }
+
+        public string? Title { get; set; }
+
         [Required]
         public string? User1Id { get; set; }
         public string? User1Email { get; set; }
