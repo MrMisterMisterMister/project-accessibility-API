@@ -23,7 +23,6 @@ namespace API.Extensions
 
             // Enable Content Security Policy (CSP) to protect the site from various types of attacks, allowing only approved content
             app.UseCsp(opt => opt
-                .DefaultSources(s => s.Self().CustomSources("clodsire.nl")) // Alows all sources from clodsire.nl 
                 .BlockAllMixedContent()         // Block mixed content to enhance security
                 .StyleSources(s => s.Self())    // Allow styles from the same originss
                 .FontSources(s => s.Self())     // Allow fonts from the same origin
