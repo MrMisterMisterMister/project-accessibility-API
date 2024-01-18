@@ -19,12 +19,14 @@ namespace API.ChatFunctionality.Hubs
             _context = context;
         }
 
+        // This method is called when the user navigates to the page (chats)
         public override async Task OnConnectedAsync()
         {
             // You can also handle any additional actions when a user connects here
             await base.OnConnectedAsync();
         }
 
+        // This method is called when the user navigates away from the page (chats)
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             // Remove the user from the connection dictionary on disconnect
@@ -36,11 +38,16 @@ namespace API.ChatFunctionality.Hubs
 
             await base.OnDisconnectedAsync(exception);
         }
+
         public async Task SendMessageToUser(User sender, User receiver, string message)
-        {
+        {   
             try
             {
+#pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CS8604 // Possible null reference argument.
                 var chat = await _context.FindOrCreateChat(sender.Id, receiver.Id, sender.Email, receiver.Email);
+#pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning restore CS8604 // Possible null reference argument.
                 await _context.AddMessage(sender.Id, message, chat.Id);
 
                 if (UserConnections.TryGetValue(receiver.Id, out string? connectionId))
@@ -56,6 +63,8 @@ namespace API.ChatFunctionality.Hubs
             }
         }
 
+        // This method is called when the user navigates to the page (chats), it registers the logged in user to chathub,
+        // he gets a connectionId from ChatHub SignalR, which is stored in the dictionary
         public void RegisterUser(string idOfTheRegisteringUser)
         {
             try
