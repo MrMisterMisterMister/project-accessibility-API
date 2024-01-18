@@ -4,8 +4,6 @@ using Domain;
 using API.Services;
 using API.DTOs;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
 
 namespace API.Controllers
 {
@@ -113,53 +111,6 @@ namespace API.Controllers
                 // Return errors if user creation fails
                 return BadRequest(result.Errors);
             }
-        }
-
-        // For testing purposes: Retrieves user information including 
-        // UserID, Email, Cookie, and JWT Token and roles
-        [HttpGet("userinfo")]
-        public async Task<IActionResult> GetUserInfo()
-        {
-            // Extracts user Email from the authenticated user's claims
-            // and finds it in the database  
-            var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email)!);
-
-            var roles = await _userManager.GetRolesAsync(user!);
-
-            // Retrieves the 'userCookie' from the HTTP request cookies
-            var cookie = Request.Cookies["userCookie"];
-
-            // Retrieves the JWT token from the HTTP context's authentication tokens
-            var jwtToken = HttpContext.GetTokenAsync("Bearer", "access_token").Result;
-
-            // Constructs a response object with retrieved user information
-            var response = new
-            {
-                UserId = user!.Id,
-                user.Email,
-                Cookie = cookie,
-                JwtToken = jwtToken,
-                UserRoles = roles
-            };
-
-            return Ok(response); // Returns the constructed response as OK
-        }
-
-        // Endpoint to set a test cookie (for demonstration or testing purposes)
-        [HttpGet("set-cookie")]
-        public async Task<IActionResult> SetCookie()
-        {
-            // Create and set a token cookie for a test user
-            await _tokenService.CreateAndSetCookie(
-                new User
-                {
-                    Email = "test@dad.com",
-                    Id = Guid.NewGuid().ToString(),
-                },
-                new List<string> { "Admin" }
-            );
-
-            return Ok("Cookie Set!"); // Returns a success message when the cookie is set
         }
     }
 }
