@@ -92,11 +92,11 @@ namespace API.Controllers
             }
 
             // Initial search in the Users table
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
+
             var users = await userManager.Users
-                                         .Where(u => u.Email.Contains(query) || u.UserName.Contains(query))
-                                         .ToListAsync();
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                             .Where(u => (!string.IsNullOrEmpty(u.Email) && u.Email.Contains(query)) ||
+                                         (!string.IsNullOrEmpty(u.UserName) && u.UserName.Contains(query)))
+                             .ToListAsync();
 
             var results = new List<object>();
 
