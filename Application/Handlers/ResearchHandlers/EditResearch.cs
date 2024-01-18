@@ -40,7 +40,7 @@ namespace Application.ResearchHandlers
                     return Result<Unit>.Failure("ResearchNotFound", "The research could not be found.");
 
                 var organizer = await _dataContext.Companies
-                    .FirstOrDefaultAsync(x => x.Email == _userAccessor.GetEmail());
+                    .FirstOrDefaultAsync(x => x.Id == _userAccessor.GetId());
 
                 if (organizer == null)
                     return Result<Unit>.Failure("OrganizerNotFound", "The organizer could not be found.");

@@ -79,7 +79,7 @@ namespace API.Controllers
         {
             // Extracts user Email from the authenticated user's claims
             // and finds it in the database  
-            var user = await userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email)!);
+            var user = await userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             if (user == null) return BadRequest(new { Code = "UserNotFound", Message = "User could not be found." });
 
