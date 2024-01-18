@@ -1,15 +1,12 @@
 using Application.Core;
-using Domain;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     // This controller is the base for other controllers to inherit common functionalities
-    // Ensures that only authenticated users can access these controllers
-    // Will add other roles or a policy when we have more roles
-    [Authorize(Roles = nameof(RoleTypes.Admin))]
+    // Due to admin policy only admin can acces the controllers
+    // unless there are restrictions
     [ApiController] // Indicates that this controller handles HTTP API requests
     [Route("[controller]")] // Routes requests to endpoints based on the controller's name
     public class BaseApiController : ControllerBase // Inherits from ControllerBase for API functionalities
@@ -28,14 +25,7 @@ namespace API.Controllers
             if (result.IsSuccess && result.Value != null) return Ok(result.Value); // Returns OK with the value if successful and value exists
             if (result.IsSuccess && result.Value == null) return NotFound(); // Returns Not Found if the result is successful but value is null
 
-            return BadRequest(result.Error); // Returns a Bad Request with the error if there's an error in the result
-        }
-
-        // Endpoint for testing purposes to throw an exception
-        [HttpGet("exception-test")]
-        public IActionResult ThrowException()
-        {
-            throw new Exception("This is a test exception");
+            return BadRequest(new { Code = result.ErrorCode, Message = result.ErrorMessage }); // Returns a Bad Request with the error if there's an error in the result
         }
     }
 }

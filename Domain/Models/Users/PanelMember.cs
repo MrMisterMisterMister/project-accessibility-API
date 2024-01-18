@@ -1,10 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using Domain.Models.Disabilities;
 
 namespace Domain
 {
     public class PanelMember : User
     {
-        public int Guardian { get; set; } // TODO ...
+        public int Guardian { get; set; }
         [Required]
         public string FirstName { get; set; } = null!;
         [Required]
@@ -14,5 +15,7 @@ namespace Domain
         public string? PostalCode { get; set; }
         public string? City { get; set; }
         public string? Country { get; set; }
+        public ICollection<PanelMemberDisability> Disabilities { get; set; } = new List<PanelMemberDisability>();
+        public ICollection<ResearchParticipant> Participations { get; set; } = new List<ResearchParticipant>();
     }
 }

@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240116105632_newChatMigration")]
-    partial class newChatMigration
+    [Migration("20240118085907_tablesFix")]
+    partial class tablesFix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,9 +31,15 @@ namespace Persistence.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("User1Email")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("User1Id")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
+
+                    b.Property<string>("User2Email")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("User2Id")
                         .IsRequired()
@@ -62,13 +68,16 @@ namespace Persistence.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<bool>("IsRead")
-                        .HasColumnType("tinyint(1)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("SenderId")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("Timestamp")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
@@ -78,6 +87,124 @@ namespace Persistence.Migrations
                     b.HasIndex("SenderId");
 
                     b.ToTable("Messages", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Models.Disabilities.Disability", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Disabilities");
+                });
+
+            modelBuilder.Entity("Domain.Models.Disabilities.PanelMemberDisability", b =>
+                {
+                    b.Property<int>("DisabilityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PanelMemberId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("DisabilityId", "PanelMemberId");
+
+                    b.HasIndex("PanelMemberId");
+
+                    b.ToTable("PanelMemberDisabilities");
+                });
+
+            modelBuilder.Entity("Domain.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("Revoked")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
+            modelBuilder.Entity("Domain.Research", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OrganizerId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<double>("Reward")
+                        .HasColumnType("double");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizerId");
+
+                    b.ToTable("Researches");
+                });
+
+            modelBuilder.Entity("Domain.ResearchParticipant", b =>
+                {
+                    b.Property<int>("ResearchId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PanelMemberId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("DateJoined")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("ResearchId", "PanelMemberId");
+
+                    b.HasIndex("PanelMemberId");
+
+                    b.ToTable("ResearchParticipants");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -381,6 +508,64 @@ namespace Persistence.Migrations
                     b.Navigation("Sender");
                 });
 
+            modelBuilder.Entity("Domain.Models.Disabilities.PanelMemberDisability", b =>
+                {
+                    b.HasOne("Domain.Models.Disabilities.Disability", "Disability")
+                        .WithMany("PanelMembers")
+                        .HasForeignKey("DisabilityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.PanelMember", "PanelMember")
+                        .WithMany("Disabilities")
+                        .HasForeignKey("PanelMemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Disability");
+
+                    b.Navigation("PanelMember");
+                });
+
+            modelBuilder.Entity("Domain.RefreshToken", b =>
+                {
+                    b.HasOne("Domain.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Research", b =>
+                {
+                    b.HasOne("Domain.Company", "Organizer")
+                        .WithMany()
+                        .HasForeignKey("OrganizerId");
+
+                    b.Navigation("Organizer");
+                });
+
+            modelBuilder.Entity("Domain.ResearchParticipant", b =>
+                {
+                    b.HasOne("Domain.PanelMember", "PanelMember")
+                        .WithMany("Participations")
+                        .HasForeignKey("PanelMemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Research", "Research")
+                        .WithMany("Participants")
+                        .HasForeignKey("ResearchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PanelMember");
+
+                    b.Navigation("Research");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -453,6 +638,28 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Models.ChatModels.Chat", b =>
                 {
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("Domain.Models.Disabilities.Disability", b =>
+                {
+                    b.Navigation("PanelMembers");
+                });
+
+            modelBuilder.Entity("Domain.Research", b =>
+                {
+                    b.Navigation("Participants");
+                });
+
+            modelBuilder.Entity("Domain.User", b =>
+                {
+                    b.Navigation("RefreshTokens");
+                });
+
+            modelBuilder.Entity("Domain.PanelMember", b =>
+                {
+                    b.Navigation("Disabilities");
+
+                    b.Navigation("Participations");
                 });
 #pragma warning restore 612, 618
         }
