@@ -20,7 +20,7 @@ namespace API.Controllers
         [HttpPost]
         //Endpoint to make chat between 2 users
         public async Task<IActionResult> createChat(ChatDTO chatDTO){
-            return HandleResult(await Mediator.Send(new createChat.Command {User1 = chatDTO.User1Id, User2 = chatDTO.user2Id, Title = chatDTO.Title}));
+            return HandleResult(await Mediator.Send(new createChat.Command {User1 = chatDTO.User1Id, User2 = chatDTO.user2Id}));
         }
 
         [HttpGet("userChats/{userId}")]

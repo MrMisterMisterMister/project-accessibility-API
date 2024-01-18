@@ -6,6 +6,7 @@ namespace API.DTOs
     {
        public string User1Id {get;set;} = null!;
        public string user2Id {get;set;} = null!;
-       public string Title{get;set;} = null!;
+       public required string User1Email{get;set;}
+       public required string User2Email{get;set;}
     }
 }

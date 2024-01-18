@@ -8,7 +8,6 @@ namespace Application.ChatHandlers{
         public class Command : IRequest<Result<Unit>>{
             public required string User1 {get;set;}
             public required string User2 {get;set;}
-            public required string Title {get;set;}
 
         }
         public class Handler : IRequestHandler<Command, Result<Unit>>{
@@ -38,7 +37,8 @@ namespace Application.ChatHandlers{
                 var newChat = new Chat{
                     User1Id = request.User1,
                     User2Id = request.User2,
-                    Title = request.Title
+                    User1Email = user1.Email,
+                    User2Email = user2.Email
             };
             _dataContext.Chats.Add(newChat);
             var result = await _dataContext.SaveChangesAsync(cancellationToken) > 0;

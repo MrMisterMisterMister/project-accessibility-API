@@ -1,5 +1,6 @@
 ﻿using Domain;
 using Domain.Models.ChatModels;
+using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -43,11 +44,11 @@ namespace API.ChatFunctionality.Hubs
         {   
             try
             {
-#pragma warning disable CS8604 // Possible null reference argument.
-#pragma warning disable CS8604 // Possible null reference argument.
+                if(sender.Email == null || receiver.Email == null){
+                    Console.WriteLine("SenderId or receiverId is null.");
+                    return;
+                                }
                 var chat = await _context.FindOrCreateChat(sender.Id, receiver.Id, sender.Email, receiver.Email);
-#pragma warning restore CS8604 // Possible null reference argument.
-#pragma warning restore CS8604 // Possible null reference argument.
                 await _context.AddMessage(sender.Id, message, chat.Id);
 
                 if (UserConnections.TryGetValue(receiver.Id, out string? connectionId))
