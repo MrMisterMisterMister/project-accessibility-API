@@ -32,7 +32,7 @@ namespace Application.ResearchHandlers
             {
                 // getting the company using email claims in the jwt token
                 var organizer = await _dataContext.Companies.FirstOrDefaultAsync(x =>
-                        x.Email == _userAccessor.GetEmail());
+                        x.Id == _userAccessor.GetId());
 
                 if (organizer == null)
                     return Result<Unit>.Failure("OrganizerNotFound", $"The organizer could not be found.");
