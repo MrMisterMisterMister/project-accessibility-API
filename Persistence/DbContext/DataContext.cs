@@ -55,29 +55,29 @@ namespace Persistence
                 .HasForeignKey(e => e.DisabilityId);
 
             // Creates a separate table instead of combining the properties in use
-            modelBuilder.Entity<Company>().ToTable("Companies");
-            modelBuilder.Entity<PanelMember>().ToTable("PanelMembers");
-            modelBuilder.Entity<Message>().ToTable("Messages");
-            modelBuilder.Entity<Chat>().ToTable("Chats");
+            builder.Entity<Company>().ToTable("Companies");
+            builder.Entity<PanelMember>().ToTable("PanelMembers");
+            builder.Entity<Message>().ToTable("Messages");
+            builder.Entity<Chat>().ToTable("Chats");
 
             // Configure the one-to-one relationships in Chat
-            modelBuilder.Entity<Chat>()
+            builder.Entity<Chat>()
                 .HasOne(c => c.User1)
                 .WithMany() // Assuming User class has no navigation property back to Chat
                 .HasForeignKey(c => c.User1Id)
                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
 
-            modelBuilder.Entity<Chat>()
+            builder.Entity<Chat>()
                 .HasOne(c => c.User2)
                 .WithMany() // Same as above
                 .HasForeignKey(c => c.User2Id)
                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
 
-            modelBuilder.Entity<Message>()
+            builder.Entity<Message>()
             .Property(m => m.IsRead)
             .HasDefaultValue(false);
                         // Configure the one-to-many relationship between Chat and Message
-            modelBuilder.Entity<Message>()
+            builder.Entity<Message>()
    
                 .HasOne(m => m.Chat)
                 .WithMany(c => c.Messages)
