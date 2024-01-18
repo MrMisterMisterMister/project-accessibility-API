@@ -14,7 +14,6 @@ namespace Infrastructure.Security
 
         public string GetEmail()
         {
-            // handle null 
             return _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email)!;
         }
     }
