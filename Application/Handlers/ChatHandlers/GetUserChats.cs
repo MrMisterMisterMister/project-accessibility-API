@@ -31,6 +31,7 @@ namespace Application.Handlers.ChatHandlers
 
             public async Task<Result<List<UserChatDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
+#pragma warning disable CS8601 // Possible null reference assignment.
                 var chats = await _context.Chats
                     .Where(c => c.User1Id == request.UserId || c.User2Id == request.UserId)
                     .Select(c => new UserChatDto
@@ -40,6 +41,7 @@ namespace Application.Handlers.ChatHandlers
                         OtherUserId = c.User1Id == request.UserId ? c.User2Id : c.User1Id
                     })
                     .ToListAsync(cancellationToken);
+#pragma warning restore CS8601 // Possible null reference assignment.
 
                 return Result<List<UserChatDto>>.Success(chats);
             }
