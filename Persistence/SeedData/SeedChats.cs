@@ -15,8 +15,6 @@ namespace Persistence.SeedData{
                     Title = "Chat 1",
                     User1Id = panelmembers[1].Id,
                     User2Id = panelmembers[2].Id,
-                    User1Email = panelmembers[1].Email,
-                    User2Email = panelmembers[2].Email,
                     Messages = new List<Message>(){
                         new Message{
                             SenderId = panelmembers[1].Id,
@@ -31,8 +29,6 @@ namespace Persistence.SeedData{
              Title = "Chat 2",
              User1Id = panelmembers[1].Id,
              User2Id = panelmembers[2].Id,
-            User1Email = panelmembers[1].Email,
-            User2Email = panelmembers[2].Email,
                     Messages = new List<Message>(){
                         new Message{
                             SenderId = panelmembers[3].Id,
@@ -46,8 +42,6 @@ namespace Persistence.SeedData{
                        Title = "Chat 3",
                        User1Id = panelmembers[1].Id,
                        User2Id = panelmembers[2].Id,
-                    User1Email = panelmembers[1].Email,
-                    User2Email = panelmembers[2].Email,
                        Messages = new List<Message>(){
                         new Message{
                             SenderId = panelmembers[1].Id,

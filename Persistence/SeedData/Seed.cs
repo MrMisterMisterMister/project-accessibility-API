@@ -11,8 +11,6 @@ namespace Persistence.SeedData
             await SeedUserBase.SeedCompanies(userManager);
             await SeedUserBase.SeedPanelMembers(userManager);
             await SeedChats.SeedChatBase(dataContext);
-            await ResearchBase.SeedResearches(dataContext);
-            await DisabilitiesBase.SeedDisabilites(dataContext);
         }
     }
 }

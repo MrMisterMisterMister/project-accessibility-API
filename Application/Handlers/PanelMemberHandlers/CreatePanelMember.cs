@@ -26,7 +26,7 @@ namespace Application.PanelMemberHandlers
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("PanelMemberFailedCreate", "Failed to create panel member.");
+                if (!result) return Result<Unit>.Failure("Failed to create panel member");
 
                 return Result<Unit>.Success(Unit.Value);
             }

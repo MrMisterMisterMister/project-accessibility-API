@@ -23,13 +23,13 @@ namespace Application.CompanyHandlers
             {
                 var company = await _dataContext.Companies.FindAsync(request.Id.ToString());
 
-                if (company == null) return Result<Unit>.Failure("CompanyNotFound", "Company could not be found.");
+                if (company == null) return Result<Unit>.Failure("Panel member not found");
 
                 _dataContext.Remove(company);
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("CompanyFailedDelete", "Failed to delete the company.");
+                if (!result) return Result<Unit>.Failure("Failed to delete the company");
 
                 return Result<Unit>.Success(Unit.Value);
             }

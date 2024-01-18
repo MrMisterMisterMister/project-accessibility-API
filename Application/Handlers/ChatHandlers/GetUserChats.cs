@@ -14,15 +14,15 @@ namespace Application.Handlers.ChatHandlers
     {
         public class Query : IRequest<Result<List<UserChatDto>>>
         {
-            public required string UserId { get; set; }
+            public string UserId { get; set; }
         }
 
         public class UserChatDto
         {
             // Define properties here, for example:
             public int ChatId { get; set; }
-            public required string ChatName { get; set; }
-            public required string OtherUserId { get; set; }
+            public string ChatName { get; set; }
+            public string OtherUserId { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result<List<UserChatDto>>>

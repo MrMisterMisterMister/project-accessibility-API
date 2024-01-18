@@ -43,24 +43,14 @@ if (app.Environment.IsDevelopment())
 {
     try
     {
-        // Get DataContext service
         var databaseContext = serviceProvider.GetRequiredService<DataContext>();
-
-        // Drop database
-        // databaseContext.Database.EnsureDeleted();
-
         var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var roleService = new RoleService(userManager, roleManager);
-
-        // Executes dotnet ef update on the latest migrations
-        await databaseContext.Database.MigrateAsync();
-
-        // Seed roles
+        await databaseContext.Database.MigrateAsync(); // executes dotnet ef update on the latest migrations
+        await Seed.SeedAll(databaseContext, userManager); // inserts seed data into the database
         await roleService.SeedRoles();
-
-        // Inserts seed data into the database
-        await Seed.SeedAll(databaseContext, userManager);
+        await roleService.AssignRoleToUser("admin@admin.com", nameof(RoleTypes.Admin)); // asigns admin role to test user... whack
     }
     catch (Exception e)
     {

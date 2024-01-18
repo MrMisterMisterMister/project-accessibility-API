@@ -9,7 +9,7 @@ namespace Domain.Models.ChatModels
         public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
-        public required string SenderId { get; set; }
+        public string? SenderId { get; set; }
         public virtual User? Sender { get; set; }
 
         [Required]

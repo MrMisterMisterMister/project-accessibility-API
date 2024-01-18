@@ -1,7 +1,6 @@
 using System.Net.Mail;
 using Domain;
 using Domain.Models.ChatModels;
-using Domain.Models.Disabilities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -16,68 +15,35 @@ namespace Persistence
         public DbSet<PanelMember> PanelMembers { get; set; }
         public DbSet<Chat> Chats {get;set;}
         public DbSet<Message> Messages {get;set;}
-        public DbSet<Research> Researches { get; set; }
-        public DbSet<Disability> Disabilities { get; set; }
-        public DbSet<ResearchParticipant> ResearchParticipants { get; set; }
-        public DbSet<PanelMemberDisability> PanelMemberDisabilities { get; set; }
-        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
-
-             // when using inheritence
-            builder.Entity<Company>().ToTable("Companies");
-            builder.Entity<PanelMember>().ToTable("PanelMembers");
-
-            builder.Entity<ResearchParticipant>(x => x.HasKey(a => new { a.ResearchId, a.PanelMemberId }));
-
-            builder.Entity<ResearchParticipant>()
-                .HasOne(x => x.PanelMember)
-                .WithMany(p => p.Participations)
-                .HasForeignKey(ps => ps.PanelMemberId);
-
-            builder.Entity<ResearchParticipant>()
-                .HasOne(x => x.Research)
-                .WithMany(r => r.Participants)
-                .HasForeignKey(p => p.ResearchId);
-
-            builder.Entity<PanelMemberDisability>(x => x.HasKey(a => new { a.DisabilityId, a.PanelMemberId }));
-
-            builder.Entity<PanelMemberDisability>()
-                .HasOne(x => x.PanelMember)
-                .WithMany(p => p.Disabilities)
-                .HasForeignKey(d => d.PanelMemberId);
-
-            builder.Entity<PanelMemberDisability>()
-                .HasOne(x => x.Disability)
-                .WithMany(r => r.PanelMembers)
-                .HasForeignKey(e => e.DisabilityId);
+            base.OnModelCreating(modelBuilder);
 
             // Creates a separate table instead of combining the properties in use
-            builder.Entity<Company>().ToTable("Companies");
-            builder.Entity<PanelMember>().ToTable("PanelMembers");
-            builder.Entity<Message>().ToTable("Messages");
-            builder.Entity<Chat>().ToTable("Chats");
+            modelBuilder.Entity<Company>().ToTable("Companies");
+            modelBuilder.Entity<PanelMember>().ToTable("PanelMembers");
+            modelBuilder.Entity<Message>().ToTable("Messages");
+            modelBuilder.Entity<Chat>().ToTable("Chats");
 
             // Configure the one-to-one relationships in Chat
-            builder.Entity<Chat>()
+            modelBuilder.Entity<Chat>()
                 .HasOne(c => c.User1)
                 .WithMany() // Assuming User class has no navigation property back to Chat
                 .HasForeignKey(c => c.User1Id)
                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
 
-            builder.Entity<Chat>()
+            modelBuilder.Entity<Chat>()
                 .HasOne(c => c.User2)
                 .WithMany() // Same as above
                 .HasForeignKey(c => c.User2Id)
                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
 
-            builder.Entity<Message>()
+            modelBuilder.Entity<Message>()
             .Property(m => m.IsRead)
             .HasDefaultValue(false);
                         // Configure the one-to-many relationship between Chat and Message
-            builder.Entity<Message>()
+            modelBuilder.Entity<Message>()
    
                 .HasOne(m => m.Chat)
                 .WithMany(c => c.Messages)
@@ -110,7 +76,6 @@ namespace Persistence
             Messages.Add(message);
             await SaveChangesAsync();
             return message;
-           
         }
     }
 }

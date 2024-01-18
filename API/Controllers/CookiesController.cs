@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [AllowAnonymous]
     public class CookiesController : BaseApiController
     {
         private readonly IHttpContextAccessor _httpContextAccessor;

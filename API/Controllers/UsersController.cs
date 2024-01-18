@@ -10,7 +10,6 @@ using Persistence;
 
 namespace API.Controllers
 {
-    [Authorize]
     public class UsersController : BaseApiController
     {
         // Will add more specific comments later
@@ -74,7 +73,7 @@ namespace API.Controllers
                 user.UserName,
                 user.Email,
                 Cookie = cookie,
-                Token = jwtToken,
+                JwtToken = jwtToken,
                 UserRoles = roles
             };
 

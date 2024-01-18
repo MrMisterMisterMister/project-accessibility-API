@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240116124843_isReadChatFix")]
+    partial class isReadChatFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,15 +31,9 @@ namespace Persistence.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("User1Email")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("User1Id")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
-
-                    b.Property<string>("User2Email")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("User2Id")
                         .IsRequired()
