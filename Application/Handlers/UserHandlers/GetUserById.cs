@@ -1,4 +1,5 @@
 using Application.Core;
+using AutoMapper;
 using Domain;
 using MediatR;
 using Persistence;
@@ -15,8 +16,10 @@ namespace Application.UserHandlers
         public class Handler : IRequestHandler<Query, Result<User>>
         {
             private readonly DataContext _dataContext;
-            public Handler(DataContext dataContext)
+            private readonly IMapper _mapper;
+            public Handler(DataContext dataContext, IMapper mapper)
             {
+                _mapper = mapper;
                 _dataContext = dataContext;
             }
 

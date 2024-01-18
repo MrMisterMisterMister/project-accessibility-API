@@ -24,7 +24,7 @@ namespace Application.CompanyHandlers
             {
                 var company = await _dataContext.Companies.FindAsync(request.Id.ToString());
 
-                if (company == null) return Result<Company>.Failure("Company not found");
+                if (company == null) return Result<Company>.Failure("CompanyNotFound", "Company could not be found.");
 
                 return Result<Company>.Success(company);
             }
