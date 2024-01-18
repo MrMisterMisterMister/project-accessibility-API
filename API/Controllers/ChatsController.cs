@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using API.DTOs;
 using Microsoft.EntityFrameworkCore;
+using Application.MessageHandlers;
 using Application.Handlers.ChatHandlers;
 
 namespace API.Controllers
@@ -33,6 +34,11 @@ namespace API.Controllers
         public async Task<IActionResult> GetUserChats(string userId)
         {
             return HandleResult(await Mediator.Send(new GetUserChats.Query { UserId = userId }));
+        }
+        [HttpPost]
+        //Endpoint to send a message to a user
+        public async Task<IActionResult> sendMessage(MessageDTO messageDTO){
+            return HandleResult(await Mediator.Send(new SendMessage.Command {ChatId = messageDTO.ChatId, Content = messageDTO.Content, SenderId = messageDTO.SenderId }));
         }
 
     }
