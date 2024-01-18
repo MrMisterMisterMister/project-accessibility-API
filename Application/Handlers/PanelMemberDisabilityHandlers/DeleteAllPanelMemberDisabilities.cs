@@ -30,7 +30,7 @@ namespace Application.Handlers.PanelMemberDisabilityHandlers
                 var panelMember = await _dataContext.PanelMembers
                     .Include(x => x.Disabilities)
                     .ThenInclude(d => d.Disability)
-                    .FirstOrDefaultAsync(x => x.Email == _userAccessor.GetEmail()
+                    .FirstOrDefaultAsync(x => x.Id == _userAccessor.GetId()
                 );
 
                 // If the panelMember is not found, return a failure result with a message
