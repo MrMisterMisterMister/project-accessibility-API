@@ -1,10 +1,8 @@
-using System.Net.Mail;
 using Domain;
 using Domain.Models.ChatModels;
 using Domain.Models.Disabilities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Persistence
 {
