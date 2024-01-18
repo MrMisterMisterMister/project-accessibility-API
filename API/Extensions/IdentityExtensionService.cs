@@ -24,7 +24,8 @@ namespace API.Extensions
                 opt.User.RequireUniqueEmail = true;
             })
             .AddRoles<IdentityRole>() // adds role based authorization
-            .AddEntityFrameworkStores<DataContext>();
+            .AddEntityFrameworkStores<DataContext>()
+            .AddDefaultTokenProviders();
 
             // Retrieveing security key for JWT token generation and validation
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes
