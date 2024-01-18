@@ -36,6 +36,11 @@ namespace Application.Handlers.UserHandlers
                 if (string.IsNullOrEmpty(request.Password))
                     return Result<Unit>.Failure("PasswordIsNullOrEmpty", "Password cannot be null or empty.");
 
+                var emailCheck = await _userManager.FindByEmailAsync(request.NewEmail);
+
+                if (emailCheck != null)
+                    return Result<Unit>.Failure("EmailIsTaken", "Email is in use by someone else");
+
                 var user = await _userManager.FindByEmailAsync(_userAccessor.GetEmail());
 
                 if (user == null) return Result<Unit>.Failure("UserNotFound", "User could not be found.");
