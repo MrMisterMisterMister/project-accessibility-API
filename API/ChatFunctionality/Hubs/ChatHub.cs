@@ -9,7 +9,7 @@ namespace API.ChatFunctionality.Hubs
 {
     public class ChatHub : Hub
     {
-        private DataContext _context;
+        private readonly DataContext _context;
 
         //Dictionary for the Users and ConnectionId, that's the plan...
         private static readonly ConcurrentDictionary<string, string> UserConnections = new ConcurrentDictionary<string, string>();
