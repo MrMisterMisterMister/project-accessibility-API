@@ -1,6 +1,7 @@
 using System.Net.Mail;
 using Domain;
 using Domain.Models.ChatModels;
+using Domain.Models.Disabilities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -15,10 +16,43 @@ namespace Persistence
         public DbSet<PanelMember> PanelMembers { get; set; }
         public DbSet<Chat> Chats {get;set;}
         public DbSet<Message> Messages {get;set;}
+        public DbSet<Research> Researches { get; set; }
+        public DbSet<Disability> Disabilities { get; set; }
+        public DbSet<ResearchParticipant> ResearchParticipants { get; set; }
+        public DbSet<PanelMemberDisability> PanelMemberDisabilities { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
+
+             // when using inheritence
+            builder.Entity<Company>().ToTable("Companies");
+            builder.Entity<PanelMember>().ToTable("PanelMembers");
+
+            builder.Entity<ResearchParticipant>(x => x.HasKey(a => new { a.ResearchId, a.PanelMemberId }));
+
+            builder.Entity<ResearchParticipant>()
+                .HasOne(x => x.PanelMember)
+                .WithMany(p => p.Participations)
+                .HasForeignKey(ps => ps.PanelMemberId);
+
+            builder.Entity<ResearchParticipant>()
+                .HasOne(x => x.Research)
+                .WithMany(r => r.Participants)
+                .HasForeignKey(p => p.ResearchId);
+
+            builder.Entity<PanelMemberDisability>(x => x.HasKey(a => new { a.DisabilityId, a.PanelMemberId }));
+
+            builder.Entity<PanelMemberDisability>()
+                .HasOne(x => x.PanelMember)
+                .WithMany(p => p.Disabilities)
+                .HasForeignKey(d => d.PanelMemberId);
+
+            builder.Entity<PanelMemberDisability>()
+                .HasOne(x => x.Disability)
+                .WithMany(r => r.PanelMembers)
+                .HasForeignKey(e => e.DisabilityId);
 
             // Creates a separate table instead of combining the properties in use
             modelBuilder.Entity<Company>().ToTable("Companies");
@@ -76,6 +110,7 @@ namespace Persistence
             Messages.Add(message);
             await SaveChangesAsync();
             return message;
+           
         }
     }
 }

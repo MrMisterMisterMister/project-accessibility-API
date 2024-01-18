@@ -27,6 +27,7 @@ namespace API.Extensions
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials()
+                    .WithExposedHeaders("WWW-Authenticate")
                     .WithOrigins("http://localhost:5001");
                 });
             });

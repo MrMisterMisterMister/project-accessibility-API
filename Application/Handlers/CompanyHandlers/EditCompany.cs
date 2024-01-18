@@ -28,13 +28,19 @@ namespace Application.CompanyHandlers
             {
                 var company = await _dataContext.Companies.FindAsync(request.Company.Id);
 
-                if (company == null) return Result<Unit>.Failure("Company not found");
+                if (company == null) return Result<Unit>.Failure("CompanyNotFound", "Company could not be found.");
+
+                request.Company.UserName = company.UserName;
+                request.Company.NormalizedUserName = company.NormalizedUserName;
+                request.Company.Email = company.Email;
+                request.Company.NormalizedEmail = company.NormalizedEmail;
+                request.Company.PasswordHash = company.PasswordHash;
 
                 _mapper.Map(request.Company, company);
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("Failed to update company");
+                if (!result) return Result<Unit>.Failure("CompanyFailedUpdate", "Failed to update company.");
 
                 return Result<Unit>.Success(Unit.Value);
             }

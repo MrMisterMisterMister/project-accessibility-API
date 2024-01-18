@@ -26,7 +26,7 @@ namespace Application.CompanyHandlers
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("Failed to create company");
+                if (!result) return Result<Unit>.Failure("CompanyFailedCreate", "Failed to create company.");
 
                 return Result<Unit>.Success(Unit.Value);
             }
