@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231231110139_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240116125817_PanelMemberDisabilities")]
+    partial class PanelMemberDisabilities
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,6 +21,124 @@ namespace Persistence.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("Domain.Models.Disabilities.Disability", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Disabilities");
+                });
+
+            modelBuilder.Entity("Domain.Models.Disabilities.PanelMemberDisability", b =>
+                {
+                    b.Property<int>("DisabilityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PanelMemberId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("DisabilityId", "PanelMemberId");
+
+                    b.HasIndex("PanelMemberId");
+
+                    b.ToTable("PanelMemberDisabilities");
+                });
+
+            modelBuilder.Entity("Domain.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("Revoked")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
+            modelBuilder.Entity("Domain.Research", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OrganizerId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<double>("Reward")
+                        .HasColumnType("double");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizerId");
+
+                    b.ToTable("Researches");
+                });
+
+            modelBuilder.Entity("Domain.ResearchParticipant", b =>
+                {
+                    b.Property<int>("ResearchId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PanelMemberId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("DateJoined")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("ResearchId", "PanelMemberId");
+
+                    b.HasIndex("PanelMemberId");
+
+                    b.ToTable("ResearchParticipants");
+                });
 
             modelBuilder.Entity("Domain.User", b =>
                 {
@@ -220,10 +338,14 @@ namespace Persistence.Migrations
                 {
                     b.HasBaseType("Domain.User");
 
-                    b.Property<string>("Adres")
+                    b.Property<string>("Address")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Contact")
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ContactPerson")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Country")
@@ -233,14 +355,16 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Location")
+                    b.Property<string>("Phone")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<string>("PostalCode")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Url")
+                    b.Property<string>("Province")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("WebsiteUrl")
                         .HasColumnType("longtext");
 
                     b.ToTable("Companies", (string)null);
@@ -249,6 +373,15 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.PanelMember", b =>
                 {
                     b.HasBaseType("Domain.User");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("City")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime(6)");
@@ -264,10 +397,68 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Zipcode")
+                    b.Property<string>("PostalCode")
                         .HasColumnType("longtext");
 
                     b.ToTable("PanelMembers", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Models.Disabilities.PanelMemberDisability", b =>
+                {
+                    b.HasOne("Domain.Models.Disabilities.Disability", "Disability")
+                        .WithMany("PanelMembers")
+                        .HasForeignKey("DisabilityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.PanelMember", "PanelMember")
+                        .WithMany("Disabilities")
+                        .HasForeignKey("PanelMemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Disability");
+
+                    b.Navigation("PanelMember");
+                });
+
+            modelBuilder.Entity("Domain.RefreshToken", b =>
+                {
+                    b.HasOne("Domain.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Research", b =>
+                {
+                    b.HasOne("Domain.Company", "Organizer")
+                        .WithMany()
+                        .HasForeignKey("OrganizerId");
+
+                    b.Navigation("Organizer");
+                });
+
+            modelBuilder.Entity("Domain.ResearchParticipant", b =>
+                {
+                    b.HasOne("Domain.PanelMember", "PanelMember")
+                        .WithMany("Participations")
+                        .HasForeignKey("PanelMemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Research", "Research")
+                        .WithMany("Participants")
+                        .HasForeignKey("ResearchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PanelMember");
+
+                    b.Navigation("Research");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -337,6 +528,28 @@ namespace Persistence.Migrations
                         .HasForeignKey("Domain.PanelMember", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.Disabilities.Disability", b =>
+                {
+                    b.Navigation("PanelMembers");
+                });
+
+            modelBuilder.Entity("Domain.Research", b =>
+                {
+                    b.Navigation("Participants");
+                });
+
+            modelBuilder.Entity("Domain.User", b =>
+                {
+                    b.Navigation("RefreshTokens");
+                });
+
+            modelBuilder.Entity("Domain.PanelMember", b =>
+                {
+                    b.Navigation("Disabilities");
+
+                    b.Navigation("Participations");
                 });
 #pragma warning restore 612, 618
         }

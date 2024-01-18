@@ -1,10 +1,11 @@
 using Application.Core;
+using AutoMapper;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.UserHandlers
+namespace Application.Handlers.UserHandlers
 {
     public class GetUser
     {

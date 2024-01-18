@@ -1,9 +1,10 @@
 using Application.Core;
+using AutoMapper;
 using Domain;
 using MediatR;
 using Persistence;
 
-namespace Application.UserHandlers
+namespace Application.Handlers.UserHandlers
 {
     public class GetUserById
     {

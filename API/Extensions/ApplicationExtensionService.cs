@@ -1,5 +1,5 @@
 using Application.Core;
-using Application.UserHandlers;
+using Application.Handlers.UserHandlers;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -27,6 +27,7 @@ namespace API.Extensions
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials()
+                    .WithExposedHeaders("WWW-Authenticate")
                     .WithOrigins("http://localhost:5001");
                 });
             });
