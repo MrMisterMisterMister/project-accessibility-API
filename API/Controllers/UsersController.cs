@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using System.Xml;
 using Application.Handlers.UserHandlers;
 using Domain;
 using Microsoft.AspNetCore.Authentication;
