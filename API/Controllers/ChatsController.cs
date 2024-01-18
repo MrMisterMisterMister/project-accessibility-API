@@ -1,20 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using API.DTOs;
 using Application.ChatHandlers;
-using Microsoft.AspNetCore.Mvc;
-using Persistence;
-using Domain.Models.ChatModels;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
-using System.Security.Claims;
-using API.DTOs;
-using Microsoft.EntityFrameworkCore;
-using Application.MessageHandlers;
 using Application.Handlers.ChatHandlers;
+using Application.MessageHandlers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     public class ChatsController : BaseApiController
     {
         // Endpoint to retrieve chat history between two users

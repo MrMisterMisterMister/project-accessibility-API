@@ -82,7 +82,7 @@ namespace API.Controllers
         }
 
         // Search for users by email, by name not implemented yet
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("search/{query}")]
         public async Task<IActionResult> SearchUsers(string query, [FromServices] UserManager<User> userManager, [FromServices] DataContext context)
         {
@@ -146,7 +146,7 @@ namespace API.Controllers
             return Ok(results);
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("byEmail/{email}")]
         public async Task<IActionResult> GetUserByEmail(string email, [FromServices] UserManager<User> userManager, [FromServices] DataContext context)
         {
