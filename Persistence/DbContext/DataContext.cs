@@ -52,12 +52,6 @@ namespace Persistence
                 .WithMany(r => r.PanelMembers)
                 .HasForeignKey(e => e.DisabilityId);
 
-            // Creates a separate table instead of combining the properties in use
-            builder.Entity<Company>().ToTable("Companies");
-            builder.Entity<PanelMember>().ToTable("PanelMembers");
-            builder.Entity<Message>().ToTable("Messages");
-            builder.Entity<Chat>().ToTable("Chats");
-
             // Configure the one-to-one relationships in Chat
             builder.Entity<Chat>()
                 .HasOne(c => c.User1)
@@ -108,7 +102,6 @@ namespace Persistence
             Messages.Add(message);
             await SaveChangesAsync();
             return message;
-           
         }
     }
 }

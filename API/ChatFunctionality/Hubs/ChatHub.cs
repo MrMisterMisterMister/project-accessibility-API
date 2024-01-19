@@ -40,6 +40,7 @@ namespace API.ChatFunctionality.Hubs
             await base.OnDisconnectedAsync(exception);
         }
 
+        // Method the frontend invokes in the server side to send a message.
         public async Task SendMessageToUser(User sender, User receiver, string message)
         {   
             try

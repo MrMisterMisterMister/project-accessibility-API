@@ -7,13 +7,13 @@ namespace Application.ChatHandlers
 {
     public class GetChatHistory
     {
-        public class Query : IRequest<Result<ChatHistoryDto>>
+        public class Query : IRequest<Result<ChatHistoryDTO>>
         {
             public required string User1Id { get; set; }
             public required string User2Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<ChatHistoryDto>>
+        public class Handler : IRequestHandler<Query, Result<ChatHistoryDTO>>
         {
             private readonly DataContext _context;
 
@@ -22,7 +22,7 @@ namespace Application.ChatHandlers
                 _context = context;
             }
 
-            public async Task<Result<ChatHistoryDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<ChatHistoryDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
                 // Find the chat session between the two users
                 var chat = await _context.Chats
@@ -33,7 +33,7 @@ namespace Application.ChatHandlers
 
                 if (chat == null)
                 {
-                    return Result<ChatHistoryDto>.Failure("Chat session not found.");
+                    return Result<ChatHistoryDTO>.Failure("Chat session not found.");
                 }
 
                 // Fetch messages for the found chat session
@@ -42,10 +42,10 @@ namespace Application.ChatHandlers
                     .OrderBy(m => m.Timestamp)
                     .ToListAsync(cancellationToken);
 
-                var chatHistory = new ChatHistoryDto
+                var chatHistory = new ChatHistoryDTO
                 {
                     Messages = messages.Select(
-                        m => new MessageDto { 
+                        m => new MessageDTO { 
                             SenderId = m.SenderId,
                             Content = m.Content, 
                             Timestamp = m.Timestamp 
@@ -53,20 +53,8 @@ namespace Application.ChatHandlers
                     .ToList()
                 };
 
-                return Result<ChatHistoryDto>.Success(chatHistory);
+                return Result<ChatHistoryDTO>.Success(chatHistory);
             }
-        }
-
-        public class ChatHistoryDto
-        {
-            public List<MessageDto> ?Messages { get; set; }
-        }
-
-        public class MessageDto
-        {
-            public required string SenderId { get; set; }
-            public required string Content { get; set; }
-            public DateTime Timestamp { get; set; }
-        }
+        }   
     }
 }

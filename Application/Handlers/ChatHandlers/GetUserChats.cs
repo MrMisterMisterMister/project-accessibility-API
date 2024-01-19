@@ -7,20 +7,12 @@ namespace Application.Handlers.ChatHandlers
 {
     public class GetUserChats
     {
-        public class Query : IRequest<Result<List<UserChatDto>>>
+        public class Query : IRequest<Result<List<UserChatDTO>>>
         {
             public required string UserId { get; set; }
         }
 
-        public class UserChatDto
-        {
-            // Define properties here, for example:
-            public int ChatId { get; set; }
-            public required string ChatName { get; set; }
-            public required string OtherUserId { get; set; }
-        }
-
-        public class Handler : IRequestHandler<Query, Result<List<UserChatDto>>>
+        public class Handler : IRequestHandler<Query, Result<List<UserChatDTO>>>
         {
             private readonly DataContext _context;
 
@@ -29,21 +21,23 @@ namespace Application.Handlers.ChatHandlers
                 _context = context;
             }
 
-            public async Task<Result<List<UserChatDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<UserChatDTO>>> Handle(Query request, CancellationToken cancellationToken)
             {
-#pragma warning disable CS8601 // Possible null reference assignment.
                 var chats = await _context.Chats
                     .Where(c => c.User1Id == request.UserId || c.User2Id == request.UserId)
-                    .Select(c => new UserChatDto
+                    .Select(c => new UserChatDTO
                     {
                         ChatId = c.Id,
-                        ChatName = c.User1Id == request.UserId ? c.User2Email : c.User1Email,
-                        OtherUserId = c.User1Id == request.UserId ? c.User2Id : c.User1Id
+                        ChatName = c.User1Id == request.UserId ?
+                            (c.User2Email ?? "Unknown Email") :
+                            (c.User1Email ?? "Unknown Email"),
+                        OtherUserId = c.User1Id == request.UserId ?
+                                (c.User2Id ?? "Unknown User") :
+                                (c.User1Id ?? "Unknown User")
                     })
                     .ToListAsync(cancellationToken);
-#pragma warning restore CS8601 // Possible null reference assignment.
 
-                return Result<List<UserChatDto>>.Success(chats);
+                return Result<List<UserChatDTO>>.Success(chats);
             }
         }
     }
