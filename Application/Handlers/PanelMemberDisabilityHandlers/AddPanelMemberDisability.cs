@@ -45,7 +45,7 @@ namespace Application.Handlers.PanelMemberDisabilityHandlers
 
                 // Retrieve the panelMember (panel member) from the database based on their email
                 var panelMember = await _dataContext.PanelMembers.FirstOrDefaultAsync(x =>
-                    x.Id == _userAccessor.GetId()
+                    x.Email == _userAccessor.GetEmail()
                 );
 
                 // If the panelMember is not found, return a failure result with a message

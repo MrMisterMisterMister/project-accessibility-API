@@ -52,7 +52,7 @@ namespace Application.ParticipantsHandlers
 
                 // getting the panelmember using email claims in the jwt token
                 var participant = await _dataContext.PanelMembers.FirstOrDefaultAsync(x =>
-                        x.Id == _userAccessor.GetId());
+                        x.Email == _userAccessor.GetEmail());
 
                 if (participant == null)
                     return Result<Unit>.Failure("ParticipantNotFound", "The participant could not be found.");

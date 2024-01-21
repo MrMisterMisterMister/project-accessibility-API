@@ -1,6 +1,6 @@
 using API.Controllers;
 using Application.Core;
-using Application.Handlers.UserHandlers;
+using Application.UserHandlers;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Http;

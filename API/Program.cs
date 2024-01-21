@@ -1,4 +1,3 @@
-using API.ChatFunctionality.Hubs;
 using API.Extensions;
 using API.Middleware;
 using API.Services;
@@ -13,14 +12,12 @@ var services = builder.Services;
 var config = builder.Configuration;
 
 // Add services to the container.
-services.AddSignalR();
 services.AddEndpointsApiExplorer();
 services.AddControllers();
 
 services.AddApplicationServices(config);
 services.AddIdentityServices(config);
 services.AddAuthorizationServices(config);
-
 
 
 var app = builder.Build();
@@ -71,7 +68,5 @@ if (app.Environment.IsDevelopment())
         logger.LogError(e, "An error occured during migration");
     }
 }
-
-app.MapHub<ChatHub>("/Chat");
 
 app.Run();

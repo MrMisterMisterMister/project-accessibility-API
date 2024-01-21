@@ -1,5 +1,5 @@
 using Application.Core;
-using Application.Handlers.UserHandlers;
+using Application.UserHandlers;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 

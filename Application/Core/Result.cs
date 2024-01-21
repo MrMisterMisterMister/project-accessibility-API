@@ -1,5 +1,3 @@
-using Domain.Models.ChatModels;
-
 namespace Application.Core
 {
     public class Result<T>
@@ -13,10 +11,5 @@ namespace Application.Core
 
         public static Result<T> Failure(string errorCode, string errorMessage = "") => new Result<T> 
             { IsSuccess = false, ErrorCode = errorCode, ErrorMessage = errorMessage };
-
-        internal static Result<Chat> Success(object value)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

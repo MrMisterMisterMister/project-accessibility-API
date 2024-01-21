@@ -2,7 +2,7 @@ using Application.Core;
 using MediatR;
 using Persistence;
 
-namespace Application.Handlers.UserHandlers
+namespace Application.UserHandlers
 {
     public class DeleteUser
     {

@@ -4,7 +4,6 @@ namespace Application.Interfaces
     // from the api
     public interface IUserAccessor
     {
-        string GetId();
         string GetEmail();
     }
 }

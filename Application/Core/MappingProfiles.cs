@@ -4,8 +4,6 @@ using Application.Handlers.ResearchHandlers;
 using Application.Handlers.UserHandlers;
 using AutoMapper;
 using Domain;
-using Domain.Models.ChatModels;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Domain.Models.Disabilities;
 
 namespace Application.Core
@@ -22,8 +20,6 @@ namespace Application.Core
                 .ForMember(x => x.UserName, o => o.MapFrom(src => src.UserName));
             CreateMap<Company, Company>();
             CreateMap<PanelMember, PanelMember>();
-            CreateMap<Chat, Chat>();
-            CreateMap<Message, Message>();
             CreateMap<PanelMember, PanelMemberDTO>()
                 .ForMember(x => x.ParticipationsId, o => o.MapFrom(src => src.Participations.Select(p => p.ResearchId)))
                 .ForMember(x => x.DisabilitiesId, o => o.MapFrom(src => src.Disabilities.Select(d => d.DisabilityId)))

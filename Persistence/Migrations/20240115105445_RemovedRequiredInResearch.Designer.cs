@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,46 +11,16 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240115105445_RemovedRequiredInResearch")]
+    partial class RemovedRequiredInResearch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("Domain.Models.Disabilities.Disability", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Disabilities");
-                });
-
-            modelBuilder.Entity("Domain.Models.Disabilities.PanelMemberDisability", b =>
-                {
-                    b.Property<int>("DisabilityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PanelMemberId")
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("DisabilityId", "PanelMemberId");
-
-                    b.HasIndex("PanelMemberId");
-
-                    b.ToTable("PanelMemberDisabilities");
-                });
 
             modelBuilder.Entity("Domain.RefreshToken", b =>
                 {
@@ -400,25 +371,6 @@ namespace Persistence.Migrations
                     b.ToTable("PanelMembers", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Models.Disabilities.PanelMemberDisability", b =>
-                {
-                    b.HasOne("Domain.Models.Disabilities.Disability", "Disability")
-                        .WithMany("PanelMembers")
-                        .HasForeignKey("DisabilityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.PanelMember", "PanelMember")
-                        .WithMany("Disabilities")
-                        .HasForeignKey("PanelMemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Disability");
-
-                    b.Navigation("PanelMember");
-                });
-
             modelBuilder.Entity("Domain.RefreshToken", b =>
                 {
                     b.HasOne("Domain.User", "User")
@@ -527,11 +479,6 @@ namespace Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Models.Disabilities.Disability", b =>
-                {
-                    b.Navigation("PanelMembers");
-                });
-
             modelBuilder.Entity("Domain.Research", b =>
                 {
                     b.Navigation("Participants");
@@ -544,8 +491,6 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.PanelMember", b =>
                 {
-                    b.Navigation("Disabilities");
-
                     b.Navigation("Participations");
                 });
 #pragma warning restore 612, 618

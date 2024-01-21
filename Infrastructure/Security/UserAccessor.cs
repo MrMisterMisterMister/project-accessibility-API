@@ -12,13 +12,9 @@ namespace Infrastructure.Security
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public string GetId()
-        {
-            return _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-        }
-
         public string GetEmail()
         {
+            // handle null 
             return _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email)!;
         }
     }
