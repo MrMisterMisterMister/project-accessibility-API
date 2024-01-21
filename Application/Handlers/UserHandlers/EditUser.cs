@@ -4,7 +4,7 @@ using Domain;
 using MediatR;
 using Persistence;
 
-namespace Application.UserHandlers
+namespace Application.Handlers.UserHandlers
 {
     public class EditUser
     {
@@ -29,13 +29,13 @@ namespace Application.UserHandlers
             {
                 var user = await _dataContext.Users.FindAsync(request.User.Id);
 
-                if (user == null) return Result<Unit>.Failure("user not found");
+                if (user == null) return Result<Unit>.Failure("UserNotFound", "User could not be found.");
 
                 _mapper.Map(request.User, user);
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("Failed to update user");
+                if (!result) return Result<Unit>.Failure("UserFailedUpdate", "Failed to update user.");
 
                 return Result<Unit>.Success(Unit.Value);
             }

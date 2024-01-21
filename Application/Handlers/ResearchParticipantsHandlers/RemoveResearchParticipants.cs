@@ -48,7 +48,7 @@ namespace Application.ParticipantsHandlers
 
                 // getting the panelmember using email claims in the jwt token
                 var participant = await _dataContext.PanelMembers.FirstOrDefaultAsync(x =>
-                        x.Email == _userAccessor.GetEmail());
+                        x.Id == _userAccessor.GetId());
 
                 var participation = research.Participants
                     .FirstOrDefault(x => x.PanelMember.Email == participant?.Email);
