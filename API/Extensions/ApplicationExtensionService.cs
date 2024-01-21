@@ -20,7 +20,7 @@ namespace API.Extensions
 
             // On DO droplet
             services.AddDbContext<DataContext>(opt =>
-                opt.UseMySql(Environment.GetEnvironmentVariable("ConnectionStrings:MyAccessibleDatabase"),
+                opt.UseMySql(Environment.GetEnvironmentVariable("ConnectionStrings_MyAccessibleDatabase"),
                     new MySqlServerVersion(new Version(8, 0, 35))
                 )
             );
