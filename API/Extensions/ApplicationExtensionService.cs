@@ -18,6 +18,13 @@ namespace API.Extensions
                 )
             );
 
+            // On DO droplet
+            // services.AddDbContext<DataContext>(opt =>
+            //     opt.UseMySql(Environment.GetEnvironmentVariable("ConnectionStrings:MyAccessibleDatabase"),
+            //         new MySqlServerVersion(new Version(8, 0, 35))
+            //     )
+            // );
+
             // Adds cors policy so http request can be made. Needs to be changed when going in production
             services.AddCors(opt =>
             {
