@@ -31,6 +31,7 @@ namespace API.Extensions
                 .StyleSources(s => s.Self().CustomSources("https://apis.google.com"))
                 .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com"))
                 .ImageSources(s => s.Self().CustomSources("https://www.google.com", "https://*.googleusercontent.com"))
+                .ConnectSources(s => s.Self().CustomSources("ws://clodsire.nl"))
             );
 
             app.Use(async (context, next) =>
