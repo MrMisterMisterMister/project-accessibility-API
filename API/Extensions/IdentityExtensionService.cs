@@ -28,11 +28,11 @@ namespace API.Extensions
             .AddDefaultTokenProviders();
 
             // Retrieveing security key for JWT token generation and validation
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]!));
+            // var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]!));
 
             // On DO droplet
-            // var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes
-            // (Environment.GetEnvironmentVariable("TokenKey")!));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes
+            (Environment.GetEnvironmentVariable("TokenKey")!));
 
             // Adding JWT authentication services
             services.AddAuthentication(o =>

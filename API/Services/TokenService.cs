@@ -38,10 +38,10 @@ namespace API.Services
             }
 
             // Key to sign the token using a secret key stored in configuration
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"]!));
+            // var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"]!));
 
             // On DO droplet
-            // var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("TokenKey")!));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("TokenKey")!));
 
             // Credentials used to sign the token
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
