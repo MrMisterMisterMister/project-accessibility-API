@@ -121,14 +121,14 @@ public async Task EditResearch_Should_Edit_Research()
         var panelMember = new PanelMember
         {
             Email = "panelmember@example.com",
-            Guardian = 1,
+            Guardian = new Random().Next(1, 1000),
             FirstName = "John",
             LastName = "Doe",
             DateOfBirth = new DateTime(1990, 1, 1),
             Address = "456 Oak St",
             PostalCode = "67890",
-            City = "Test City",
-            Country = "Test Country"
+            City = "Apeldoorn",
+            Country = "The Netherlands"
         };
         return panelMember;
     }
