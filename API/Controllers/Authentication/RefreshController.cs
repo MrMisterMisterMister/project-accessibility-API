@@ -29,7 +29,7 @@ namespace API.Controllers
 
             var user = await _userManager.Users
                 .Include(r => r.RefreshTokens)
-                .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+                .FirstOrDefaultAsync(x => x.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             if (user == null) return Unauthorized(); // just in case, might never happen
 
