@@ -22,7 +22,6 @@ services.AddIdentityServices(config);
 services.AddAuthorizationServices(config);
 
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline. HTTPS will be handled by NGINX
@@ -69,6 +68,6 @@ catch (Exception e)
     logger.LogError(e, "An error occured during migration");
 }
 
-app.MapHub<ChatHub>("/Chat");
+app.MapHub<ChatHub>("/chat");
 
 app.Run();
