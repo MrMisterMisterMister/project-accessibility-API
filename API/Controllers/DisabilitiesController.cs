@@ -5,7 +5,7 @@ using Application.DisabilityHandlers;
 
 namespace API.Controllers
 {
-    [Authorize] // for now
+    [Authorize(Policy = "PanelMemberPolicy")] // for now
     public class DisabilitiesController : BaseApiController
     {
         [HttpGet]

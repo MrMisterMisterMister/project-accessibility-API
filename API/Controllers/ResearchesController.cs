@@ -5,7 +5,7 @@ using Application.ResearchHandlers;
 
 namespace API.Controllers
 {
-    [Authorize] // for now
+    [Authorize(Policy = "CompanyPolicy")] // for now
     public class ResearchesController : BaseApiController
     {
         // all researches
