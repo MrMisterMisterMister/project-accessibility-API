@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "PanelMemberPolicy")]
     public class PanelMemberDisabilitiesController : BaseApiController
     {
         [HttpPost("add-disability/{disabilityId}")]
@@ -22,7 +22,7 @@ namespace API.Controllers
         [HttpDelete("remove-all-panelmember-disabilities")]
         public async Task<IActionResult> RemoveAllDisabilitiesFromPanelMember()
         {
-            return HandleResult(await Mediator.Send(new DeleteAllPanelMemberDisabilities.Command() ));
+            return HandleResult(await Mediator.Send(new DeleteAllPanelMemberDisabilities.Command()));
         }
     }
 }
