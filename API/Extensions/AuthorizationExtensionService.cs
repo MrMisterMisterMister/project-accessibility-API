@@ -42,8 +42,7 @@ namespace API.Extensions
 
                 opt.AddPolicy("ChatPolicy", policy =>
                 {
-                    policy.RequireRole(nameof(RoleTypes.PanelMember));
-                    policy.RequireRole(nameof(RoleTypes.Company));
+                    policy.RequireRole(nameof(RoleTypes.PanelMember), nameof(RoleTypes.Company));
                 });
             });
 
