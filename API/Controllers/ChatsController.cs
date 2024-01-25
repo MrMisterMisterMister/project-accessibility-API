@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "ChatPolicy")]
     public class ChatsController : BaseApiController
     {
         // Endpoint to retrieve chat history (messages) between two users
