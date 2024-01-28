@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize(Policy = "CompanyPolicy")]
+    [Authorize]
     public class PanelMembersController : BaseApiController
     {
         [HttpGet]
@@ -25,13 +25,13 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new CreatePanelMember.Command { PanelMember = panelMember }));
         }
-
+        [Authorize(Policy = "CompanyPolicy")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePanelMember(Guid id)
         {
             return HandleResult(await Mediator.Send(new DeletePanelMember.Command { PanelMemberId = id }));
         }
-
+        [Authorize(Policy = "CompanyPolicy")]
         [HttpPut("{id}")]
         public async Task<ActionResult> EditPanelMember(Guid id, PanelMember panelMember)
         {
