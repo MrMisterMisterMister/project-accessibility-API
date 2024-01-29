@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "AdminPolicy")] // for now
     public class CompaniesController : BaseApiController
     {
         [HttpGet]

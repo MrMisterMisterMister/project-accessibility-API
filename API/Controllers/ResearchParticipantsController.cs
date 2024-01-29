@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
-    [Authorize(Policy = "PanelMemberPolicy")]
+    [Authorize]
     public class ResearchParticipantsController : BaseApiController
     {
         [HttpPost("join-research/{researchId}")]

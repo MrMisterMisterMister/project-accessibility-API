@@ -5,7 +5,7 @@ using Application.ResearchHandlers;
 
 namespace API.Controllers
 {
-    [Authorize] // for now
+    [Authorize]
     public class ResearchesController : BaseApiController
     {
         // all researches
@@ -16,6 +16,7 @@ namespace API.Controllers
         }
 
         // get researches by organizer id
+        [Authorize(Policy = "CompanyPolicy")]
         [HttpGet("organizer/{id}")]
         public async Task<IActionResult> GetResearchesByOrganizer(string id)
         {
@@ -30,6 +31,7 @@ namespace API.Controllers
         }
 
         // new research
+        [Authorize(Policy = "CompanyPolicy")]
         [HttpPost]
         public async Task<IActionResult> CreateResearch(Research research)
         {
@@ -37,6 +39,7 @@ namespace API.Controllers
         }
 
         // edit research
+        [Authorize(Policy = "CompanyPolicy")]
         [HttpPut("{id}")]
         public async Task<IActionResult> EditResearch(int id, Research research)
         {
@@ -45,6 +48,7 @@ namespace API.Controllers
         }
 
         // delete research
+        [Authorize(Policy = "CompanyPolicy")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteResearch(int id)
         {

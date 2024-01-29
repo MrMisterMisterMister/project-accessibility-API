@@ -28,15 +28,21 @@ namespace API.Extensions
                 });
 
                 // Add "PanelMember" policy
+                // Add "PanelMember" or "Admin" policy
                 opt.AddPolicy("PanelMemberPolicy", policy =>
                 {
-                    policy.RequireRole(nameof(RoleTypes.PanelMember));
+                    policy.RequireRole(nameof(RoleTypes.PanelMember), nameof(RoleTypes.Admin));
                 });
 
                 // Add "PanelMember" policy
                 opt.AddPolicy("CompanyPolicy", policy =>
                 {
-                    policy.RequireRole(nameof(RoleTypes.PanelMember));
+                    policy.RequireRole(nameof(RoleTypes.Company), nameof(RoleTypes.Admin));
+                });
+
+                opt.AddPolicy("ChatPolicy", policy =>
+                {
+                    policy.RequireRole(nameof(RoleTypes.PanelMember), nameof(RoleTypes.Company));
                 });
             });
 
