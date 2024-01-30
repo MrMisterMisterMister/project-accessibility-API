@@ -35,7 +35,7 @@ namespace API.Extensions
                     .AllowAnyMethod()
                     .AllowCredentials()
                     .WithExposedHeaders("WWW-Authenticate")
-                    .WithOrigins("https://clodsire.nl");
+                    .WithOrigins("https://projectaccessiblity.nl");
                 });
             });
 
